@@ -6,35 +6,30 @@ use App\Models\Game;
 use App\Models\Season;
 use App\Models\User;
 use App\Services\ServerLog;
+use App\Services\TextString;
 
 class Start extends Command {
 
     public function run($update, $bot) {
         ServerLog::log('Start > run');
         $userId = $this->getUserId($update);
-        $userExists = User::where('id', $userId)->exists();
 
-        if($userExists === false) {
+        if($this->UserExists($userId) === false) {
             ServerLog::log('user does\'n exist');
             $this->addNewUser($userId);
-            $bot->sendMessage($userId, "Boas vindas ao Palavreco!!\nEnvie /start para começar um novo jogo");
+            $bot->sendMessage($userId, TextString::get('start.welcome'));
             return;
         }
 
-        $date = date('Y-m-d');
-        $gameExists = Game::where('user_id', $userId)
-            ->where('word_date', $date)
-            ->exists();
-                   
-        if($gameExists === false) {
+        if($this->GameExists($userId) === false) {
             ServerLog::log('game does\'n exist');
-            $this->startNewGame($userId, $date);
-            $bot->sendMessage($userId, "Jogo iniciado, qual o seu primeiro chute?");
+            $this->startNewGame($userId);
+            $bot->sendMessage($userId, TextString::get('start.game_started'));
             return;
         }
 
         ServerLog::log('user and game exist');
-        $bot->sendMessage($userId, "*Placeholder\nSituação atual do jogo");
+        $bot->sendMessage($userId, TextString::get('placeholder.game_status'));
         
     }
 
@@ -47,7 +42,8 @@ class Start extends Command {
         $user->save();
     }
 
-    public function startNewGame($userId, $date) {
+    public function startNewGame($userId) {
+        $date = date('Y-m-d');
         $season = Season::where('from', '<=', $date)
             ->where('to', '>=', $date)
             ->first();
