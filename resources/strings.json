@@ -14,6 +14,11 @@
             "Nenhum jogo em andamento, que tal dar /start para começar ou /ajuda para tirar dúvidas?"
         ]
     },
+    "settings": {
+        "help": [
+            "Palavreco é um jogo inspirando em Wordle, onde você tem 6 tentativas de descobrir a palavra do dia"
+        ]
+    },
     "placeholder": {
         "game_status": [
             "*Placeholder\nSituação atual do jogo"
