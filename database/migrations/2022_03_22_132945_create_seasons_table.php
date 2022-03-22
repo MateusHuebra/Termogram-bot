@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateUsersTable extends Migration
+class CreateSeasonsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,11 @@ class CreateUsersTable extends Migration
      */
     public function up()
     {
-        Schema::create('users', function (Blueprint $table) {
-            $table->unsignedInteger('id')->primary();
-            $table->boolean('subscribed');
-            $table->unsignedTinyInteger('subscription_hour')->nullable();
+        Schema::create('seasons', function (Blueprint $table) {
+            $table->id();
+            $table->date('from');
+            $table->date('to');
+            $table->string('name', 32);
         });
     }
 
@@ -27,6 +28,6 @@ class CreateUsersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('seasons');
     }
 }
