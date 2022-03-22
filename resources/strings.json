@@ -12,6 +12,15 @@
     "game": {
         "no_game": [
             "Nenhum jogo em andamento, que tal dar /start para começar ou /ajuda para tirar dúvidas?"
+        ],
+        "invalid_size": [
+            "Tamanho de palavra inválida!\nApenas palavras de 5 letras"
+        ],
+        "invalid_characters": [
+            "Palavra inválida!\nEssa palavra possui caracteres inválidos, não use caracteres especiais e/ou acentuação\n\nPor exemplo: use racao invés de ração"
+        ],
+        "invalid_word": [
+            "Palavra inválida!\nEssa palavra não consta no meu vocabulário robótico"
         ]
     },
     "settings": {

@@ -11,11 +11,11 @@ abstract class Command {
         return $update->getMessage()->getFrom()->getId();
     }
 
-    public function UserExists($userId) {
+    public function userExists($userId) {
         return User::where('id', $userId)->exists();
     }
 
-    public function GameExists($userId) {
+    public function gameExists($userId) {
         $date = date('Y-m-d');
         return Game::where('user_id', $userId)
             ->where('word_date', $date)
