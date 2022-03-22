@@ -14,11 +14,14 @@ class Factory {
         if($command=='start') {
             return new Start();
 
-        } else if($command=='help') {
+        } else if($command=='ajuda') {
             return new Help();
 
         } else if($command=='ping') {
             return new Ping();
+
+        } else if($command=='attempt') {
+            return new Attempt();
             
         } else {
             return false;
@@ -43,8 +46,8 @@ class Factory {
         preg_match(Client::REGEXP, $message->getText(), $matches);
 
         if (empty($matches)) {
-            ServerLog::log('no matches');
-            return false;
+            ServerLog::log('no matches, command: attempt');
+            return 'attempt';
         } 
 
         ServerLog::log('command: '.$matches[1]);
