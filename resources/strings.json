@@ -1,0 +1,22 @@
+{
+    "start": {
+        "welcome": [
+            "Boas vindas ao Palavreco!!\nEnvie /start para começar um novo jogo"
+        ],
+        "game_started": [
+            "Jogo iniciado, qual o seu primeiro chute?",
+            "Vambora, qual o seu primeiro chute?",
+            "Bora lá, qual o seu primerio chute?"
+        ]
+    },
+    "game": {
+        "no_game": [
+            "Nenhum jogo em andamento, que tal dar /start para começar ou /ajuda para tirar dúvidas?"
+        ]
+    },
+    "placeholder": {
+        "game_status": [
+            "*Placeholder\nSituação atual do jogo"
+        ]
+    }
+}
