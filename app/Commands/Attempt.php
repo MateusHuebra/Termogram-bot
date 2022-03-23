@@ -156,7 +156,8 @@ class Attempt extends Command {
             if(isset($letters[$letterPosition])) {
                 continue;
             }
-            if($key = array_search($letter, $wordLetters)) {
+            $key = array_search($letter, $wordLetters);
+            if($key !== false) {
                 $letters[$letterPosition] = '{'.$letter.'}';
                 unset($wordLetters[$key]);
                 continue;
