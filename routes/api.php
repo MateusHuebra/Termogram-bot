@@ -1,7 +1,6 @@
 <?php
 
-use App\Http\Controllers\PalavrecoController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\TermogramController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,4 +18,4 @@ use Illuminate\Support\Facades\Route;
 //    return $request->user();
 //});
 
-Route::post('/bot/listen', [PalavrecoController::class, 'listen']);
+Route::post('/bot/listen', [TermogramController::class, 'listen']);

@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use TelegramBot\Api\BotApi;
 use TelegramBot\Api\Types\Update;
 
-class PalavrecoController extends Controller
+class TermogramController extends Controller
 {
     
     function listen(Request $request) {

@@ -55,7 +55,7 @@ class Attempt extends Command {
         }
         if($attemptNumber>=6) {
             ServerLog::log("game lost by {$game->user_id} at attempt {$attemptNumber}");
-            $keyboard = $this->getShareButton($render, $attemptNumber);
+            $keyboard = $this->getShareButton($render, 'X');
             $render = $this->endGame($game, $render, $word);
         }
 
@@ -69,7 +69,7 @@ class Attempt extends Command {
         */
     }
 
-    public function getShareButton(string $render, int $attemptNumber) {
+    public function getShareButton(string $render, $attemptNumber) {
         $date = date('d/m/Y');
         $share = "{$date} - {$attemptNumber} / 6\n\n";
         $share.= FontHandler::hide($render);
@@ -77,7 +77,7 @@ class Attempt extends Command {
             [
                 [
                     'text' => TextString::get('game.share'),
-                    'url' => 'https://t.me/share/url?url=Palavreco&text='.$share
+                    'url' => 'https://t.me/share/url?url=t.me/TermogramBot&text='.$share
                 ]
             ]
         ]);
