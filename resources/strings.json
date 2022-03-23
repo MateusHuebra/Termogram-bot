@@ -21,6 +21,12 @@
         ],
         "invalid_word": [
             "Palavra inválida!\nEssa palavra não consta no meu vocabulário robótico"
+        ],
+        "won": [
+            "\n\nVocê ganhou!"
+        ],
+        "lost": [
+            "\n\nVocê perdeu!"
         ]
     },
     "settings": {

@@ -44,14 +44,16 @@ class Attempt extends Command {
         $attemptNumber = $this->addNewAttempt($userId, $attempt);
 
         if($attempt == $word->value) {
-            ServerLog::log("game won by {$game->toJson()} at attempt {$attemptNumber}");
+            ServerLog::log("game won by {$game->user_id} at attempt {$attemptNumber}");
             $game->ended = 1;
             $game->won_at = $attemptNumber;
             $game->save();
+            $render.= TextString::get('game.won');
         } else if($attemptNumber>=6) {
             ServerLog::log("game lost by {$game->user_id} at attempt {$attemptNumber}");
             $game-> ended = 1;
             $game->save();
+            $render.= TextString::get('game.lost');
         }
 
         $bot->sendMessage($userId, $render);
