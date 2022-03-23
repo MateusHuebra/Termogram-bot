@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Game extends Model
+class Attempt extends Model
 {
     use HasFactory;
 
@@ -14,7 +14,8 @@ class Game extends Model
     public function scopeByUser($query, $userId) {
         $date = date('Y-m-d');
         return $query->where('user_id', $userId)
-            ->where('word_date', $date);
+            ->where('word_date', $date)
+            ->orderBy('number', 'ASC');
     }
-    
+   
 }

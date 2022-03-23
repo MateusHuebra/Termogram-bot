@@ -14,14 +14,14 @@ class Start extends Command {
         ServerLog::log('Start > run');
         $userId = $this->getUserId($update);
 
-        if($this->UserExists($userId) === false) {
+        if(User::ofId($userId)->exists() === false) {
             ServerLog::log('user does\'n exist');
             $this->addNewUser($userId);
             $bot->sendMessage($userId, TextString::get('start.welcome'));
             return;
         }
 
-        if($this->GameExists($userId) === false) {
+        if(Game::byUser($userId)->exists() === false) {
             ServerLog::log('game does\'n exist');
             $this->startNewGame($userId);
             $bot->sendMessage($userId, TextString::get('start.game_started'));
@@ -44,9 +44,7 @@ class Start extends Command {
 
     public function startNewGame($userId) {
         $date = date('Y-m-d');
-        $season = Season::where('from', '<=', $date)
-            ->where('to', '>=', $date)
-            ->first();
+        $season = Season::current()->first();
         ServerLog::log('creating new game for '.$userId.' in '.$date.' from season '.$season->name);
 
         $game = new Game();

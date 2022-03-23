@@ -8,13 +8,14 @@ use App\Models\Word;
 use App\Services\ServerLog;
 use App\Services\TextString;
 use Illuminate\Support\Facades\File;
+use App\Models\Attempt as AttemptModel;
 
 class Attempt extends Command {
 
     public function run($update, $bot) {
         ServerLog::log('Attempt > run');
         $userId = $this->getUserId($update);
-        $game = $this->getGame($userId);
+        $game = Game::byUser($userId)->first();
 
         if($game === null) {
             ServerLog::log('game does\'n exist');
@@ -28,7 +29,7 @@ class Attempt extends Command {
             return;
         }
 
-        $attempt = $this->getAttempt($update);
+        $attempt = $this->getCurrentAttempt($update);
 
         if($invalidationString = $this->isInvalidWord($attempt)) {
             ServerLog::log('invalid word: '.$invalidationString);
@@ -36,41 +37,31 @@ class Attempt extends Command {
             return;
         }
 
-        $word = $this->getWord();
+        $word = Word::today()->first();
 
         if($attempt == $word) {
             ServerLog::log('game won');
 
         }
 
-        //$render = $this->getGameRender($attempt, $word);
+        $attempts = AttemptModel::byUser($userId)->get();
+        $render = $this->getGameRender($attempt, $word, $attempts);
+
+        $bot->sendMessage($userId, $render);
 
     }
 
-    public function getGame($userId) {
-        $date = date('Y-m-d');
-        return Game::where('user_id', $userId)
-            ->where('word_date', $date)
-            ->first();
-    }
-
-    public function getWord() {
-        $date = date('Y-m-d');
-        return Word::where('word_date', $date)->first();
-    }
-
-    public function getAttempt($update) {
+    public function getCurrentAttempt($update) {
         return strtoupper($update->getMessage()->getText());
     }
 
-
     public function isInvalidWord(string $word) {
-        if(strlen($word) != 5) {
-            return 'game.invalid_size';
+        if(!preg_match('/^[A-z]*$/', $word)) {
+            return 'game.invalid_characters';
         }
 
-        if(!preg_match('/^[A-z]{5}$/', $word)) {
-            return 'game.invalid_characters';
+        if(strlen($word) != 5) {
+            return 'game.invalid_size';
         }
 
         $json = File::get(__DIR__.'/../../resources/words.json');
@@ -83,8 +74,57 @@ class Attempt extends Command {
         return false;
     }
 
-    public function getGameRender(string $currentAttempt, string $word) {
-        
+    public function getGameRender(string $currentAttempt, string $word, $attempts) {
+        $lines = [];
+        foreach ($attempts as $attempt) {
+            $lines[] = $this->getLineRender($attempt, $word);
+        }
+        $lines[] = $this->getLineRender($currentAttempt, $word);
+        return implode(PHP_EOL, $lines);
+    }
+
+    public function getLineRender(string $attempt, string $word) {
+        $letters = [];
+        $attemptLetters = str_split($attempt);
+        $wordLetters = str_split($word);
+
+        if($attempt===$word) {
+            $letters = array_map(function($letter) {
+                return '['.$letter.']';
+            }, $wordLetters);
+        } else {
+            $letters = $this->fillCorrects($attemptLetters, $wordLetters);
+            $letters = $this->fillDisplacedsAndWrongs($attemptLetters, $wordLetters, $letters);
+        }
+
+        return implode(' ', $letters);
+    }
+
+    public function fillCorrects(array $attemptLetters, array $wordLetters) {
+        $letters = [];
+        foreach($attemptLetters as $letterPosition => $letter) {
+            if($letter===$wordLetters[$letterPosition]) {
+                $letters[$letterPosition] = '['.$letter.']';
+            }
+        }
+        return $letters;
+    }
+
+    public function fillDisplacedsAndWrongs(array $attemptLetters, array $wordLetters, array $letters) {
+        $wordLetters = array_diff_key($wordLetters, $letters);
+        $letters = [];
+        foreach($attemptLetters as $letterPosition => $letter) {
+            if(isset($letters[$letterPosition])) {
+                continue;
+            }
+            if($key = array_search($letter, $wordLetters)) {
+                $letters[$letterPosition] = '{'.$letter.'}';
+                unset($wordLetters[$key]);
+                continue;
+            }
+            $letters[$letterPosition] = '('.$letter.')';
+        }
+        return $letters;
     }
 
 }

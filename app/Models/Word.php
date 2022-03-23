@@ -10,5 +10,10 @@ class Word extends Model
     use HasFactory;
 
     public $timestamps = false;
+
+    public function scopeToday($query) {
+        $date = date('Y-m-d');
+        return $query->where('word_date', $date);
+    }
     
 }

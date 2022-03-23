@@ -11,4 +11,8 @@ class User extends Model
 
     public $timestamps = false;
 
+    public function scopeOfId($query, $userId) {
+        return $query->where('id', $userId);
+    }
+
 }
