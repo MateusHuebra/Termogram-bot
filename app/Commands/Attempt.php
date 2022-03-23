@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\File;
 use App\Models\Attempt as AttemptModel;
 use App\Services\FontHandler;
 use CURLFile;
+use TelegramBot\Api\Types\Inline\InlineKeyboardMarkup;
 
 class Attempt extends Command {
 
@@ -45,21 +46,20 @@ class Attempt extends Command {
         $render = $this->getGameRender($attempt, $word->value, $attempts);
         $render = FontHandler::replace($render);
         $attemptNumber = $this->addNewAttempt($userId, $attempt);
+        $keyboard = null;
 
         if($attempt == $word->value) {
             ServerLog::log("game won by {$game->user_id} at attempt {$attemptNumber}");
-            $game->ended = 1;
-            $game->won_at = $attemptNumber;
-            $game->save();
-            $render.= TextString::get('game.won');
-        } else if($attemptNumber>=6) {
+            $keyboard = $this->getShareButton($render, $attemptNumber);
+            $render = $this->endGame($game, $render, $word, $attemptNumber);
+        }
+        if($attemptNumber>=6) {
             ServerLog::log("game lost by {$game->user_id} at attempt {$attemptNumber}");
-            $game-> ended = 1;
-            $game->save();
-            $render.= TextString::get('game.lost').$word->value;
+            $keyboard = $this->getShareButton($render, $attemptNumber);
+            $render = $this->endGame($game, $render, $word);
         }
 
-        $bot->sendMessage($userId, $render);
+        $bot->sendMessage($userId, $render, null, false, null, $keyboard);
 
         // tests:
         /*
@@ -67,6 +67,34 @@ class Attempt extends Command {
         $bot->setCurlOption(CURLOPT_TIMEOUT, 10);
         $bot->sendPhoto($userId, $photo);
         */
+    }
+
+    public function getShareButton(string $render, int $attemptNumber) {
+        $date = date('d/m/Y');
+        $share = "{$date} - {$attemptNumber} / 6\n\n";
+        $share.= FontHandler::hide($render);
+        return new InlineKeyboardMarkup([
+            [
+                [
+                    'text' => TextString::get('game.share'),
+                    'url' => 'https://t.me/share/url?url=Palavreco&text='.$share
+                ]
+            ]
+        ]);
+    }
+
+    public function endGame(Game $game, string $render, $word, $wonAt = null) {
+        $game->ended = 1;
+        $game->won_at = $wonAt;
+        $game->save();
+
+        if($wonAt) {
+            $render.= TextString::get('game.won');
+        } else {
+            $render.= TextString::get('game.lost').$word->value;
+        }
+
+        return $render;
     }
 
     public function getCurrentAttempt($update) {
