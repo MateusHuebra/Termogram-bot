@@ -9,6 +9,8 @@ use App\Services\ServerLog;
 use App\Services\TextString;
 use Illuminate\Support\Facades\File;
 use App\Models\Attempt as AttemptModel;
+use App\Services\FontHandler;
+use CURLFile;
 
 class Attempt extends Command {
 
@@ -41,6 +43,7 @@ class Attempt extends Command {
 
         $attempts = AttemptModel::byUser($userId)->get();
         $render = $this->getGameRender($attempt, $word->value, $attempts);
+        $render = FontHandler::replace($render);
         $attemptNumber = $this->addNewAttempt($userId, $attempt);
 
         if($attempt == $word->value) {
@@ -58,6 +61,12 @@ class Attempt extends Command {
 
         $bot->sendMessage($userId, $render);
 
+        // tests:
+        /*
+        $photo = new CURLFile(storage_path('app/test.png'), 'image/png');
+        $bot->setCurlOption(CURLOPT_TIMEOUT, 10);
+        $bot->sendPhoto($userId, $photo);
+        */
     }
 
     public function getCurrentAttempt($update) {
