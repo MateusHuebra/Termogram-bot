@@ -22,6 +22,9 @@ class Factory {
 
         } else if($command=='attempt') {
             return new Attempt();
+
+        } else if($command=='reset') {
+            return new Reset();
             
         } else {
             return false;
