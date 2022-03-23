@@ -39,13 +39,20 @@ class Attempt extends Command {
 
         $word = Word::today()->first();
 
-        if($attempt == $word) {
-            ServerLog::log('game won');
-
-        }
-
         $attempts = AttemptModel::byUser($userId)->get();
-        $render = $this->getGameRender($attempt, $word, $attempts);
+        $render = $this->getGameRender($attempt, $word->value, $attempts);
+        $attemptNumber = $this->addNewAttempt($userId, $attempt);
+
+        if($attempt == $word->value) {
+            ServerLog::log("game won by {$game->toJson()} at attempt {$attemptNumber}");
+            $game->ended = 1;
+            $game->won_at = $attemptNumber;
+            $game->save();
+        } else if($attemptNumber>=6) {
+            ServerLog::log("game lost by {$game->user_id} at attempt {$attemptNumber}");
+            $game-> ended = 1;
+            $game->save();
+        }
 
         $bot->sendMessage($userId, $render);
 
@@ -53,6 +60,21 @@ class Attempt extends Command {
 
     public function getCurrentAttempt($update) {
         return strtoupper($update->getMessage()->getText());
+    }
+
+    public function addNewAttempt($userId, string $word) {
+        $number = AttemptModel::byUser($userId)->count() + 1;
+        $date = date('Y-m-d');
+        ServerLog::log('creating attempt '.$number.' in '.$date.' for '.$userId.': '.$word);
+
+        $attempt = new AttemptModel();
+        $attempt->user_id = $userId;
+        $attempt->word_date = $date;
+        $attempt->number = $number;
+        $attempt->word = $word;
+        $attempt->save();
+
+        return $number;
     }
 
     public function isInvalidWord(string $word) {
@@ -77,18 +99,19 @@ class Attempt extends Command {
     public function getGameRender(string $currentAttempt, string $word, $attempts) {
         $lines = [];
         foreach ($attempts as $attempt) {
-            $lines[] = $this->getLineRender($attempt, $word);
+            $lines[] = $this->getLineRender($attempt->word, $word);
         }
         $lines[] = $this->getLineRender($currentAttempt, $word);
         return implode(PHP_EOL, $lines);
     }
 
     public function getLineRender(string $attempt, string $word) {
+        ServerLog::log("- - getLineRender - {$attempt} > {$word}");
         $letters = [];
         $attemptLetters = str_split($attempt);
         $wordLetters = str_split($word);
 
-        if($attempt===$word) {
+        if($attempt==$word) {
             $letters = array_map(function($letter) {
                 return '['.$letter.']';
             }, $wordLetters);
@@ -101,18 +124,23 @@ class Attempt extends Command {
     }
 
     public function fillCorrects(array $attemptLetters, array $wordLetters) {
+        ServerLog::log("- fillCorrects");
         $letters = [];
         foreach($attemptLetters as $letterPosition => $letter) {
             if($letter===$wordLetters[$letterPosition]) {
+                ServerLog::log("{$letter} === {$wordLetters[$letterPosition]}");
                 $letters[$letterPosition] = '['.$letter.']';
+                continue;
             }
+            ServerLog::log("{$letter} !!! {$wordLetters[$letterPosition]}");
         }
+        ServerLog::printR($letters);
         return $letters;
     }
 
     public function fillDisplacedsAndWrongs(array $attemptLetters, array $wordLetters, array $letters) {
+        ServerLog::log("- fillDisplacedsAndWrongs");
         $wordLetters = array_diff_key($wordLetters, $letters);
-        $letters = [];
         foreach($attemptLetters as $letterPosition => $letter) {
             if(isset($letters[$letterPosition])) {
                 continue;
@@ -124,6 +152,8 @@ class Attempt extends Command {
             }
             $letters[$letterPosition] = '('.$letter.')';
         }
+        ksort($letters);
+        ServerLog::printR($letters);
         return $letters;
     }
 

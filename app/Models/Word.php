@@ -13,7 +13,7 @@ class Word extends Model
 
     public function scopeToday($query) {
         $date = date('Y-m-d');
-        return $query->where('word_date', $date);
+        return $query->where('date', $date);
     }
     
 }
