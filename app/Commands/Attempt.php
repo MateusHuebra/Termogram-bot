@@ -56,7 +56,7 @@ class Attempt extends Command {
             ServerLog::log("game lost by {$game->user_id} at attempt {$attemptNumber}");
             $game-> ended = 1;
             $game->save();
-            $render.= TextString::get('game.lost');
+            $render.= TextString::get('game.lost').$word->value;
         }
 
         $bot->sendMessage($userId, $render);
