@@ -32,6 +32,9 @@
     "settings": {
         "help": [
             "Palavreco é um jogo inspirando em Wordle, onde você tem 6 tentativas de descobrir a palavra do dia\n\nO círculo indica que a letra está na posição correta\n\nT🅔STE\n\nO quadrado indica que a palavra contém a letra, mas em outra posição\n\n🄼ANIA\n\nLetras sem nada indicam que a palavra não contém aquela letra"
+        ],
+        "reset": [
+            "Dia resetado!"
         ]
     },
     "placeholder": {
