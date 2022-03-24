@@ -52,8 +52,7 @@ class Attempt extends Command {
             ServerLog::log("game won by {$game->user_id} at attempt {$attemptNumber}");
             $keyboard = $this->getShareButton($render, $attemptNumber);
             $render = $this->endGame($game, $render, $word, $attemptNumber);
-        }
-        if($attemptNumber>=6) {
+        } else if($attemptNumber>=6) {
             ServerLog::log("game lost by {$game->user_id} at attempt {$attemptNumber}");
             $keyboard = $this->getShareButton($render, 'X');
             $render = $this->endGame($game, $render, $word);
