@@ -28,8 +28,14 @@
         "lost": [
             "\n\nVocê perdeu! A palavra era "
         ],
-        "share": [
-            "Compartilhar"
+        "share_telegram": [
+            "Compartilhar no Telegram"
+        ],
+        "share_twitter": [
+            "Compartilhar no Twitter"
+        ],
+        "share_whatsapp": [
+            "Compartilhar no WhatsApp"
         ]
     },
     "settings": {

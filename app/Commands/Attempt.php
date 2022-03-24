@@ -75,8 +75,20 @@ class Attempt extends Command {
         return new InlineKeyboardMarkup([
             [
                 [
-                    'text' => TextString::get('game.share'),
+                    'text' => TextString::get('game.share_telegram'),
                     'url' => 'https://t.me/share/url?url=t.me/TermogramBot&text='.$share
+                ]
+            ],
+            [
+                [
+                    'text' => TextString::get('game.share_twitter'),
+                    'url' => 'https://twitter.com/intent/tweet?text=Joguei t.me/TermogramBot'.PHP_EOL.$share
+                ]
+            ],
+            [
+                [
+                    'text' => TextString::get('game.share_whatsapp'),
+                    'url' => 'https://api.whatsapp.com/send?text=Joguei t.me/TermogramBot'.PHP_EOL.$share
                 ]
             ]
         ]);
