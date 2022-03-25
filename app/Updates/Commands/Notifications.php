@@ -21,33 +21,42 @@ class Notifications extends Command {
 
     public function getNotificationsKeyboard($current) {
         $buttons = [];
-        for ($i=0; $i < 12; $i++) {
-            $am = $i;
-            $pm = ''.(12+$i);
-            if($i<10) {
-                $am = '0'.$am;
+        for ($row=0; $row<4; $row++) {
+            $arrayRow = [];
+            for ($i=($row*6)+1; $i<=($row*6)+6; $i++) {
+                $hour = $i;
+                if($hour==24) {
+                    $hour = 0;
+                }
+                $arrayRow[] = [
+                    'text' => $this->parseCurrent($hour, $current),
+                    'callback_data' => 'notification:'.$this->parseHour($hour)
+                ];
             }
-
-            $buttons[] = [
-                [
-                    'text' => ($current==$am)?$am.TextString::get('settings.selected'):$am,
-                    'callback_data' => 'notification:'.$am
-                ],
-                [
-                    'text' => ($current==$pm)?$pm.TextString::get('settings.selected'):$pm,
-                    'callback_data' => 'notification:'.$pm
-                ]
-            ];
+            $buttons[] = $arrayRow;
         }
+
         $turnOff = TextString::get('settings.turn_notifications_off');
         $buttons[] = [
             [
-                'text' => ($current===null)?$turnOff.TextString::get('settings.selected'):$turnOff,
+                'text' => ($current===null)?'• '.$turnOff.' •':$turnOff,
                 'callback_data' => 'notification:'.'off'
             ]
         ];
 
         return new InlineKeyboardMarkup($buttons);
+    }
+
+    public function parseHour($hour) {
+        if(strlen(''.$hour)<2) {
+            return '0'.$hour;
+        }
+        return $hour;
+    }
+
+    public function parseCurrent($hour, $current) {
+        $hour = $this->parseHour($hour);
+        return ($current==$hour)?'• '.$hour.' •':$hour;
     }
 
 }
