@@ -17,11 +17,17 @@ class Factory {
         } else if($command=='attempt') {
             return new Attempt();
 
+        } else if($command=='notificacoes') {
+            return new Notifications();
+
         } else if($command=='ajuda') {
             return new Help();
 
-        } else if($command=='notificacoes') {
-            return new Notifications();
+        } else if($command=='ajuda_jogar') {
+            return new HelpPlay();
+
+        } else if($command=='ajuda_notificacoes') {
+            return new HelpNotifications();
 
         } else if($command=='ping') {
             return new Ping();
