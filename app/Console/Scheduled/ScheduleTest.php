@@ -2,7 +2,6 @@
 
 namespace App\Console\Scheduled;
 
-use App\Models\Game;
 use TelegramBot\Api\BotApi;
 
 class ScheduleTest {
