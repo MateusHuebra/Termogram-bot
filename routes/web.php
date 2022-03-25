@@ -16,3 +16,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/datetime', function () {
+    return response(date('Y-m-d H:m:s'));
+});
