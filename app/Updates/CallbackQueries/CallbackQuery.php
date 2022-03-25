@@ -17,7 +17,7 @@ abstract class CallbackQuery {
     }
 
     public function getData($update, string $type) {
-        return str_replace($type.':', '', $update->getCallbackQuery()->data());
+        return str_replace($type.':', '', $update->getCallbackQuery()->getData());
     }
 
 }
