@@ -19,3 +19,4 @@ use Illuminate\Support\Facades\Route;
 //});
 
 Route::post('/bot/listen', [TermogramController::class, 'listen']);
+Route::post('/bot/broadcast', [TermogramController::class, 'broadcast']);
