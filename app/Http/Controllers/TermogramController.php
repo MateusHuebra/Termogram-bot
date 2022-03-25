@@ -12,9 +12,11 @@ class TermogramController extends Controller
 {
     
     function listen(Request $request) {
+
         ServerLog::log('BotController > listen');
         $bot = new \TelegramBot\Api\Client(env('TG_TOKEN'));
         $update = Update::fromResponse(BotApi::jsonValidate($bot->getRawBody(), true));
+        ServerLog::log('update json: '.$bot->getRawBody());
 
         $updateHandler = Factory::buildUpdate($update);
         if($updateHandler) {
