@@ -23,7 +23,7 @@ class Notifications extends Command {
         $buttons = [];
         for ($row=0; $row<4; $row++) {
             $arrayRow = [];
-            for ($i=($row*6)+1; $i<=($row*6)+6; $i++) {
+            for ($i=($row*6); $i<=($row*6)+5; $i++) {
                 $hour = $i;
                 if($hour==24) {
                     $hour = 0;
