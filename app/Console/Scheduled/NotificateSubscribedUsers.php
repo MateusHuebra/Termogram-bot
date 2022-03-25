@@ -2,6 +2,7 @@
 
 namespace App\Console\Scheduled;
 
+use App\Models\Game;
 use App\Models\User;
 use App\Services\TextString;
 use TelegramBot\Api\BotApi;
@@ -14,7 +15,9 @@ class NotificateSubscribedUsers {
         $hour = date('H');
         $users = User::whereSubscriptionHour($hour)->get('id');
         foreach ($users as $user) {
-            $bot->sendMessage($user->id, TextString::get('notification.new_word'));
+            if(!Game::byUser($user->id)->exists()) {
+                $bot->sendMessage($user->id, TextString::get('notification.new_word'));
+            }
         }
     }
 
