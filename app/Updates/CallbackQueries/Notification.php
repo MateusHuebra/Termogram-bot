@@ -9,11 +9,12 @@ use App\Services\TextString;
 class Notification extends CallbackQuery {
 
     public function run($update, $bot) {
-        ServerLog::log('CallbackQuery > run');
+        ServerLog::log('Notification > run');
         $userId = $this->getUserId($update);
         $chatId = $this->getChatId($update);
         $messageId = $this->getMessageId($update);
         $data = $this->getData($update, 'notification');
+        ServerLog::log("userId: {$userId} - chatId: {$chatId} - messageId: {$messageId} - data: {$data}");
 
         $text = TextString::get('notification.setted');
         if($data==='off') {
