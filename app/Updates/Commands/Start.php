@@ -28,7 +28,13 @@ class Start extends Command {
             return;
         }
 
-        ServerLog::log('user and game exist');
+        if(Game::byUser($userId)->ended) {
+            ServerLog::log('game ended');
+            $bot->sendMessage($userId, TextString::get('placeholder.already_ended'));
+            return;
+        }
+
+        ServerLog::log('game not ended');
         $bot->sendMessage($userId, TextString::get('placeholder.game_status'));
         
     }
