@@ -25,7 +25,7 @@ class Factory {
             return false;
         }
 
-        preg_match('/^([A-z]+:)/', $data, $matches);
+        preg_match('/^([A-z]+):/', $data, $matches);
 
         if (empty($matches)) {
             ServerLog::log('no matches');
