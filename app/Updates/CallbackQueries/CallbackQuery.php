@@ -13,7 +13,7 @@ abstract class CallbackQuery {
     }
 
     public function getChatId($update) {
-        return $update->getCallbackQuery()->getMessage()->getChat()->getChatId();
+        return $update->getCallbackQuery()->getMessage()->getChat()->getId();
     }
 
     public function getData($update, string $type) {
