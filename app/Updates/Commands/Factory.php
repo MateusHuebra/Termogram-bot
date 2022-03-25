@@ -20,7 +20,7 @@ class Factory {
         } else if($command=='ajuda') {
             return new Help();
 
-        } else if($command=='notificações') {
+        } else if($command=='notificacoes') {
             return new Notifications();
 
         } else if($command=='ping') {
