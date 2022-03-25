@@ -13,6 +13,11 @@
         "no_game": [
             "Nenhum jogo em andamento, que tal dar /start para começar ou /ajuda para tirar dúvidas?"
         ],
+        "already_ended": [
+            "Você já jogou a palavra do dia, volte amanhã para uma nova palavra",
+            "Você já jogou hoje, mas amanhã terá uma palavrinha novinha a sua espera",
+            "Você já jogou hoje, volte amanhã para mais"
+        ],
         "invalid_size": [
             "Tamanho de palavra inválida!\nApenas palavras de 5 letras"
         ],
