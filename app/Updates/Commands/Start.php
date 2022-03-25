@@ -28,7 +28,7 @@ class Start extends Command {
             return;
         }
 
-        if(Game::byUser($userId)->ended) {
+        if(Game::byUser($userId)->first()->ended) {
             ServerLog::log('game ended');
             $bot->sendMessage($userId, TextString::get('placeholder.already_ended'));
             return;
