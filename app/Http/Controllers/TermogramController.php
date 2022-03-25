@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Services\ServerLog;
 use App\Services\TextString;
 use App\Updates\Factory;
+use Exception;
 use Illuminate\Http\Request;
 use TelegramBot\Api\BotApi;
 use TelegramBot\Api\Client;
@@ -42,7 +43,11 @@ class TermogramController extends Controller
 
         $users = User::all();
         foreach ($users as $user) {
-            $bot->sendMessage($user->id, TextString::get('broadcast.'.$request->string));
+            try {
+                $bot->sendMessage($user->id, TextString::get('broadcast.'.$request->string));
+            } catch (Exception $e) {
+                $bot->sendMessage(env('TG_MYID'), "error on trying to broadcast to {$user->id}: {$e->getMessage()}");
+            }
         }
 
     }
