@@ -1,27 +1,30 @@
 <?php
 
-namespace App\Commands;
+namespace App\Update\Commands;
 
 use App\Services\ServerLog;
 use TelegramBot\Api\Client;
 
 class Factory {
 
-    static function buildCommand($update, $bot) {
+    static function buildCommand($update) {
         ServerLog::log('Factory > buildCommand');
         $command = self::getCommand($update);
 
         if($command=='start') {
             return new Start();
 
+        } else if($command=='attempt') {
+            return new Attempt();
+
         } else if($command=='ajuda') {
             return new Help();
 
+        } else if($command=='notificações') {
+            return new Notifications();
+
         } else if($command=='ping') {
             return new Ping();
-
-        } else if($command=='attempt') {
-            return new Attempt();
 
         } else if($command=='reset') {
             return new Reset();
@@ -30,11 +33,6 @@ class Factory {
             return false;
         }
         
-        /*
-        $bot->command('ping', function ($message) use ($bot) {
-            
-        });
-        */
     }
 
     private static function getCommand($update) {

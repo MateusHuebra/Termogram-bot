@@ -1,9 +1,6 @@
 <?php
 
-namespace App\Commands;
-
-use App\Models\Game;
-use App\Models\User;
+namespace App\Update\Commands;
 
 abstract class Command {
 

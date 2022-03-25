@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Commands;
+namespace App\Update\Commands;
 
 use App\Models\Attempt;
 use App\Models\Game;

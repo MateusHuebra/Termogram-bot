@@ -44,6 +44,15 @@
         ],
         "reset": [
             "Dia resetado!"
+        ],
+        "notifications": [
+            "Receba novas palaravas diariamente.\n\nEscolha a hora do dia em que você gostaria de ser notificado:"
+        ],
+        "turn_notifications_off": [
+            "Desligar notificações"
+        ],
+        "selected": [
+            " (selecionado)"
         ]
     },
     "notification": {
@@ -51,6 +60,12 @@
             "Palavra nova no ar!\nDê /start para começar",
             "Chegou palavra fresquinha, dê /start para tentar descobrir ela",
             "A palavra do dia está aqui, dê /start para jogar"
+        ],
+        "setted": [
+            "Notificações configuradas com sucesso para: "
+        ],
+        "off": [
+            "desligado"
         ]
     },
     "placeholder": {

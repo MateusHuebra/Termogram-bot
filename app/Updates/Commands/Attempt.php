@@ -1,16 +1,14 @@
 <?php
 
-namespace App\Commands;
+namespace App\Update\Commands;
 
 use App\Models\Game;
-use App\Models\User;
 use App\Models\Word;
 use App\Services\ServerLog;
 use App\Services\TextString;
 use Illuminate\Support\Facades\File;
 use App\Models\Attempt as AttemptModel;
 use App\Services\FontHandler;
-use CURLFile;
 use TelegramBot\Api\Types\Inline\InlineKeyboardMarkup;
 
 class Attempt extends Command {

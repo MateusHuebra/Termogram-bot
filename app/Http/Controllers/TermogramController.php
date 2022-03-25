@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Commands\Factory;
 use App\Services\ServerLog;
+use App\Updates\Factory;
 use Illuminate\Http\Request;
 use TelegramBot\Api\BotApi;
 use TelegramBot\Api\Types\Update;
@@ -16,9 +16,9 @@ class TermogramController extends Controller
         $bot = new \TelegramBot\Api\Client(env('TG_TOKEN'));
         $update = Update::fromResponse(BotApi::jsonValidate($bot->getRawBody(), true));
 
-        $command = Factory::buildCommand($update, $bot);
-        if($command) {
-            $command->run($update, $bot);
+        $updateHandler = Factory::buildUpdate($update);
+        if($updateHandler) {
+            $updateHandler->run($update, $bot);
         }
 
     }

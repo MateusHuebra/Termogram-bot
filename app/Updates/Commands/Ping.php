@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Commands;
+namespace App\Update\Commands;
 
 class Ping extends Command {
 
