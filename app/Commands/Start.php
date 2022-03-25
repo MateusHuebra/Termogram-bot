@@ -37,8 +37,7 @@ class Start extends Command {
         ServerLog::log('creating new user: '.$userId);
         $user = new User();
         $user->id = $userId;
-        $user->subscribed = true;
-        $user->subscription_hour = null;
+        $user->subscription_hour = 0;
         $user->save();
     }
 

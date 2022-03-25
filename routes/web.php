@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,5 +19,9 @@ Route::get('/', function () {
 });
 
 Route::get('/datetime', function () {
-    return response(date('Y-m-d H:m:s'));
+    $date = date('Y-m-d');
+    $time = date('H:i:s');
+    $yesterday = date('Y-m-d', strtotime($date. ' - 1 days'));
+
+    return response("Agora: {$date} {$time} - Ontem: {$yesterday}");
 });

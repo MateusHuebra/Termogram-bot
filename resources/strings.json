@@ -46,6 +46,13 @@
             "Dia resetado!"
         ]
     },
+    "notification": {
+        "new_word": [
+            "Palavra nova no ar!\nDê /start para começar",
+            "Chegou palavra fresquinha, dê /start para tentar descobrir ela",
+            "A palavra do dia está aqui, dê /start para jogar"
+        ]
+    },
     "placeholder": {
         "game_status": [
             "*Placeholder\nSituação atual do jogo"
