@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Update\Commands;
+namespace App\Updates\Commands;
 
 abstract class Command {
 

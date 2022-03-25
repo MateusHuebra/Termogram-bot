@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Update\Commands;
+namespace App\Updates\Commands;
 
 use App\Models\Game;
 use App\Models\Season;

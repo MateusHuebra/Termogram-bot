@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Update\Commands;
+namespace App\Updates\Commands;
 
 use App\Services\ServerLog;
 use TelegramBot\Api\Client;
@@ -32,7 +32,7 @@ class Factory {
         } else {
             return false;
         }
-        
+
     }
 
     private static function getCommand($update) {

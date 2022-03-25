@@ -2,7 +2,7 @@
 
 namespace App\Updates;
 
-use App\Update\Commands\Factory as CommandsFactory;
+use App\Updates\Commands\Factory as CommandsFactory;
 use App\Services\ServerLog;
 use App\Updates\CallbackQueries\Factory as CallbackQueriesFactory;
 
