@@ -1,7 +1,7 @@
 {
     "start": {
         "welcome": [
-            "Boas vindas ao Termogram!!\nEnvie /start para começar um novo jogo"
+            "Boas vindas ao Termogram!!\nEnvie /jogar para começar um novo jogo ou /ajuda para tirar dúvidas"
         ],
         "game_started": [
             "Jogo iniciado, qual o seu primeiro chute?",
@@ -11,7 +11,7 @@
     },
     "game": {
         "no_game": [
-            "Nenhum jogo em andamento, que tal dar /start para começar ou /ajuda para tirar dúvidas?"
+            "Nenhum jogo em andamento, que tal dar /jogar para começar ou /ajuda para tirar dúvidas?"
         ],
         "already_ended": [
             "Você já jogou a palavra do dia, volte amanhã para uma nova palavra",
@@ -70,9 +70,9 @@
     },
     "notification": {
         "new_word": [
-            "Palavra nova no ar!\nDê /start para começar",
-            "Chegou palavra fresquinha, dê /start para tentar descobrir ela",
-            "A palavra do dia está aqui, dê /start para jogar"
+            "Palavra nova no ar!\nDê /jogar para começar",
+            "Chegou palavra fresquinha, dê /jogar para tentar descobrir ela",
+            "A palavra do dia está aqui, dê /jogar para jogar"
         ],
         "setted": [
             "Notificações configuradas com sucesso para: "
