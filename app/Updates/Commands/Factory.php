@@ -20,6 +20,9 @@ class Factory {
         } else if($command=='notificacoes') {
             return new Notifications();
 
+        } else if($command=='estatisticas') {
+            return new Statistics();
+
         } else if(in_array($command, ['help', 'ajuda'])) {
             return new Help();
 

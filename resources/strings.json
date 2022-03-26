@@ -81,6 +81,11 @@
             "desligado"
         ]
     },
+    "statistics": {
+        "text": [
+            "- Estatísticas:\n\nJogos iniciados: {total}\nJogos finalizados: {ended}\n\n- Distribuição de tentativas:\n"
+        ]
+    },
     "placeholder": {
         "game_status": [
             "Jogo já em andamento, qual seu próximo chute?"
