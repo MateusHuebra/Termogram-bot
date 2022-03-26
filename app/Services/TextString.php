@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\File;
 
 class TextString {
 
-    static function get(string $path) {
+    static function get(string $path, array $variables = null) {
         $json = File::get(__DIR__.'/../../resources/strings.json');
         $string = json_decode($json);
 
@@ -19,7 +19,15 @@ class TextString {
         }
 
         $variations = count($string);
-        return $string[rand(0, $variations-1)];
+        $string = $string[rand(0, $variations-1)];
+        
+        if($variables) {
+            foreach ($variables as $index => $variable) {
+                $string = str_replace('{'.$index.'}', $variable, $string);
+            }
+        }
+
+        return $string;
 
     }
 
