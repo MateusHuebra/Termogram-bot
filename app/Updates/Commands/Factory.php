@@ -11,7 +11,7 @@ class Factory {
         ServerLog::log('Factory > buildCommand');
         $command = self::getCommand($update);
 
-        if($command=='start') {
+        if(in_array($command, ['start', 'jogar'])) {
             return new Start();
 
         } else if($command=='attempt') {
@@ -20,7 +20,7 @@ class Factory {
         } else if($command=='notificacoes') {
             return new Notifications();
 
-        } else if($command=='ajuda') {
+        } else if(in_array($command, ['help', 'ajuda'])) {
             return new Help();
 
         } else if($command=='ajuda_jogar') {
