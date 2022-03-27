@@ -10,6 +10,7 @@ use TelegramBot\Api\Types\Inline\InlineKeyboardMarkup;
 class Notifications extends Command {
 
     public function run($update, $bot) {
+        $this->dieIfUnallowedChatType($update, $bot, ['private']);
         ServerLog::log('Notifications > run');
         $userId = $this->getUserId($update);
         $currentSubscriptionHour = User::find($userId)->subscription_hour;

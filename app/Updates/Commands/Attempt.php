@@ -14,6 +14,7 @@ use TelegramBot\Api\Types\Inline\InlineKeyboardMarkup;
 class Attempt extends Command {
 
     public function run($update, $bot) {
+        $this->dieIfUnallowedChatType($update, $bot, ['private']);
         ServerLog::log('Attempt > run');
         $userId = $this->getUserId($update);
         $game = Game::byUser($userId)->first();

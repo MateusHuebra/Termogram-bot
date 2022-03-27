@@ -11,6 +11,7 @@ use App\Services\TextString;
 class Start extends Command {
 
     public function run($update, $bot) {
+        $this->dieIfUnallowedChatType($update, $bot, ['private'], 'start_in_private');
         ServerLog::log('Start > run');
         $userId = $this->getUserId($update);
 

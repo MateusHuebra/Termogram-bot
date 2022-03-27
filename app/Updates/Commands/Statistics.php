@@ -3,31 +3,36 @@
 namespace App\Updates\Commands;
 
 use App\Models\Game;
+use App\Models\User;
 use App\Services\TextString;
 
 class Statistics extends Command {
 
     public function run($update, $bot) {
-        $userId = $this->getUserId($update);
-        $gameQuery = Game::where('user_id', $userId);
-        $total = $gameQuery->count();
-        $gameQuery = $gameQuery->where('ended', true);
-        $ended = $gameQuery->count();
-        $data = [
-            'total' => $total,
-            'ended' => $ended
-        ];
-        $wonAt = $gameQuery->orderBy('won_at')->get()->countBy('won_at')->toArray();
-        if(isset($wonAt[''])) {
-            $wonAt[7] = $wonAt[''];
+        if($userId = $this->getReplyToMessageUserId($update)) {
+            $person = TextString::get('statistics.other');
+        } else {
+            $person = TextString::get('statistics.yours');
+            $userId = $this->getUserId($update);
         }
-        $text = TextString::get('statistics.text', $data);
-        $text.= $this->getDistribution($wonAt);
-
-        $bot->sendMessage($userId, $text);
+        
+        if(User::find($userId)===null) {
+            $chatId = $this->getChatId($update);
+            $messageId = $this->getMessageId($update);
+            $bot->sendMessage($chatId, TextString::get('error.user_never_played'), null, false, $messageId);
+        }
+        $text = $this->getText($userId, $person);
+        
+        if($this->getChatType=='private') {
+            $bot->sendMessage($userId, $text);
+        } else {
+            $chatId = $this->getChatId($update);
+            $messageId = $this->getMessageId($update);
+            $bot->sendMessage($chatId, $text, null, false, $messageId);
+        }
     }
 
-    public function getDistribution(array $wonAt) {
+    private function parseDistribution(array $wonAt) {
         $text = '';
         for ($i=1; $i<=7 ; $i++) {
             $number = 0;
@@ -39,6 +44,26 @@ class Statistics extends Command {
             $label = str_replace($originalString, $betterString, ''.$i);
             $text.= "\n".($label)."> {$number}";
         }
+        return $text;
+    }
+
+    private function getText($userId, string $person) {
+        $gameQuery = Game::where('user_id', $userId);
+        $total = $gameQuery->count();
+        $gameQuery = $gameQuery->where('ended', true);
+        $ended = $gameQuery->count();
+        $data = [
+            'person' => $person,
+            'total' => $total,
+            'ended' => $ended
+        ];
+        $wonAt = $gameQuery->orderBy('won_at')->get()->countBy('won_at')->toArray();
+        if(isset($wonAt[''])) {
+            $wonAt[7] = $wonAt[''];
+        }
+
+        $text = TextString::get('statistics.text', $data);
+        $text.= $this->parseDistribution($wonAt);
         return $text;
     }
 

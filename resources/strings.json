@@ -82,8 +82,22 @@
         ]
     },
     "statistics": {
+        "yours": [
+            "Suas estatísticas"
+        ],
+        "other": [
+            "Estatísticas dessa pessoa"
+        ],
         "text": [
-            "- Estatísticas:\n\nJogos iniciados: {total}\nJogos finalizados: {ended}\n\n- Distribuição de tentativas:\n"
+            "- {person}:\n\nJogos iniciados: {total}\nJogos finalizados: {ended}\n\n- Distribuição de tentativas:\n"
+        ]
+    },
+    "error": {
+        "start_in_private": [
+            "Você só pode jogar no privado"
+        ],
+        "user_never_played": [
+            "O jogador mencionado nunca jogou Termogram"
         ]
     },
     "placeholder": {

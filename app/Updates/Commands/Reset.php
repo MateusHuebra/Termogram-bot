@@ -9,6 +9,7 @@ use App\Services\TextString;
 class Reset extends Command {
 
     public function run($update, $bot) {
+        $this->dieIfUnallowedChatType($update, $bot, ['private']);
         $userId = $this->getUserId($update);
         if($userId != env('TG_MYID')) {
             return;
