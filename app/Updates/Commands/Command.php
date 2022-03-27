@@ -24,19 +24,17 @@ abstract class Command {
     }
 
     public function getReplyToMessageId($update) {
-        try {
+        if($update->getMessage()->getReplyToMessage()) {
             return $update->getMessage()->getReplyToMessage()->getMessageId();
-        } catch (Exception $e) {
-            return null;
         }
+        return null;
     }
 
     public function getReplyToMessageUserId($update) {
-        try {
+        if($update->getMessage()->getReplyToMessage()) {
             return $update->getMessage()->getReplyToMessage()->getFrom()->getId();
-        } catch (Exception $e) {
-            return null;
         }
+        return null;
     }
 
     public function dieIfUnallowedChatType($update, $bot, array $allowed, string $errorString = null) {
