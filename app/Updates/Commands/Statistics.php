@@ -20,6 +20,7 @@ class Statistics extends Command {
             $chatId = $this->getChatId($update);
             $messageId = $this->getMessageId($update);
             $bot->sendMessage($chatId, TextString::get('error.user_never_played'), null, false, $messageId);
+            return;
         }
         $text = $this->getText($userId, $person);
         
