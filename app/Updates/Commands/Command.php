@@ -3,6 +3,7 @@
 namespace App\Updates\Commands;
 
 use App\Services\TextString;
+use Exception;
 
 abstract class Command {
 
@@ -23,11 +24,19 @@ abstract class Command {
     }
 
     public function getReplyToMessageId($update) {
-        return $update->getMessage()->getReplyToMessage()->getMessageId();
+        try {
+            return $update->getMessage()->getReplyToMessage()->getMessageId();
+        } catch (Exception $e) {
+            return null;
+        }
     }
 
     public function getReplyToMessageUserId($update) {
-        return $update->getMessage()->getReplyToMessage()->getFrom()->getId();
+        try {
+            return $update->getMessage()->getReplyToMessage()->getFrom()->getId();
+        } catch (Exception $e) {
+            return null;
+        }
     }
 
     public function dieIfUnallowedChatType($update, $bot, array $allowed, string $errorString = null) {
