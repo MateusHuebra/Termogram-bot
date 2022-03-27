@@ -9,7 +9,7 @@ class HelpNotifications extends Command {
     public function run($update, $bot) {
         $this->dieIfUnallowedChatType($update, $bot, ['private', 'group', 'supergroup']);
 
-        if($this->getChatType=='private') {
+        if($this->getChatType($update)=='private') {
             $userId = $this->getUserId($update);
             $bot->sendMessage($userId, TextString::get('help.notifications'));
         } else {
