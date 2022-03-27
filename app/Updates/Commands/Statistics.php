@@ -24,7 +24,7 @@ class Statistics extends Command {
         }
         $text = $this->getText($userId, $person);
         
-        if($this->getChatType=='private') {
+        if($this->getChatType()=='private') {
             $bot->sendMessage($userId, $text);
         } else {
             $chatId = $this->getChatId($update);
