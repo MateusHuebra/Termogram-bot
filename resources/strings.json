@@ -89,7 +89,7 @@
             "Estatísticas dessa pessoa"
         ],
         "text": [
-            "- {person}:\n\nJogos iniciados: {total}\nJogos finalizados: {ended}\nTexa de vitória: {win_rate}%\n\n- Distribuição de tentativas:\n"
+            "- {person}:\n\nJogos iniciados: {total}\nJogos finalizados: {ended}\nTaxa de vitória: {win_rate}%\n\n- Distribuição de tentativas:\n"
         ]
     },
     "error": {
