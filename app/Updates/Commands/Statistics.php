@@ -53,6 +53,7 @@ class Statistics extends Command {
         }
         $winnings = ($wonAt[0]??0)+($wonAt[1]??0)+($wonAt[2]??0)+($wonAt[3]??0)+($wonAt[4]??0)+($wonAt[5]??0)+($wonAt[6]??0);
         $winRate = $winnings*100/($winnings+$wonAt[7]);
+        $winRate = round($winRate, 2);
         $data = [
             'person' => $person,
             'total' => $total,
