@@ -45,6 +45,7 @@ class Start extends Command {
         $user->id = $this->getUserId();
         $user->subscription_hour = 0;
         $user->save();
+        ServerLog::log('new user created');
     }
 
     public function startNewGame() {
@@ -59,6 +60,7 @@ class Start extends Command {
         $game->ended = false;
         $game->season_id = $season->id;
         $game->save();
+        ServerLog::log('new game created');
     }
 
 }
