@@ -111,7 +111,7 @@ class Attempt extends Command {
     }
 
     private function addNewAttempt(string $word) {
-        $number = AttemptModel::byUser($this->getthis->getUserId()())->count() + 1;
+        $number = AttemptModel::byUser($this->getUserId())->count() + 1;
         $date = date('Y-m-d');
         ServerLog::log('creating attempt '.$number.' in '.$date.' for '.$this->getthis->getUserId()().': '.$word);
 
