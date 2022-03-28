@@ -45,15 +45,20 @@ class Statistics extends Command {
         $total = $gameQuery->count();
         $gameQuery = $gameQuery->where('ended', true);
         $ended = $gameQuery->count();
-        $data = [
-            'person' => $person,
-            'total' => $total,
-            'ended' => $ended
-        ];
         $wonAt = $gameQuery->orderBy('won_at')->get()->countBy('won_at')->toArray();
         if(isset($wonAt[''])) {
             $wonAt[7] = $wonAt[''];
+        } else {
+            $wonAt[7] = 0;
         }
+        $winnings = ($wonAt[0]??0)+($wonAt[1]??0)+($wonAt[2]??0)+($wonAt[3]??0)+($wonAt[4]??0)+($wonAt[5]??0)+($wonAt[6]??0);
+        $winRate = $winnings*100/($winnings+$wonAt[7]);
+        $data = [
+            'person' => $person,
+            'total' => $total,
+            'win_rate' => $winRate,
+            'ended' => $ended
+        ];
 
         $text = TextString::get('statistics.text', $data);
         $text.= $this->parseDistribution($wonAt);
