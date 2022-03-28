@@ -2,22 +2,50 @@
 
 namespace App\Updates\CallbackQueries;
 
-abstract class CallbackQuery {
+use App\Updates\Update;
 
-    public function getUserId($update) {
-        return $update->getCallbackQuery()->getFrom()->getId();
+abstract class CallbackQuery extends Update {
+
+    protected function getUserId() {
+        if(!isset($this->userId)) {
+            $this->userId = $this->update->getCallbackQuery()->getFrom()->getId();
+        }
+        return $this->userId;
     }
 
-    public function getMessageId($update) {
-        return $update->getCallbackQuery()->getMessage()->getMessageId();
+    protected function getMessage() {
+        if(!isset($this->message)) {
+            $this->message = $this->update->getCallbackQuery()->getMessage();
+        }
+        return $this->message;
     }
 
-    public function getChatId($update) {
-        return $update->getCallbackQuery()->getMessage()->getChat()->getId();
+    protected function getMessageId() {
+        if(!isset($this->messageId)) {
+            if($this->getMessage()) {
+                $this->messageId = $this->update->getCallbackQuery()->getMessage()->getMessageId();
+            } else {
+                $this->messageId = null;
+            }
+            
+        }
+        return $this->messageId;
     }
 
-    public function getData($update, string $type) {
-        return str_replace($type.':', '', $update->getCallbackQuery()->getData());
+    protected function getChatId() {
+        if(!isset($this->chatId)) {
+            if($this->getMessage()) {
+                $this->chatId = $this->update->getCallbackQuery()->getMessage()->getChat()->getId();
+            } else {
+                $this->chatId = null;
+            }
+            
+        }
+        return $this->chatId;
+    }
+
+    protected function getData(string $type) {
+        return str_replace($type.':', '', $this->update->getCallbackQuery()->getData());
     }
 
 }

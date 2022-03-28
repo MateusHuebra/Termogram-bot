@@ -6,12 +6,12 @@ use App\Services\ServerLog;
 
 class Factory {
 
-    static function buildCallbackQuery($update) {
+    static function buildCallbackQuery($update, $bot) {
         ServerLog::log('Factory > buildCallbackQuery');
         $type = self::getCallbackType($update);
 
         if($type=='notification') {
-            return new Notification();
+            return new Notification($update, $bot);
 
         } else {
             return false;

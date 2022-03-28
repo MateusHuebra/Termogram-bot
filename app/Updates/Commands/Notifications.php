@@ -9,15 +9,14 @@ use TelegramBot\Api\Types\Inline\InlineKeyboardMarkup;
 
 class Notifications extends Command {
 
-    public function run($update, $bot) {
-        $this->dieIfUnallowedChatType($update, $bot, ['private']);
+    public function run() {
+        $this->dieIfUnallowedChatType(['private']);
         ServerLog::log('Notifications > run');
-        $userId = $this->getUserId($update);
-        $currentSubscriptionHour = User::find($userId)->subscription_hour;
+        $currentSubscriptionHour = User::find($this->getUserId())->subscription_hour;
 
         $keyboard = $this->getNotificationsKeyboard($currentSubscriptionHour);
 
-        $bot->sendMessage($userId, TextString::get('settings.notifications'), null, false, null, $keyboard);
+        $this->sendMessage(TextString::get('settings.notifications'), $keyboard);
     }
 
     public function getNotificationsKeyboard($current) {

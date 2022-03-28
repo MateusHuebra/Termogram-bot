@@ -13,38 +13,37 @@ use TelegramBot\Api\Types\Inline\InlineKeyboardMarkup;
 
 class Attempt extends Command {
 
-    public function run($update, $bot) {
-        $this->dieIfUnallowedChatType($update, $bot, ['private']);
+    public function run() {
+        $this->dieIfUnallowedChatType(['private']);
         ServerLog::log('Attempt > run');
-        $userId = $this->getUserId($update);
-        $game = Game::byUser($userId)->first();
+        $game = Game::byUser($this->getUserId())->first();
 
         if($game === null) {
             ServerLog::log('game does\'n exist');
-            $bot->sendMessage($userId, TextString::get('game.no_game'));
+            $this->sendMessage(TextString::get('game.no_game'));
             return;
         }
 
         if($game->ended) {
             ServerLog::log('game already ended');
-            $bot->sendMessage($userId, TextString::get('game.already_ended'));
+            $this->sendMessage(TextString::get('game.already_ended'));
             return;
         }
 
-        $attempt = $this->getCurrentAttempt($update);
+        $attempt = $this->getCurrentAttempt();
 
         if($invalidationString = $this->isInvalidWord($attempt)) {
             ServerLog::log('invalid word: '.$invalidationString);
-            $bot->sendMessage($userId, TextString::get($invalidationString));
+            $this->sendMessage(TextString::get($invalidationString));
             return;
         }
 
         $word = Word::today()->first();
 
-        $attempts = AttemptModel::byUser($userId)->get();
+        $attempts = AttemptModel::byUser($this->getUserId())->get();
         $render = $this->getGameRender($attempt, $word->value, $attempts);
         $render = FontHandler::replace($render);
-        $attemptNumber = $this->addNewAttempt($userId, $attempt);
+        $attemptNumber = $this->addNewAttempt($attempt);
         $keyboard = null;
 
         if($attempt == $word->value) {
@@ -57,17 +56,17 @@ class Attempt extends Command {
             $render = $this->endGame($game, $render, $word);
         }
 
-        $bot->sendMessage($userId, $render, null, false, null, $keyboard);
+        $this->sendMessage($render, $keyboard);
 
         // tests:
         /*
         $photo = new CURLFile(storage_path('app/test.png'), 'image/png');
-        $bot->setCurlOption(CURLOPT_TIMEOUT, 10);
-        $bot->sendPhoto($userId, $photo);
+        $this->bot->setCurlOption(CURLOPT_TIMEOUT, 10);
+        $this->bot->sendPhoto($this->getUserId(), $photo);
         */
     }
 
-    public function getShareButton(string $render, $attemptNumber) {
+    private function getShareButton(string $render, $attemptNumber) {
         $date = date('d/m/Y');
         $share = "{$date} - {$attemptNumber} / 6\n\n";
         $share.= FontHandler::hide($render);
@@ -93,7 +92,7 @@ class Attempt extends Command {
         ]);
     }
 
-    public function endGame(Game $game, string $render, $word, $wonAt = null) {
+    private function endGame(Game $game, string $render, $word, $wonAt = null) {
         $game->ended = 1;
         $game->won_at = $wonAt;
         $game->save();
@@ -107,17 +106,17 @@ class Attempt extends Command {
         return $render;
     }
 
-    public function getCurrentAttempt($update) {
-        return strtoupper($update->getMessage()->getText());
+    private function getCurrentAttempt() {
+        return strtoupper($this->update->getMessage()->getText());
     }
 
-    public function addNewAttempt($userId, string $word) {
-        $number = AttemptModel::byUser($userId)->count() + 1;
+    private function addNewAttempt(string $word) {
+        $number = AttemptModel::byUser($this->getthis->getUserId()())->count() + 1;
         $date = date('Y-m-d');
-        ServerLog::log('creating attempt '.$number.' in '.$date.' for '.$userId.': '.$word);
+        ServerLog::log('creating attempt '.$number.' in '.$date.' for '.$this->getthis->getUserId()().': '.$word);
 
         $attempt = new AttemptModel();
-        $attempt->user_id = $userId;
+        $attempt->user_id = $this->getthis->getUserId()();
         $attempt->word_date = $date;
         $attempt->number = $number;
         $attempt->word = $word;
@@ -126,7 +125,7 @@ class Attempt extends Command {
         return $number;
     }
 
-    public function isInvalidWord(string $word) {
+    private function isInvalidWord(string $word) {
         if(!preg_match('/^[A-z]*$/', $word)) {
             return 'game.invalid_characters';
         }
@@ -145,7 +144,7 @@ class Attempt extends Command {
         return false;
     }
 
-    public function getGameRender(string $currentAttempt, string $word, $attempts) {
+    private function getGameRender(string $currentAttempt, string $word, $attempts) {
         $lines = [];
         foreach ($attempts as $attempt) {
             $lines[] = $this->getLineRender($attempt->word, $word);
@@ -154,7 +153,7 @@ class Attempt extends Command {
         return implode(PHP_EOL, $lines);
     }
 
-    public function getLineRender(string $attempt, string $word) {
+    private function getLineRender(string $attempt, string $word) {
         ServerLog::log("- - getLineRender - {$attempt} > {$word}");
         $letters = [];
         $attemptLetters = str_split($attempt);
@@ -172,7 +171,7 @@ class Attempt extends Command {
         return implode(' ', $letters);
     }
 
-    public function fillCorrects(array $attemptLetters, array $wordLetters) {
+    private function fillCorrects(array $attemptLetters, array $wordLetters) {
         ServerLog::log("- fillCorrects");
         $letters = [];
         foreach($attemptLetters as $letterPosition => $letter) {
@@ -187,7 +186,7 @@ class Attempt extends Command {
         return $letters;
     }
 
-    public function fillDisplacedsAndWrongs(array $attemptLetters, array $wordLetters, array $letters) {
+    private function fillDisplacedsAndWrongs(array $attemptLetters, array $wordLetters, array $letters) {
         ServerLog::log("- fillDisplacedsAndWrongs");
         $wordLetters = array_diff_key($wordLetters, $letters);
         foreach($attemptLetters as $letterPosition => $letter) {

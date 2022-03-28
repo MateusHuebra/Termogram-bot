@@ -18,13 +18,14 @@ class TermogramController extends Controller
     function listen(Request $request) {
 
         ServerLog::log('BotController > listen');
-        $bot = new Client(env('TG_TOKEN'));
-        $update = Update::fromResponse(BotApi::jsonValidate($bot->getRawBody(), true));
-        ServerLog::log('update json: '.$bot->getRawBody());
+        $client = new Client(env('TG_TOKEN'));
+        $bot = new BotApi(env('TG_TOKEN'));
+        $update = Update::fromResponse(BotApi::jsonValidate($client->getRawBody(), true));
+        ServerLog::log('update json: '.$client->getRawBody());
 
-        $updateHandler = Factory::buildUpdate($update);
+        $updateHandler = Factory::buildUpdate($update, $bot);
         if($updateHandler) {
-            $updateHandler->run($update, $bot);
+            $updateHandler->run();
         }
 
     }

@@ -8,16 +8,15 @@ use App\Services\TextString;
 
 class Reset extends Command {
 
-    public function run($update, $bot) {
-        $this->dieIfUnallowedChatType($update, $bot, ['private']);
-        $userId = $this->getUserId($update);
-        if($userId != env('TG_MYID')) {
+    public function run() {
+        $this->dieIfUnallowedChatType(['private']);
+        if($this->getUserId() != env('TG_MYID')) {
             return;
         }
 
-        Attempt::byUser($userId)->delete();
-        Game::byUser($userId)->delete();
-        $bot->sendMessage($userId, TextString::get('settings.reset'));
+        Attempt::byUser($this->getUserId())->delete();
+        Game::byUser($this->getUserId())->delete();
+        $this->sendMessage(TextString::get('settings.reset'));
     }
 
 }

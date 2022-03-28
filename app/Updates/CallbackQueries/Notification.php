@@ -8,13 +8,9 @@ use App\Services\TextString;
 
 class Notification extends CallbackQuery {
 
-    public function run($update, $bot) {
+    public function run() {
         ServerLog::log('Notification > run');
-        $userId = $this->getUserId($update);
-        $chatId = $this->getChatId($update);
-        $messageId = $this->getMessageId($update);
-        $data = $this->getData($update, 'notification');
-        ServerLog::log("userId: {$userId} - chatId: {$chatId} - messageId: {$messageId} - data: {$data}");
+        $data = $this->getData('notification');
 
         $text = TextString::get('notification.setted');
         if($data==='off') {
@@ -24,14 +20,14 @@ class Notification extends CallbackQuery {
             $text.= $data.'h';
         }
 
-        $user = User::find($userId);
+        $user = User::find($this->getUserId());
         $user->subscription_hour = $data;
         $user->save();
 
-        if($messageId && $chatId) {
-            $bot->editMessageText($chatId, $messageId, $text);
+        if($this->getMessageId() && $this->getChatId()) {
+            $this->bot->editMessageText($this->getChatId(), $this->getMessageId(), $text);
         } else {
-            $bot->sendMessage($chatId, $text);
+            $this->bot->sendMessage($this->getUserId(), $text);
         }
     }
 

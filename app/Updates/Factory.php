@@ -8,15 +8,15 @@ use App\Updates\CallbackQueries\Factory as CallbackQueriesFactory;
 
 class Factory {
 
-    static function buildUpdate($update) {
+    static function buildUpdate($update, $bot) {
         ServerLog::log('Factory > buildUpdate');
         $type = self::getUpdateType($update);
 
         if($type=='command') {
-            return CommandsFactory::buildCommand($update);
+            return CommandsFactory::buildCommand($update, $bot);
 
         } else if($type=='callback_query') {
-            return CallbackQueriesFactory::buildCallbackQuery($update);
+            return CallbackQueriesFactory::buildCallbackQuery($update, $bot);
 
         } else {
             return false;

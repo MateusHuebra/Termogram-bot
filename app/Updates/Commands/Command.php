@@ -3,50 +3,19 @@
 namespace App\Updates\Commands;
 
 use App\Services\TextString;
+use App\Updates\Update;
 use Exception;
 
-abstract class Command {
+abstract class Command extends Update {
 
-    public function getUserId($update) {
-        return $update->getMessage()->getFrom()->getId();
-    }
-
-    public function getChatType($update) {
-        return $update->getMessage()->getChat()->getType();
-    }
-
-    public function getChatId($update) {
-        return $update->getMessage()->getChat()->getId();
-    }
-
-    public function getMessageId($update) {
-        return $update->getMessage()->getMessageId();
-    }
-
-    public function getReplyToMessageId($update) {
-        if($update->getMessage()->getReplyToMessage()) {
-            return $update->getMessage()->getReplyToMessage()->getMessageId();
+    protected function dieIfUnallowedChatType(array $allowed, string $errorString = null) {
+        if(in_array($this->getChatType(), $allowed)) {
+            return;
         }
-        return null;
-    }
-
-    public function getReplyToMessageUserId($update) {
-        if($update->getMessage()->getReplyToMessage()) {
-            return $update->getMessage()->getReplyToMessage()->getFrom()->getId();
+        if($errorString) {
+            $this->bot->sendMessage($this->getChatId(), TextString::get('error.'.$errorString), null, false, $this->getMessageId());
         }
-        return null;
-    }
-
-    public function dieIfUnallowedChatType($update, $bot, array $allowed, string $errorString = null) {
-        $chatType = $this->getChatType($update);
-        if(!in_array($chatType, $allowed)) {
-            if($errorString) {
-                $chatId = $this->getChatId($update);
-                $messageId = $this->getMessageId($update);
-                $bot->sendMessage($chatId, TextString::get('error.'.$errorString), null, false, $messageId);
-            }
-            die;
-        }
-    }
+        die;
+}
 
 }

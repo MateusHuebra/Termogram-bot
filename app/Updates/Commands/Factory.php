@@ -7,36 +7,36 @@ use TelegramBot\Api\Client;
 
 class Factory {
 
-    static function buildCommand($update) {
+    static function buildCommand($update, $bot) {
         ServerLog::log('Factory > buildCommand');
         $command = self::getCommand($update);
 
         if(in_array($command, ['start', 'jogar'])) {
-            return new Start();
+            return new Start($update, $bot);
 
         } else if($command=='attempt') {
-            return new Attempt();
+            return new Attempt($update, $bot);
 
         } else if($command=='notificacoes') {
-            return new Notifications();
+            return new Notifications($update, $bot);
 
         } else if($command=='estatisticas') {
-            return new Statistics();
+            return new Statistics($update, $bot);
 
         } else if(in_array($command, ['help', 'ajuda'])) {
-            return new Help();
+            return new Help($update, $bot);
 
         } else if($command=='ajuda_jogar') {
-            return new HelpPlay();
+            return new HelpPlay($update, $bot);
 
         } else if($command=='ajuda_notificacoes') {
-            return new HelpNotifications();
+            return new HelpNotifications($update, $bot);
 
         } else if($command=='ping') {
-            return new Ping();
+            return new Ping($update, $bot);
 
         } else if($command=='reset') {
-            return new Reset();
+            return new Reset($update, $bot);
             
         } else {
             return false;

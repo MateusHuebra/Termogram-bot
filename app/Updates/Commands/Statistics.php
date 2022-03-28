@@ -8,29 +8,21 @@ use App\Services\TextString;
 
 class Statistics extends Command {
 
-    public function run($update, $bot) {
-        if($userId = $this->getReplyToMessageUserId($update)) {
+    public function run() {
+        if($userId = $this->getReplyToMessageUserId()) {
             $person = TextString::get('statistics.other');
         } else {
             $person = TextString::get('statistics.yours');
-            $userId = $this->getUserId($update);
+            $userId = $this->getUserId();
         }
         
         if(User::find($userId)===null) {
-            $chatId = $this->getChatId($update);
-            $messageId = $this->getMessageId($update);
-            $bot->sendMessage($chatId, TextString::get('error.user_never_played'), null, false, $messageId);
+            $this->sendMessage(TextString::get('error.user_never_played'), null, true);
             return;
         }
-        $text = $this->getText($userId, $person);
         
-        if($this->getChatType($update)=='private') {
-            $bot->sendMessage($userId, $text);
-        } else {
-            $chatId = $this->getChatId($update);
-            $messageId = $this->getMessageId($update);
-            $bot->sendMessage($chatId, $text, null, false, $messageId);
-        }
+        $text = $this->getText($userId, $person);
+        $this->sendMessage($text);
     }
 
     private function parseDistribution(array $wonAt) {

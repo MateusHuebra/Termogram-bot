@@ -10,51 +10,50 @@ use App\Services\TextString;
 
 class Start extends Command {
 
-    public function run($update, $bot) {
-        $this->dieIfUnallowedChatType($update, $bot, ['private'], 'start_in_private');
+    public function run() {
+        $this->dieIfUnallowedChatType(['private'], 'start_in_private');
         ServerLog::log('Start > run');
-        $userId = $this->getUserId($update);
 
-        if(User::ofId($userId)->exists() === false) {
+        if(User::ofId($this->getUserId())->exists() === false) {
             ServerLog::log('user does\'n exist');
-            $this->addNewUser($userId);
-            $bot->sendMessage($userId, TextString::get('start.welcome'));
+            $this->addNewUser($this->getUserId());
+            $this->sendMessage(TextString::get('start.welcome'));
             return;
         }
 
-        if(Game::byUser($userId)->exists() === false) {
+        if(Game::byUser($this->getUserId())->exists() === false) {
             ServerLog::log('game does\'n exist');
-            $this->startNewGame($userId);
-            $bot->sendMessage($userId, TextString::get('start.game_started'));
+            $this->startNewGame($this->getUserId());
+            $this->sendMessage(TextString::get('start.game_started'));
             return;
         }
 
-        if(Game::byUser($userId)->first()->ended) {
+        if(Game::byUser($this->getUserId())->first()->ended) {
             ServerLog::log('game ended');
-            $bot->sendMessage($userId, TextString::get('game.already_ended'));
+            $this->sendMessage(TextString::get('game.already_ended'));
             return;
         }
 
         ServerLog::log('game not ended');
-        $bot->sendMessage($userId, TextString::get('placeholder.game_status'));
+        $this->sendMessage(TextString::get('placeholder.game_status'));
         
     }
 
-    public function addNewUser($userId) {
-        ServerLog::log('creating new user: '.$userId);
+    public function addNewUser() {
+        ServerLog::log('creating new user: '.$this->getUserId());
         $user = new User();
-        $user->id = $userId;
+        $user->id = $this->getUserId();
         $user->subscription_hour = 0;
         $user->save();
     }
 
-    public function startNewGame($userId) {
+    public function startNewGame() {
         $date = date('Y-m-d');
         $season = Season::current()->first();
-        ServerLog::log('creating new game for '.$userId.' in '.$date.' from season '.$season->name);
+        ServerLog::log('creating new game for '.$this->getUserId().' in '.$date.' from season '.$season->name);
 
         $game = new Game();
-        $game->user_id = $userId;
+        $game->user_id = $this->getUserId();
         $game->word_date = $date;
         $game->won_at = null;
         $game->ended = false;
