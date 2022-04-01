@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Console\Scheduled\NotificateSubscribedUsers;
 use App\Models\User;
 use App\Services\ServerLog;
 use App\Services\TextString;
@@ -15,7 +16,7 @@ use TelegramBot\Api\Types\Update;
 class TermogramController extends Controller
 {
     
-    function listen(Request $request) {
+    public function listen(Request $request) {
 
         ServerLog::log('BotController > listen');
         $client = new Client(env('TG_TOKEN'));
@@ -30,7 +31,16 @@ class TermogramController extends Controller
 
     }
 
-    function broadcast(Request $request) {
+    public function testForcedNotification(Request $request) {
+        if($request->token!=env('TG_TOKEN')){
+            return;
+        }
+
+        $bot = new BotApi(env('TG_TOKEN'));
+        NotificateSubscribedUsers::tryToSendMessage($bot, env('TG_MYID'));
+    }
+
+    public function broadcast(Request $request) {
 
         if($request->token!=env('TG_TOKEN') || !isset($request->string)){
             return;

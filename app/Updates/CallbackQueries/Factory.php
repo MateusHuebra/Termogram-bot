@@ -14,7 +14,7 @@ class Factory {
             return new Notification($update, $bot);
 
         } else if($type=='open_notification') {
-            return new Notification($update, $bot);
+            return new OpenNotification($update, $bot);
 
         } else {
             return false;
@@ -28,7 +28,7 @@ class Factory {
             return false;
         }
 
-        preg_match('/^([A-z]+):/', $data, $matches);
+        preg_match('/^([A-z_]+):/', $data, $matches);
 
         if (empty($matches)) {
             ServerLog::log('no matches');

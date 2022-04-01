@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Services\TextString;
 use Exception;
 use TelegramBot\Api\BotApi;
+use TelegramBot\Api\Types\Inline\InlineKeyboardMarkup;
 
 class NotificateSubscribedUsers {
 
@@ -17,25 +18,29 @@ class NotificateSubscribedUsers {
         $users = User::whereSubscriptionHour($hour)->get('id');
         foreach ($users as $user) {
             if(!Game::byUser($user->id)->exists()) {
-                try {
-                    $keyboard = $this->getNotificationKeyboard();
-                    $bot->sendMessage($user->id, TextString::get('notification.new_word'), null, false, $keyboard);
-                } catch (Exception $e) {
-                    $bot->sendMessage(env('TG_MYID'), "error on trying to notificate to {$user->id}: {$e->getMessage()}");
-                }
+                self::tryToSendMessage($bot, $user->id);
             }
         }
     }
 
-    private function getNotificationKeyboard() {
-        return [
+    static function tryToSendMessage(BotApi $bot, $userId) {
+        try {
+            $keyboard = self::getNotificationKeyboard();
+            $bot->sendMessage($userId, TextString::get('notification.new_word'), null, false, null, $keyboard);
+        } catch (Exception $e) {
+            $bot->sendMessage(env('TG_MYID'), "error on trying to notificate to {$userId}: {$e->getMessage()}");
+        }
+    }
+
+    static function getNotificationKeyboard() {
+        $buttons[] = [
             [
-                [
-                    'text' => TextString::get('settings.notification_settings'),
-                    'callback_data' => 'open_notification:'
-                ]
+                'text' => TextString::get('settings.notifications_settings'),
+                'callback_data' => 'open_notification:'
             ]
         ];
+
+        return new InlineKeyboardMarkup($buttons);
     }
 
 }
