@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Console\Scheduled\NotificateSubscribedUsers;
+use App\Models\Game;
 use App\Models\User;
 use App\Services\ServerLog;
 use App\Services\TextString;
@@ -15,7 +16,7 @@ use TelegramBot\Api\Types\Update;
 
 class TermogramController extends Controller
 {
-    
+
     public function listen(Request $request) {
 
         ServerLog::log('BotController > listen');
@@ -38,6 +39,26 @@ class TermogramController extends Controller
 
         $bot = new BotApi(env('TG_TOKEN'));
         NotificateSubscribedUsers::tryToSendMessage($bot, env('TG_MYID'));
+    }
+
+    public function resetAndDistributeScore(Request $request) {
+        if($request->token!=env('TG_TOKEN')){
+            return;
+        }
+
+        $users = User::all();
+        foreach ($users as $user) {
+            $user->score = 0;
+            $user->save();
+        }
+
+        $games = Game::whereNotNull('won_at');
+        foreach ($games as $game) {
+            $user = User::find($game->user_id);
+            $user->score+= (7 - $game->won_at);
+            $user->save();
+        }
+
     }
 
     public function broadcast(Request $request) {
@@ -74,18 +95,18 @@ class TermogramController extends Controller
             return true;
         });
         */
-        
+
         //$bot->sendMessage(, 'test');
 
 
         /*
         try {
             $bot = new \TelegramBot\Api\Client(env('TG_TOKEN'));
-            
+
             $bot->command('ping', function ($message) use ($bot) {
                 $bot->sendMessage($message->getChat()->getId(), 'pong!', $message->getId());
             });
-            
+
             $bot->run();
         } catch (\TelegramBot\Api\Exception $e) {
             $e->getMessage();
