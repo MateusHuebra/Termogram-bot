@@ -11,7 +11,7 @@ abstract class CallbackQuery extends Update {
 
     public function __construct(UpdateType $update, BotApi $bot)
     {
-        self::__construct($update, $bot);
+        parent::__construct($update, $bot);
         if($this->getMessage()==null) {
             $this->bot->answerCallbackQuery($this->getId(), TextString::get('error.too_old_message'));
             die;
