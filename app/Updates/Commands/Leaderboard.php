@@ -32,7 +32,7 @@ class Leaderboard extends Command {
                 $positionString = ' \=  ';
             } else {
                 $positionString = Notifications::parseHour($position).' ';
-                $positionString = str_replace(['01', '02', '03'], ['🥇', '🥈', '🥉'], $positionString);
+                $positionString = str_replace(['01 ', '02 ', '03 '], ['🥇', '🥈', '🥉'], $positionString);
             }
             $text.= TextString::get('leaderboard.line', [
                 'position' => $positionString,
