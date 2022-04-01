@@ -20,6 +20,9 @@ class Factory {
         } else if($command=='notificacoes') {
             return new Notifications($update, $bot);
 
+        } else if($command=='leaderboard') {
+            return new Leaderboard($update, $bot);
+
         } else if($command=='estatisticas') {
             return new Statistics($update, $bot);
 
@@ -37,7 +40,7 @@ class Factory {
 
         } else if($command=='reset') {
             return new Reset($update, $bot);
-            
+
         } else {
             return false;
         }
@@ -58,7 +61,7 @@ class Factory {
         if (empty($matches)) {
             ServerLog::log('no matches, command: attempt');
             return 'attempt';
-        } 
+        }
 
         ServerLog::log('command: '.$matches[1]);
         return $matches[1];

@@ -104,6 +104,9 @@
         ],
         "too_old_message": [
             "Mensagem antiga demais para interagir"
+        ],
+        "only_groups": [
+            "Esse comando só pode ser usado em grupos no momento"
         ]
     },
     "placeholder": {
