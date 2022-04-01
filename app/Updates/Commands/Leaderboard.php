@@ -33,7 +33,7 @@ class Leaderboard extends Command {
             } else {
                 $positionString = Notifications::parseHour($position);
             }
-            $text.= "\n{$positionString}》 [{$name}](tg://user?id={$user->id}) {$user->score}";
+            $text.= "\n{$positionString} 》[{$name}](tg://user?id={$user->id})  {$user->score}";
             $last = $user->score;
             $position++;
             if($position > 10) {
