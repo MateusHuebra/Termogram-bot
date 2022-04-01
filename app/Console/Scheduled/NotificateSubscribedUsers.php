@@ -18,12 +18,24 @@ class NotificateSubscribedUsers {
         foreach ($users as $user) {
             if(!Game::byUser($user->id)->exists()) {
                 try {
-                    $bot->sendMessage($user->id, TextString::get('notification.new_word'));
+                    $keyboard = $this->getNotificationKeyboard();
+                    $bot->sendMessage($user->id, TextString::get('notification.new_word'), null, false, $keyboard);
                 } catch (Exception $e) {
                     $bot->sendMessage(env('TG_MYID'), "error on trying to notificate to {$user->id}: {$e->getMessage()}");
                 }
             }
         }
+    }
+
+    private function getNotificationKeyboard() {
+        return [
+            [
+                [
+                    'text' => TextString::get('settings.notification_settings'),
+                    'callback_data' => 'open_notification:'
+                ]
+            ]
+        ];
     }
 
 }

@@ -100,7 +100,7 @@ class Attempt extends Command {
         if($wonAt) {
             $render.= TextString::get('game.won');
         } else {
-            $render.= TextString::get('game.lost').$word->value;
+            $render.= TextString::get('game.lost', ['word' => $word->value]);
         }
 
         return $render;

@@ -14,12 +14,12 @@ class Notifications extends Command {
         ServerLog::log('Notifications > run');
         $currentSubscriptionHour = User::find($this->getUserId())->subscription_hour;
 
-        $keyboard = $this->getNotificationsKeyboard($currentSubscriptionHour);
+        $keyboard = self::getNotificationsKeyboard($currentSubscriptionHour);
 
         $this->sendMessage(TextString::get('settings.notifications'), $keyboard);
     }
 
-    public function getNotificationsKeyboard($current) {
+    static function getNotificationsKeyboard($current) : InlineKeyboardMarkup {
         $buttons = [];
         for ($row=0; $row<4; $row++) {
             $arrayRow = [];
@@ -29,8 +29,8 @@ class Notifications extends Command {
                     $hour = 0;
                 }
                 $arrayRow[] = [
-                    'text' => $this->parseCurrent($hour, $current),
-                    'callback_data' => 'notification:'.$this->parseHour($hour)
+                    'text' => self::parseCurrent($hour, $current),
+                    'callback_data' => 'notification:'.self::parseHour($hour)
                 ];
             }
             $buttons[] = $arrayRow;
@@ -47,15 +47,16 @@ class Notifications extends Command {
         return new InlineKeyboardMarkup($buttons);
     }
 
-    public function parseHour($hour) {
-        if(strlen(''.$hour)<2) {
+    static function parseHour($hour) : string {
+        $hour = ''.$hour;
+        if(strlen($hour)<2) {
             return '0'.$hour;
         }
         return $hour;
     }
 
-    public function parseCurrent($hour, $current) {
-        $hour = $this->parseHour($hour);
+    static function parseCurrent($hour, $current) : string {
+        $hour = self::parseHour($hour);
         return ($current==$hour)?'• '.$hour.' •':$hour;
     }
 

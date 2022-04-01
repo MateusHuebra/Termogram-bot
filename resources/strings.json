@@ -31,7 +31,7 @@
             "\n\nVocê ganhou!"
         ],
         "lost": [
-            "\n\nVocê perdeu! A palavra era "
+            "\n\nVocê perdeu! A palavra era {word}"
         ],
         "share_telegram": [
             "Compartilhar no Telegram"
@@ -52,6 +52,9 @@
         ],
         "turn_notifications_off": [
             "Desligar notificações"
+        ],
+        "notifications_settings": [
+            "Configurações de notificação"
         ],
         "selected": [
             " (selecionado)"
