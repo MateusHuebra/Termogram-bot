@@ -112,6 +112,7 @@ class Attempt extends Command {
         $data['score'] = 7 - $wonAt;
         $user = User::find($this->getUserId());
         $user->score+= $data['score'];
+        $user->save();
         $data['total_score'] = $user->score;
         return $data;
     }
