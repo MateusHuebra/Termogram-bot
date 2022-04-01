@@ -52,7 +52,7 @@ class TermogramController extends Controller
             $user->save();
         }
 
-        $games = Game::whereNotNull('won_at');
+        $games = Game::whereNotNull('won_at')->get();
         foreach ($games as $game) {
             $user = User::find($game->user_id);
             $user->score+= (7 - $game->won_at);
