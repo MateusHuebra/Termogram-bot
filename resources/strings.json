@@ -100,7 +100,7 @@
             "🏆 ＬＥＡ🄳ＥＲＢＯＡＲＤ ＤＯ ＧＲＵ🅟Ｏ ✍️"
         ],
         "line": [
-            "\n{position} 》[{name}](tg://user?id={id})  {score}"
+            "\n{position}》[{name}](tg://user?id={id})  {score}"
         ]
     },
     "error": {
