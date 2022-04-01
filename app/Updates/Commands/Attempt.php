@@ -8,6 +8,7 @@ use App\Services\ServerLog;
 use App\Services\TextString;
 use Illuminate\Support\Facades\File;
 use App\Models\Attempt as AttemptModel;
+use App\Models\User;
 use App\Services\FontHandler;
 use TelegramBot\Api\Types\Inline\InlineKeyboardMarkup;
 
@@ -92,13 +93,14 @@ class Attempt extends Command {
         ]);
     }
 
-    private function endGame(Game $game, string $render, $word, $wonAt = null) {
+    private function endGame(Game $game, string $render, $word, $wonAt = null) : string {
         $game->ended = 1;
         $game->won_at = $wonAt;
         $game->save();
 
         if($wonAt) {
-            $render.= TextString::get('game.won');
+            $data = $this->addScore($wonAt);
+            $render.= TextString::get('game.won', $data);
         } else {
             $render.= TextString::get('game.lost', ['word' => $word->value]);
         }
@@ -106,11 +108,19 @@ class Attempt extends Command {
         return $render;
     }
 
+    private function addScore(int $wonAt) : array {
+        $data['score'] = 7 - $wonAt;
+        $user = User::find($this->getUserId());
+        $user->score+= $data['score'];
+        $data['total_score'] = $user->score;
+        return $data;
+    }
+
     private function getCurrentAttempt() {
         return strtoupper($this->update->getMessage()->getText());
     }
 
-    private function addNewAttempt(string $word) {
+    private function addNewAttempt(string $word) : int {
         $number = AttemptModel::byUser($this->getUserId())->count() + 1;
         $date = date('Y-m-d');
         ServerLog::log('creating attempt '.$number.' in '.$date.' for '.$this->getUserId().': '.$word);
@@ -144,7 +154,7 @@ class Attempt extends Command {
         return false;
     }
 
-    private function getGameRender(string $currentAttempt, string $word, $attempts) {
+    private function getGameRender(string $currentAttempt, string $word, $attempts) : string {
         $lines = [];
         foreach ($attempts as $attempt) {
             $lines[] = $this->getLineRender($attempt->word, $word);
@@ -153,7 +163,7 @@ class Attempt extends Command {
         return implode(PHP_EOL, $lines);
     }
 
-    private function getLineRender(string $attempt, string $word) {
+    private function getLineRender(string $attempt, string $word) : string {
         ServerLog::log("- - getLineRender - {$attempt} > {$word}");
         $letters = [];
         $attemptLetters = str_split($attempt);
@@ -171,7 +181,7 @@ class Attempt extends Command {
         return implode(' ', $letters);
     }
 
-    private function fillCorrects(array $attemptLetters, array $wordLetters) {
+    private function fillCorrects(array $attemptLetters, array $wordLetters) : array {
         ServerLog::log("- fillCorrects");
         $letters = [];
         foreach($attemptLetters as $letterPosition => $letter) {
@@ -186,7 +196,7 @@ class Attempt extends Command {
         return $letters;
     }
 
-    private function fillDisplacedsAndWrongs(array $attemptLetters, array $wordLetters, array $letters) {
+    private function fillDisplacedsAndWrongs(array $attemptLetters, array $wordLetters, array $letters) : array {
         ServerLog::log("- fillDisplacedsAndWrongs");
         $wordLetters = array_diff_key($wordLetters, $letters);
         foreach($attemptLetters as $letterPosition => $letter) {

@@ -28,7 +28,7 @@
             "Palavra inválida!\nEssa palavra não consta no meu vocabulário robótico"
         ],
         "won": [
-            "\n\nVocê ganhou!"
+            "\n\nVocê ganhou!\nPontos: {total_score} (+{score})"
         ],
         "lost": [
             "\n\nVocê perdeu! A palavra era {word}"
@@ -92,7 +92,7 @@
             "Estatísticas dessa pessoa"
         ],
         "text": [
-            "- {person}:\n\nJogos iniciados: {total}\nJogos finalizados: {ended}\nTaxa de vitória: {win_rate}%\n\n- Distribuição de tentativas:\n"
+            "- {person}:\n\nJogos iniciados: {total}\nJogos finalizados: {ended}\nTaxa de vitória: {win_rate}%\nPontuação (beta): {score}\n\n- Distribuição de tentativas:\n"
         ]
     },
     "error": {

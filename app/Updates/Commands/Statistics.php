@@ -57,8 +57,9 @@ class Statistics extends Command {
         $data = [
             'person' => $person,
             'total' => $total,
+            'ended' => $ended,
             'win_rate' => $winRate,
-            'ended' => $ended
+            'score' => User::find($userId)->score
         ];
 
         $text = TextString::get('statistics.text', $data);
