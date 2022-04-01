@@ -101,6 +101,9 @@
         ],
         "user_never_played": [
             "A pessoa mencionada nunca jogou Termogram"
+        ],
+        "too_old_message": [
+            "Mensagem antiga demais para interagir"
         ]
     },
     "placeholder": {

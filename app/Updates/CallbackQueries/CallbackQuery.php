@@ -2,9 +2,28 @@
 
 namespace App\Updates\CallbackQueries;
 
+use App\Services\TextString;
+use TelegramBot\Api\BotApi;
+use TelegramBot\Api\Types\Update as UpdateType;
 use App\Updates\Update;
 
 abstract class CallbackQuery extends Update {
+
+    public function __construct(UpdateType $update, BotApi $bot)
+    {
+        self::__construct($update, $bot);
+        if($this->getMessage()==null) {
+            $this->bot->answerCallbackQuery($this->getId(), TextString::get('error.too_old_message'));
+            die;
+        }
+    }
+
+    protected function getId() {
+        if(!isset($this->id)) {
+            $this->id = $this->update->getCallbackQuery()->getId();
+        }
+        return $this->id;
+    }
 
     protected function getUserId() {
         if(!isset($this->userId)) {
