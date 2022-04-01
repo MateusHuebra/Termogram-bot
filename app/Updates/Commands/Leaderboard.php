@@ -29,7 +29,7 @@ class Leaderboard extends Command {
             }
 
             if($user->score==$last) {
-                $positionString = ' = ';
+                $positionString = ' \= ';
             } else {
                 $positionString = Notifications::parseHour($position);
                 $positionString = str_replace(['01', '02', '03'], ['🥇', '🥈', '🥉'], $positionString);
