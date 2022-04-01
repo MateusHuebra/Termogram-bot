@@ -3,6 +3,7 @@
 namespace App\Updates\Commands;
 
 use App\Models\User;
+use App\Services\TextString;
 use Exception;
 
 class Leaderboard extends Command {
@@ -11,7 +12,7 @@ class Leaderboard extends Command {
         $this->dieIfUnallowedChatType(['group', 'supergroup'], 'only_groups', false);
 
         $users = User::orderBy('score', 'DESC')->get();
-        $text = '';
+        $text = TextString::get('leaderboard.title')."\n";
         $position = 1;
         $last = 0;
         $this->bot->sendChatAction($this->getChatId(), 'typing');
@@ -27,13 +28,18 @@ class Leaderboard extends Command {
                 continue;
             }
 
-            $name = $TgUser->getUser()->getFirstName();
             if($user->score==$last) {
-                $positionString = '  ';
+                $positionString = ' = ';
             } else {
                 $positionString = Notifications::parseHour($position);
+                $positionString = str_replace(['01', '02', '03'], ['🥇', '🥈', '🥉'], $positionString);
             }
-            $text.= "\n{$positionString} 》[{$name}](tg://user?id={$user->id})  {$user->score}";
+            $text.= TextString::get('leaderboard.line', [
+                'position' => $positionString,
+                'name' => $TgUser->getUser()->getFirstName(),
+                'id' => $user->id,
+                'score' => $user->score
+            ]);
             $last = $user->score;
             $position++;
             if($position > 10) {

@@ -95,6 +95,14 @@
             "- {person}:\n\nJogos iniciados: {total}\nJogos finalizados: {ended}\nTaxa de vitória: {win_rate}%\nPontuação (beta): {score}\n\n- Distribuição de tentativas:\n"
         ]
     },
+    "leaderboard": {
+        "title": [
+            "🏆 ＬＥＡ🄳ＥＲＢＯＡＲＤ ＤＯ ＧＲＵ🅟Ｏ ✍️"
+        ],
+        "line": [
+            "\n{position} 》[{name}](tg://user?id={id})  {score}"
+        ]
+    },
     "error": {
         "start_in_private": [
             "Você só pode jogar no privado"
