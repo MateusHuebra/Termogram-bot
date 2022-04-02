@@ -27,7 +27,12 @@ class TermogramController extends Controller
 
         $updateHandler = Factory::buildUpdate($update, $bot);
         if($updateHandler) {
-            $updateHandler->run();
+            try {
+                $updateHandler->run();
+            } catch(Exception $e) {
+                $bot->sendMessage(env('TG_MYID'), $e->getMessage());
+                echo PHP_EOL.$e->getFile().' line '.$e->getLine()."\n\n\n".$e->getTraceAsString();
+            }
         }
 
     }
