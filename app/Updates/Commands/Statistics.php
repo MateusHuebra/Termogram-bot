@@ -15,12 +15,12 @@ class Statistics extends Command {
             $person = TextString::get('statistics.yours');
             $userId = $this->getUserId();
         }
-        
+
         if(User::find($userId)===null) {
             $this->sendMessage(TextString::get('error.user_never_played'), null, true);
             return;
         }
-        
+
         $text = $this->getText($userId, $person);
         $this->sendMessage($text);
     }
@@ -52,8 +52,12 @@ class Statistics extends Command {
             $wonAt[7] = 0;
         }
         $winnings = ($wonAt[0]??0)+($wonAt[1]??0)+($wonAt[2]??0)+($wonAt[3]??0)+($wonAt[4]??0)+($wonAt[5]??0)+($wonAt[6]??0);
-        $winRate = $winnings*100/($winnings+$wonAt[7]);
-        $winRate = round($winRate, 2);
+        if($winnings>0) {
+            $winRate = $winnings*100/($winnings+$wonAt[7]);
+            $winRate = round($winRate, 2);
+        } else {
+            $winRate = 0;
+        }
         $data = [
             'person' => $person,
             'total' => $total,
