@@ -15,7 +15,8 @@ class OpenNotification extends CallbackQuery {
         $currentSubscriptionHour = User::find($this->getUserId())->subscription_hour;
 
         $keyboard = Notifications::getNotificationsKeyboard($currentSubscriptionHour);
-
+        
+        $this->bot->answerCallbackQuery($this->getId(), TextString::get('settings.loading'));
         $this->bot->sendMessage($this->getUserId(), TextString::get('settings.notifications'), null, false, null, $keyboard);
     }
 

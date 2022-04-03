@@ -58,6 +58,9 @@
         ],
         "selected": [
             " (selecionado)"
+        ],
+        "loading": [
+            "Carregando..."
         ]
     },
     "help": {
