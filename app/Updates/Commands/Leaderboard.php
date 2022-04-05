@@ -21,6 +21,9 @@ class Leaderboard extends Command {
 
         $this->bot->sendChatAction($this->getChatId(), 'typing');
         $board = $this->renderBoard($users);
+        $reservedCharacters = ['_', '*', '[', ']', '(', ')', '~', '`', '>', '#', '+', '-', '=', '|', '{', '}', '.', '!'];
+        $escapedCharacters = ['\_', '\*', '\[', '\]', '\(', '\)', '\~', '\`', '\>', '\#', '\+', '\-', '\=', '\|', '\{', '\}', '\.', '\!'];
+        $board = str_replace($reservedCharacters, $escapedCharacters, $board);
         $this->bot->sendMessage($this->getChatId(), $board, 'MarkdownV2', false, $this->getMessageId());
     }
 
@@ -38,7 +41,7 @@ class Leaderboard extends Command {
             }
 
             if($user->score==$last) {
-                $positionString = ' \=  ';
+                $positionString = ' =  ';
             } else {
                 $positionString = Notifications::parseHour($position).' ';
                 $positionString = str_replace(['01 ', '02 ', '03 '], ['🥇', '🥈', '🥉'], $positionString);
