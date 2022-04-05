@@ -10,6 +10,9 @@ use Illuminate\Support\Facades\DB;
 
 class Leaderboard extends Command {
 
+    const RESERVED_CHARACTERS = ['_', '*', '[', ']', '(', ')', '~', '`', '>', '#', '+', '-', '=', '|', '{', '}', '.', '!'];
+    const ESCAPED_CHARACTERS = ['\_', '\*', '\[', '\]', '\(', '\)', '\~', '\`', '\>', '\#', '\+', '\-', '\=', '\|', '\{', '\}', '\.', '\!'];
+
     public function run() {
         $this->dieIfUnallowedChatType(['group', 'supergroup'], 'only_groups', false);
 
@@ -21,9 +24,7 @@ class Leaderboard extends Command {
 
         $this->bot->sendChatAction($this->getChatId(), 'typing');
         $board = $this->renderBoard($users);
-        $reservedCharacters = ['_', '*', '[', ']', '(', ')', '~', '`', '>', '#', '+', '-', '=', '|', '{', '}', '.', '!'];
-        $escapedCharacters = ['\_', '\*', '\[', '\]', '\(', '\)', '\~', '\`', '\>', '\#', '\+', '\-', '\=', '\|', '\{', '\}', '\.', '\!'];
-        $board = str_replace($reservedCharacters, $escapedCharacters, $board);
+        
         $this->bot->sendMessage($this->getChatId(), $board, 'MarkdownV2', false, $this->getMessageId());
     }
 
@@ -41,14 +42,14 @@ class Leaderboard extends Command {
             }
 
             if($user->score==$last) {
-                $positionString = ' =  ';
+                $positionString = ' \=  ';
             } else {
                 $positionString = Notifications::parseHour($position).' ';
                 $positionString = str_replace(['01 ', '02 ', '03 '], ['🥇', '🥈', '🥉'], $positionString);
             }
             $text.= TextString::get('leaderboard.line', [
                 'position' => $positionString,
-                'name' => $TgUser->getUser()->getFirstName(),
+                'name' => self::parseMarkdownV2($TgUser->getUser()->getFirstName()),
                 'id' => $user->id,
                 'score' => $user->score
             ]);
@@ -72,6 +73,10 @@ class Leaderboard extends Command {
             return false;
         }
         return $TgUser;
+    }
+
+    static function parseMarkdownV2($string) {
+        return str_replace(self::RESERVED_CHARACTERS, self::ESCAPED_CHARACTERS, $string);
     }
 
 }
