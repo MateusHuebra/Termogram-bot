@@ -51,7 +51,8 @@ class TermogramController extends Controller
             return;
         }
 
-        NotificateSubscribedUsers();
+        $method = new NotificateSubscribedUsers();
+        $method();
     }
 
     public function resetAndDistributeScore(Request $request) {
