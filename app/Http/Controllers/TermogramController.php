@@ -46,6 +46,14 @@ class TermogramController extends Controller
         NotificateSubscribedUsers::tryToSendMessage($bot, env('TG_MYID'));
     }
 
+    public function forceNotificationAll(Request $request) {
+        if($request->token!=env('TG_TOKEN')){
+            return;
+        }
+
+        NotificateSubscribedUsers();
+    }
+
     public function resetAndDistributeScore(Request $request) {
         if($request->token!=env('TG_TOKEN')){
             return;

@@ -29,7 +29,7 @@ class NotificateSubscribedUsers {
             $bot->sendMessage($userId, TextString::get('notification.new_word'), null, false, null, $keyboard);
         } catch (Exception $e) {
             $user = User::find($userdId);
-            $user->subscription_hour = NULL;
+            $user->subscription_hour = null;
             $user->save();
             $bot->sendMessage(env('TG_MYID'), "error on trying to notificate to {$userId}: {$e->getMessage()}\n\nturning off his notifications");
         }

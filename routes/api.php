@@ -21,4 +21,5 @@ use Illuminate\Support\Facades\Route;
 Route::post('/bot/listen', [TermogramController::class, 'listen']);
 Route::post('/bot/broadcast', [TermogramController::class, 'broadcast']);
 Route::post('/bot/testForcedNotification', [TermogramController::class, 'testForcedNotification']);
+Route::post('/bot/forceNotificationAll', [TermogramController::class, 'forceNotificationAll']);
 Route::post('/bot/resetAndDistributeScore', [TermogramController::class, 'resetAndDistributeScore']);
