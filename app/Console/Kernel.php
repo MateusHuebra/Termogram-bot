@@ -3,8 +3,9 @@
 namespace App\Console;
 
 use App\Console\Scheduled\NotificateSubscribedUsers;
-use App\Console\Scheduled\ScheduleTest;
+use App\Console\Scheduled\resetAndDistributeScore;
 use App\Console\Scheduled\SendGamesPlayedToday;
+use App\Console\Scheduled\reserAnd;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -21,6 +22,7 @@ class Kernel extends ConsoleKernel
         //$schedule->call(new ScheduleTest)->everyMinute();
         $schedule->call(new NotificateSubscribedUsers)->hourly();
         $schedule->call(new SendGamesPlayedToday)->daily();
+        $schedule->call(new resetAndDistributeScore)->twiceMonthly(1, 16, '00:00');	
     }
 
     /**

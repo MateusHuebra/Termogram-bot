@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Console\Scheduled\NotificateSubscribedUsers;
 use App\Models\Game;
 use App\Models\User;
+use App\Services\Score;
 use App\Services\ServerLog;
 use App\Services\TextString;
 use App\Updates\Factory;
@@ -56,23 +57,13 @@ class TermogramController extends Controller
     }
 
     public function resetAndDistributeScore(Request $request) {
-        if($request->token!=env('TG_TOKEN')){
+        if(($request->token)!=env('TG_TOKEN')){
             return;
         }
 
-        $users = User::all();
-        foreach ($users as $user) {
-            $user->score = 0;
-            $user->save();
-        }
-
-        $games = Game::whereNotNull('won_at')->get();
-        foreach ($games as $game) {
-            $user = User::find($game->user_id);
-            $user->score+= (7 - $game->won_at);
-            $user->save();
-        }
-
+        $score = new Score();
+        $score->resetScore();
+        $score->distributeScore($request->date_offset??Score::DEFAULT_DATE_OFFSET);
     }
 
     public function broadcast(Request $request) {
