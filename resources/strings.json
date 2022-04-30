@@ -118,6 +118,9 @@
         ],
         "only_groups": [
             "Esse comando só pode ser usado em grupos no momento"
+        ],
+        "no_todays_word": [
+            "Foi mal, não consegui encontrar a palavra de hoje no meu banco de dados :(\n\nLogo mais meu desenvolvedor vem arrumar isso"
         ]
     },
     "placeholder": {

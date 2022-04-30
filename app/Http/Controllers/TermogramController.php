@@ -90,30 +90,3 @@ class TermogramController extends Controller
     }
 
 }
-
-        //$bot->getChe
-
-        /*
-        $bot->on(function (Update $update) use ($bot) {
-            $bot->sendMessage($update->getMessage()->getChat()->getId(), 'pong');
-        }, function() {
-            return true;
-        });
-        */
-
-        //$bot->sendMessage(, 'test');
-
-
-        /*
-        try {
-            $bot = new \TelegramBot\Api\Client(env('TG_TOKEN'));
-
-            $bot->command('ping', function ($message) use ($bot) {
-                $bot->sendMessage($message->getChat()->getId(), 'pong!', $message->getId());
-            });
-
-            $bot->run();
-        } catch (\TelegramBot\Api\Exception $e) {
-            $e->getMessage();
-        }
-        */

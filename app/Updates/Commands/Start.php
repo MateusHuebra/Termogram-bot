@@ -5,6 +5,7 @@ namespace App\Updates\Commands;
 use App\Models\Game;
 use App\Models\Season;
 use App\Models\User;
+use App\Models\Word;
 use App\Services\ServerLog;
 use App\Services\TextString;
 
@@ -23,8 +24,8 @@ class Start extends Command {
 
         if(Game::byUser($this->getUserId())->exists() === false) {
             ServerLog::log('game does\'n exist');
-            $this->startNewGame($this->getUserId());
-            $this->sendMessage(TextString::get('start.game_started'));
+            $resultString = $this->startNewGame($this->getUserId());
+            $this->sendMessage(TextString::get($resultString));
             return;
         }
 
@@ -48,19 +49,25 @@ class Start extends Command {
         ServerLog::log('new user created');
     }
 
-    public function startNewGame() {
+    public function startNewGame() : string {
         $date = date('Y-m-d');
         $season = Season::current()->first();
+        $word = Word::today()->first();
+
+        if($word === null) {
+            return 'error.no_todays_word';
+        }
         ServerLog::log('creating new game for '.$this->getUserId().' in '.$date.' from season '.$season->name);
 
         $game = new Game();
         $game->user_id = $this->getUserId();
-        $game->word_date = $date;
+        $game->word_date = $word->date;
         $game->won_at = null;
         $game->ended = false;
         $game->season_id = $season->id;
         $game->save();
         ServerLog::log('new game created');
+        return 'start.game_started';
     }
 
 }
