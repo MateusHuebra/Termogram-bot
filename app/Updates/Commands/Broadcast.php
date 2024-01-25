@@ -15,7 +15,7 @@ class Broadcast extends Command {
             return;
         }
 
-        $bot->sendMessage(env('TG_MYID'), TextString::get('broadcast.started'));
+        $this->bot->sendMessage(env('TG_MYID'), TextString::get('broadcast.started'));
 
         $bot = new BotApi(env('TG_TOKEN'));
         $users = User::all();
@@ -24,26 +24,26 @@ class Broadcast extends Command {
         $message = $this->getMessage();
 
         foreach ($users as $user) {
-            $this->tryToSendMessage($bot, $user->id, $message);
+            $this->tryToSendMessage($user->id, $message);
         }
 
         $result = TextString::get('broadcast.done', [
             'notified' => $usersNotified,
             'not_notified' => $usersNotNotified
         ]);
-        $bot->sendMessage(env('TG_MYID'), $result);
+        $this->bot->sendMessage(env('TG_MYID'), $result);
     }
 
     private function getMessage() {
         return str_replace('/broadcast ', '', $this->update->getMessage()->getText());
     }
 
-    private function tryToSendMessage(BotApi $bot, $userId, $message) {
+    private function tryToSendMessage($userId, $message) {
         try {
-            $bot->sendMessage($userId, $message);
+            $this->bot->sendMessage($userId, $message);
             $this->usersNotified++;
         } catch (Exception $e) {
-            $bot->sendMessage(env('TG_MYID'), "error on trying to broadcast to {$userId}: {$e->getMessage()}");
+            $this->bot->sendMessage(env('TG_MYID'), "error on trying to broadcast to {$userId}: {$e->getMessage()}");
             $this->usersNotNotified++;
         }
     }
