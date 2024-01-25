@@ -13,6 +13,9 @@ class Factory {
         if($type=='notification') {
             return new Notification($update, $bot);
 
+        } else if($type=='play') {
+            return new Play($update, $bot);
+
         } else if($type=='open_notification') {
             return new OpenNotification($update, $bot);
 

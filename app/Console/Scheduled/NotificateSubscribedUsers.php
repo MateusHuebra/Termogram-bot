@@ -36,10 +36,18 @@ class NotificateSubscribedUsers {
     }
 
     static function getNotificationKeyboard() {
-        $buttons[] = [
+        $buttons = [
             [
-                'text' => TextString::get('settings.notifications_settings'),
-                'callback_data' => 'open_notification:'
+                [
+                    'text' => TextString::get('settings.play'),
+                    'callback_data' => 'play:'
+                ]
+            ],
+            [
+                [
+                    'text' => TextString::get('settings.notifications_settings'),
+                    'callback_data' => 'open_notification:'
+                ]
             ]
         ];
 

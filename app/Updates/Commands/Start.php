@@ -40,7 +40,7 @@ class Start extends Command {
         
     }
 
-    public function addNewUser() {
+    private function addNewUser() {
         ServerLog::log('creating new user: '.$this->getUserId());
         $user = new User();
         $user->id = $this->getUserId();
@@ -49,7 +49,7 @@ class Start extends Command {
         ServerLog::log('new user created');
     }
 
-    public function startNewGame() : string {
+    private function startNewGame() : string {
         $date = date('Y-m-d');
         $season = Season::current()->first();
         $word = Word::today()->first();
