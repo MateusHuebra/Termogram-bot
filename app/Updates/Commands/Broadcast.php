@@ -5,6 +5,7 @@ namespace App\Updates\Commands;
 use App\Models\Attempt;
 use App\Models\Game;
 use App\Services\TextString;
+use TelegramBot\Api\BotApi;
 
 class Broadcast extends Command {
 
