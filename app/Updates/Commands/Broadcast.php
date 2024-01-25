@@ -8,7 +8,6 @@ use App\Services\TextString;
 use TelegramBot\Api\BotApi;
 use App\Services\ServerLog;
 
-
 class Broadcast extends Command {
 
     private $usersNotified = 0;
@@ -49,7 +48,7 @@ class Broadcast extends Command {
             $this->bot->sendMessage($userId, $message);
             $this->usersNotified++;
             ServerLog::log('- success');
-        } catch (Exception $e) {
+        } catch(\Exception $e) {
             ServerLog::log('- failed');
             $this->bot->sendMessage(env('TG_MYID'), "error on trying to broadcast to {$userId}: {$e->getMessage()}");
             $this->usersNotNotified++;
