@@ -9,6 +9,9 @@ use TelegramBot\Api\BotApi;
 
 class Broadcast extends Command {
 
+    private $usersNotified = 0;
+    private $usersNotNotified = 0;
+
     public function run() {
         $this->dieIfUnallowedChatType(['private']);
         if($this->getUserId() != env('TG_MYID')) {
@@ -18,8 +21,6 @@ class Broadcast extends Command {
         $this->bot->sendMessage(env('TG_MYID'), TextString::get('broadcast.started'));
 
         $users = User::all();
-        $usersNotified = 0;
-        $usersNotNotified = 0;
         $message = $this->getMessage();
 
         foreach ($users as $user) {
@@ -27,8 +28,8 @@ class Broadcast extends Command {
         }
 
         $result = TextString::get('broadcast.done', [
-            'notified' => $usersNotified,
-            'not_notified' => $usersNotNotified
+            'notified' => $this->usersNotified,
+            'not_notified' => $this->usersNotNotified
         ]);
         $this->bot->sendMessage(env('TG_MYID'), $result);
     }
