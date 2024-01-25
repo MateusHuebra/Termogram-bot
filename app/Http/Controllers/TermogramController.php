@@ -32,6 +32,7 @@ class TermogramController extends Controller
                 $updateHandler->run();
             } catch(Exception $e) {
                 ServerLog::log("exception on main controller: \n\n".$e->getTraceAsString());
+                ServerLog::log('exception class: '.get_class($e));
                 $bot->sendMessage(env('TG_MYID'), $e->getMessage());
                 echo PHP_EOL.$e->getFile().' line '.$e->getLine()."\n\n\n".$e->getTraceAsString();
             }
