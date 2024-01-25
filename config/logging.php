@@ -50,6 +50,7 @@ return [
     'channels' => [
         'stack' => [
             'driver' => 'stack',
+            'name' => 'main',
             'channels' => ['single'],
             'ignore_exceptions' => false,
         ],
