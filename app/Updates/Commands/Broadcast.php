@@ -17,7 +17,6 @@ class Broadcast extends Command {
 
         $this->bot->sendMessage(env('TG_MYID'), TextString::get('broadcast.started'));
 
-        $bot = new BotApi(env('TG_TOKEN'));
         $users = User::all();
         $usersNotified = 0;
         $usersNotNotified = 0;
