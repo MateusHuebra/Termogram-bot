@@ -4,6 +4,7 @@ namespace App\Console\Scheduled;
 
 use App\Models\Game;
 use App\Models\User;
+use App\Models\Word;
 use App\Services\TextString;
 use Exception;
 use TelegramBot\Api\BotApi;
@@ -14,6 +15,11 @@ class NotificateSubscribedUsers {
     public function __invoke()
     {
         $bot = new BotApi(env('TG_TOKEN'));
+
+        if(!Word::today()->first()) {
+            return;
+        }
+
         $hour = date('H');
         $users = User::whereSubscriptionHour($hour)->get('id');
         foreach ($users as $user) {
