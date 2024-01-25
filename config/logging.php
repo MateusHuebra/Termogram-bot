@@ -50,9 +50,14 @@ return [
     'channels' => [
         'stack' => [
             'driver' => 'stack',
-            'name' => 'main',
             'channels' => ['single'],
             'ignore_exceptions' => false,
+        ],
+
+        'botinfo' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/devinfo.log'),
+            'level' => env('LOG_LEVEL', 'debug'),
         ],
 
         'single' => [

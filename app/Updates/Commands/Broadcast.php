@@ -19,7 +19,7 @@ class Broadcast extends Command {
             return;
         }
 
-        Log::debug('- broadcast started');
+        Log::channel('devinfo')->debug('- broadcast started');
         $this->bot->sendMessage(env('TG_MYID'), TextString::get('broadcast.started'));
 
         $users = User::all();
@@ -34,7 +34,7 @@ class Broadcast extends Command {
             'not_notified' => $this->usersNotNotified
         ]);
 
-        Log::debug('- broadcast ended: '.$result);
+        Log::channel('devinfo')->debug('- broadcast ended: '.$result);
         $this->bot->sendMessage(env('TG_MYID'), $result);
     }
 
@@ -44,13 +44,13 @@ class Broadcast extends Command {
 
     private function tryToSendMessage($userId, $message) {
         try {
-            Log::debug('sending message to '.$userId);
+            Log::channel('devinfo')->debug('sending message to '.$userId);
             $this->bot->sendMessage($userId, $message);
             $this->usersNotified++;
-            Log::warning('> success');
+            Log::channel('devinfo')->warning('> success');
 
         } catch (Exception $e) {
-            Log::warning('> failed');
+            Log::channel('devinfo')->warning('> failed');
             $this->bot->sendMessage(env('TG_MYID'), "error on trying to broadcast to {$userId}: {$e->getMessage()}");
             $this->usersNotNotified++;
         }
