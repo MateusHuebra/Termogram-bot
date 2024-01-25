@@ -41,6 +41,9 @@ class Factory {
         } else if($command=='reset') {
             return new Reset($update, $bot);
 
+        } else if($command=='broadcast') {
+            return new Broadcast($update, $bot);
+
         } else {
             return false;
         }

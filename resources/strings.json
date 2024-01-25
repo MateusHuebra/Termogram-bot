@@ -134,6 +134,12 @@
     "broadcast": {
         "notifications": [
             "🔸 Agora o Termogram conta com notificações de novo desafio!\n\nPor padrão você será avisado toda meia noite (horário em que novas palavras saem)\n\nMas você pode enviar /notificacoes e escolher um horário melhor, ou até mesmo desativar as notificações, se preferir\n\nObs.: você não será inutilmente notificado se já tiver jogado no dia"
+        ],
+        "started": [
+            "Broadcast iniciado"
+        ],
+        "done": [
+            "Broadcast finalizado/n/nPessoas notificadas: {notified}/n/nPessoas não notificadas: {not_notified}"
         ]
     }
 }
