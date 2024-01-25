@@ -5,7 +5,7 @@ namespace App\Services;
 class ServerLog {
 
     static function log($value) {
-        file_put_contents('php://stderr', "\n {$value}\n");
+        file_put_contents(storage_path('logs/logs.log'), "\n {$value}\n");
     }
 
     static function printR($value) {

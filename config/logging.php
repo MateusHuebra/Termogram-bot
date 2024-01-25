@@ -54,12 +54,6 @@ return [
             'ignore_exceptions' => false,
         ],
 
-        'botinfo' => [
-            'driver' => 'single',
-            'path' => storage_path('logs/devinfo.log'),
-            'level' => env('LOG_LEVEL', 'debug'),
-        ],
-
         'single' => [
             'driver' => 'single',
             'path' => storage_path('logs/laravel.log'),

@@ -6,7 +6,6 @@ use App\Models\Attempt;
 use App\Models\User;
 use App\Services\TextString;
 use TelegramBot\Api\BotApi;
-use Illuminate\Support\Facades\Log;
 
 class Broadcast extends Command {
 
@@ -19,7 +18,6 @@ class Broadcast extends Command {
             return;
         }
 
-        Log::channel('devinfo')->debug('- broadcast started');
         $this->bot->sendMessage(env('TG_MYID'), TextString::get('broadcast.started'));
 
         $users = User::all();
@@ -33,8 +31,6 @@ class Broadcast extends Command {
             'notified' => $this->usersNotified,
             'not_notified' => $this->usersNotNotified
         ]);
-
-        Log::channel('devinfo')->debug('- broadcast ended: '.$result);
         $this->bot->sendMessage(env('TG_MYID'), $result);
     }
 
@@ -44,13 +40,9 @@ class Broadcast extends Command {
 
     private function tryToSendMessage($userId, $message) {
         try {
-            Log::channel('devinfo')->debug('sending message to '.$userId);
             $this->bot->sendMessage($userId, $message);
             $this->usersNotified++;
-            Log::channel('devinfo')->warning('> success');
-
         } catch (Exception $e) {
-            Log::channel('devinfo')->warning('> failed');
             $this->bot->sendMessage(env('TG_MYID'), "error on trying to broadcast to {$userId}: {$e->getMessage()}");
             $this->usersNotNotified++;
         }
