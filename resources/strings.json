@@ -139,7 +139,7 @@
             "Broadcast iniciado"
         ],
         "done": [
-            "Broadcast finalizado/n/nPessoas notificadas: {notified}/n/nPessoas não notificadas: {not_notified}"
+            "Broadcast finalizado\n\nPessoas notificadas: {notified}\n\nPessoas não notificadas: {not_notified}"
         ]
     }
 }

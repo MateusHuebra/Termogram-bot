@@ -23,8 +23,9 @@ class TermogramController extends Controller
         ServerLog::log('BotController > listen');
         $client = new Client(env('TG_TOKEN'));
         $bot = new BotApi(env('TG_TOKEN'));
-        $update = Update::fromResponse(BotApi::jsonValidate($client->getRawBody(), true));
-        ServerLog::log('update json: '.$client->getRawBody());
+        $updateData = $client->getRawBody();
+        $update = Update::fromResponse(BotApi::jsonValidate($updateData, true));
+        ServerLog::log('update json: '.$updateData);
 
         $updateHandler = Factory::buildUpdate($update, $bot);
         if($updateHandler) {

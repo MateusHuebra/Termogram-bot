@@ -7,15 +7,18 @@ use App\Models\User;
 use App\Services\TextString;
 use TelegramBot\Api\BotApi;
 use App\Services\ServerLog;
+use Exception;
 
 class Broadcast extends Command {
 
     private $usersNotified = 0;
     private $usersNotNotified = 0;
+    private $errors = [];
 
     public function run() {
         $this->dieIfUnallowedChatType(['private']);
         if($this->getUserId() != env('TG_MYID')) {
+            ServerLog::log('Broadcast > no permission');
             return;
         }
 
@@ -36,6 +39,9 @@ class Broadcast extends Command {
 
         ServerLog::log('Broadcast > ended: '.$result);
         $this->bot->sendMessage(env('TG_MYID'), $result);
+        foreach ($this->errors as $index=>$error) {
+            $this->bot->sendMessage(env('TG_MYID'), "$index\n\n$error");
+        }
     }
 
     private function getMessage() {
@@ -44,13 +50,17 @@ class Broadcast extends Command {
 
     private function tryToSendMessage($userId, $message) {
         try {
-            ServerLog::log('trying to message '.$userId);
+            ServerLog::log('trying to message '.$userId, false);
             $this->bot->sendMessage($userId, $message);
             $this->usersNotified++;
-            ServerLog::log('- success');
-        } catch(\Exception $e) {
-            ServerLog::log('- failed');
-            $this->bot->sendMessage(env('TG_MYID'), "error on trying to broadcast to {$userId}: {$e->getMessage()}");
+            ServerLog::log('v success');
+
+        } catch(Exception $e) {
+            ServerLog::log('x failed: '.$e->getMessage());
+            if(!array_key_exists($e->getMessage(), $this->errors)) {
+                $this->errors[$e->getMessage()] = '';
+            }
+            $this->errors[$e->getMessage()].= "{$userId}\n";
             $this->usersNotNotified++;
         }
     }
