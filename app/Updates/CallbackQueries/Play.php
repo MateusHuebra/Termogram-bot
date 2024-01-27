@@ -9,9 +9,9 @@ use App\Updates\Commands\Start;
 
 class Play extends CallbackQuery {
 
-    public function run($update, $bot) {
+    public function run() {
         ServerLog::log('Play by Notification > run');
-        $start = new Start($update, $bot);
+        $start = new Start($this->update, $this->bot);
         $start->run();
     }
 

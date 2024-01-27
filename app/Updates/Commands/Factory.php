@@ -44,6 +44,9 @@ class Factory {
         } else if($command=='broadcast') {
             return new Broadcast($update, $bot);
 
+        } else if($command=='gerar') {
+            return new Generate($update, $bot);
+
         } else {
             return false;
         }

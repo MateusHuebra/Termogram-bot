@@ -19,6 +19,9 @@ class Factory {
         } else if($type=='open_notification') {
             return new OpenNotification($update, $bot);
 
+        } else if($type=='generate') {
+            return new Generate($update, $bot);
+
         } else {
             return false;
         }
@@ -36,7 +39,7 @@ class Factory {
         if (empty($matches)) {
             ServerLog::log('no matches');
             return false;
-        } 
+        }
 
         ServerLog::log('type: '.$matches[1]);
         return $matches[1];

@@ -141,5 +141,19 @@
         "done": [
             "Broadcast finalizado\n\nPessoas notificadas: {notified}\n\nPessoas não notificadas: {not_notified}"
         ]
+    },
+    "generate": {
+        "never": [
+            "nunca"
+        ],
+        "accept": [
+            "aceitar"
+        ],
+        "generated": [
+            "Palavra gerada: {word}\nÚltima vez usada: {last}"
+        ],
+        "saved": [
+            "Palavra salva com sucesso!\n{word} - {date}"
+        ]
     }
 }
