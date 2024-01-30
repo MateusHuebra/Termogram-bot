@@ -79,9 +79,10 @@
     },
     "notification": {
         "new_word": [
-            "Palavra nova no ar!\nDê /jogar para começar",
-            "Chegou palavra fresquinha, dê /jogar para tentar descobrir ela",
-            "A palavra do dia está aqui, dê /jogar para jogar"
+            "Palavra nova no ar!",
+            "Chegou palavra fresquinha",
+            "A palavra do dia está aqui",
+            "Vem, o desafio de hoje já está entre nós"
         ],
         "setted": [
             "Notificações configuradas com sucesso para: "

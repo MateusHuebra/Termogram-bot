@@ -12,6 +12,8 @@ class Play extends CallbackQuery {
     public function run() {
         ServerLog::log('Play by Notification > run');
         $start = new Start($this->update, $this->bot);
+        $start->chatType = $this->getChatType();
+        $start->userId = $this->getUserId();
         $start->run();
     }
 

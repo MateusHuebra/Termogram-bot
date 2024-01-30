@@ -46,7 +46,7 @@ abstract class CallbackQuery extends Update {
             } else {
                 $this->messageId = null;
             }
-            
+
         }
         return $this->messageId;
     }
@@ -58,9 +58,16 @@ abstract class CallbackQuery extends Update {
             } else {
                 $this->chatId = null;
             }
-            
+
         }
         return $this->chatId;
+    }
+
+    protected function getChatType() {
+        if(!isset($this->chatType)) {
+            $this->chatType = $this->update->getCallbackQuery()->getMessage()->getChat()->getType();
+        }
+        return $this->chatType;
     }
 
     protected function getData(string $type) {
