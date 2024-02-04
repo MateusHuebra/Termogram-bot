@@ -2,10 +2,8 @@
 
 namespace App\Updates\Commands;
 
-use App\Models\Attempt;
 use App\Models\User;
 use App\Services\TextString;
-use TelegramBot\Api\BotApi;
 use App\Services\ServerLog;
 use Exception;
 
@@ -45,7 +43,7 @@ class Broadcast extends Command {
     }
 
     private function getMessage() {
-        return str_replace('/broadcast ', '', $this->update->getMessage()->getText());
+        return str_ireplace('/broadcast ', '', $this->update->getMessage()->getText());
     }
 
     private function tryToSendMessage($userId, $message) {

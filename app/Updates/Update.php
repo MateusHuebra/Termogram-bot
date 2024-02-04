@@ -16,11 +16,11 @@ abstract class Update {
         $this->bot = $bot;
     }
 
-    protected function sendMessage(string $text, $replyMarkup = null, bool $forceReply = false) {
+    protected function sendMessage(string $text, $replyMarkup = null, bool $forceReply = false, $parseMode = null) {
         if(!$forceReply && $this->isChatType('private')) {
-            $this->bot->sendMessage($this->getUserId(), $text, null, false, null, $replyMarkup);
+            $this->bot->sendMessage($this->getUserId(), $text, $parseMode, false, null, $replyMarkup);
         } else {
-            $this->bot->sendMessage($this->getChatId(), $text, null, false, $this->getMessageId(), $replyMarkup);
+            $this->bot->sendMessage($this->getChatId(), $text, $parseMode, false, $this->getMessageId(), $replyMarkup);
         }
     }
 
@@ -29,6 +29,16 @@ abstract class Update {
             $this->userId = $this->update->getMessage()->getFrom()->getId();
         }
         return $this->userId;
+    }
+
+    protected function getUserName() {
+        if(!isset($this->userName)) {
+            $this->userName = $this->update->getMessage()->getFrom()->getFirstName();
+            if($lastName = $this->update->getMessage()->getFrom()->getLastName()) {
+                $this->userName.= ' '.$lastName;
+            }
+        }
+        return $this->userName;
     }
 
     protected function getChatType() {
@@ -84,5 +94,5 @@ abstract class Update {
         }
         return $this->replyToMessageUserId;
     }
-    
+
 }
