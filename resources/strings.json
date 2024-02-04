@@ -68,13 +68,19 @@
     },
     "help": {
         "main": [
-            "Toque no comando respectivo à sua dúvida:\n\n• como jogar: /ajuda_jogar\n\n• notificações: /ajuda_notificacoes"
+            "Toque no comando respectivo à sua dúvida:\n\n• como jogar: /ajuda_jogar\n\n• notificações: /ajuda_notificacoes\n\n• leaderboard: /ajuda_leaderboard\n\n• feedback: /ajuda_feedback"
         ],
         "play": [
             "Termogram é um jogo inspirando em Wordle, onde você tem 6 tentativas de descobrir a palavra do dia\n\nO círculo indica que a letra está na posição correta\n\nＴ🅔ＳＴＥ\n\nO quadrado indica que a palavra contém a letra, mas em outra posição\n\n🄼ＡＮＩＡ\n\nLetras sem nada indicam que a palavra não contém aquela letra"
         ],
         "notifications": [
             "Agora o Termogram conta com notificações de novo desafio!\n\nPor padrão você será avisado toda meia noite (horário em que novas palavras saem)\n\nMas você pode enviar /notificacoes e escolher um horário melhor, ou até mesmo desativar as notificações, se preferir\n\nObs.: você não será inutilmente notificado se já tiver jogado no dia"
+        ],
+        "leaderboard": [
+            "Envie /leaderboard em um grupo para visualizar um ranking dos melhores jogadores de Termogram no respectivo grupo\n\nQuanto menos tentativas você levar para descobrir as palavras, mais pontos você soma.\n\nOs pontos são resetados a cada 15 dias"
+        ],
+        "feedback": [
+            "Envie /feedback seguido de algum texto para enviar este texto diretamente para o desenvolvedor do Bot\n\nÚtil para reportar bugs, sugerir features e relatar palavras faltando no vocabulário do bot"
         ]
     },
     "notification": {

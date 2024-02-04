@@ -35,6 +35,12 @@ class Factory {
         } else if($command=='ajuda_notificacoes') {
             return new HelpNotifications($update, $bot);
 
+        } else if($command=='ajuda_leaderboard') {
+            return new HelpLeaderboard($update, $bot);
+
+        } else if($command=='ajuda_feedback') {
+            return new HelpFeedback($update, $bot);
+
         } else if($command=='ping') {
             return new Ping($update, $bot);
 
