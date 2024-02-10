@@ -20,7 +20,7 @@ class TermogramController extends Controller
 
     public function listen(Request $request) {
 
-        ServerLog::log('BotController > listen');
+        ServerLog::log('start -----> BotController > listen');
         $client = new Client(env('TG_TOKEN'));
         $bot = new BotApi(env('TG_TOKEN'));
         $updateData = $client->getRawBody();
@@ -38,6 +38,7 @@ class TermogramController extends Controller
                 echo PHP_EOL.$e->getFile().' line '.$e->getLine()."\n\n\n".$e->getTraceAsString();
             }
         }
+        ServerLog::log('end <----- BotController > listen');
 
     }
 

@@ -2,8 +2,10 @@
 
 namespace App\Updates;
 
+use App\Services\ServerLog;
 use TelegramBot\Api\BotApi;
 use TelegramBot\Api\Types\Update as UpdateType;
+use App\Models\TelegramUpdate;
 
 abstract class Update {
 
@@ -12,6 +14,15 @@ abstract class Update {
 
     public function __construct(UpdateType $update, BotApi $bot)
     {
+        $this->updateId = $update->getUpdateId();
+        if(TelegramUpdate::where('id', $this->updateId)->exists() === true) {
+            ServerLog::log("Update id {$this->updateId} already received. ending...");
+            die();
+        }
+        $tu = new TelegramUpdate();
+        $tu->id = $this->updateId;
+        $tu->save();
+
         $this->update = $update;
         $this->bot = $bot;
     }
@@ -22,6 +33,10 @@ abstract class Update {
         } else {
             $this->bot->sendMessage($this->getChatId(), $text, $parseMode, false, $this->getMessageId(), $replyMarkup);
         }
+    }
+
+    protected function getUpdateId() {
+        return $this->updateId;
     }
 
     protected function getUserId() {
