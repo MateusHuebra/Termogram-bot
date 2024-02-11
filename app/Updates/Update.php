@@ -12,16 +12,18 @@ abstract class Update {
     protected $update;
     protected $bot;
 
-    public function __construct(UpdateType $update, BotApi $bot)
+    public function __construct(UpdateType $update, BotApi $bot, bool $fakeUpdate = false)
     {
-        $this->updateId = $update->getUpdateId();
-        if(TelegramUpdate::where('id', $this->updateId)->exists() === true) {
-            ServerLog::log("Update id {$this->updateId} already received. ending...");
-            die();
+        if($fakeUpdate === false) {
+            $this->updateId = $update->getUpdateId();
+            if(TelegramUpdate::where('id', $this->updateId)->exists() === true) {
+                ServerLog::log("Update id {$this->updateId} already received. ending...");
+                die();
+            }
+            $tu = new TelegramUpdate();
+            $tu->id = $this->updateId;
+            $tu->save();
         }
-        $tu = new TelegramUpdate();
-        $tu->id = $this->updateId;
-        $tu->save();
 
         $this->update = $update;
         $this->bot = $bot;
