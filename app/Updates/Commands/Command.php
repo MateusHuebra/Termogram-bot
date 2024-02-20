@@ -2,6 +2,7 @@
 
 namespace App\Updates\Commands;
 
+use App\Services\ServerLog;
 use App\Services\TextString;
 use App\Updates\Update;
 use Exception;
@@ -19,6 +20,7 @@ abstract class Command extends Update {
                 $this->bot->sendMessage($this->getChatId(), TextString::get('error.'.$errorString));
             }
         }
+        ServerLog::log('end <----- Unallowed Chat Type');
         die;
     }
 
