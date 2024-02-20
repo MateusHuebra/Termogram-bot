@@ -178,6 +178,7 @@ class Attempt extends Command {
     }
 
     private function renderKeyboard(string $render) {
+        ServerLog::log("- renderKeyboard");
         $k = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
         //shown order = ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P', 'A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', 'Z', 'X', 'C', 'V', 'B', 'N', 'M'];
 
@@ -208,13 +209,13 @@ class Attempt extends Command {
         $letters = [];
         foreach($attemptLetters as $letterPosition => $letter) {
             if($letter===$wordLetters[$letterPosition]) {
-                ServerLog::log("{$letter} === {$wordLetters[$letterPosition]}");
+                //ServerLog::log("{$letter} === {$wordLetters[$letterPosition]}");
                 $letters[$letterPosition] = '['.$letter.']';
                 continue;
             }
-            ServerLog::log("{$letter} !!! {$wordLetters[$letterPosition]}");
+            //ServerLog::log("{$letter} !!! {$wordLetters[$letterPosition]}");
         }
-        ServerLog::printR($letters);
+        //ServerLog::printR($letters);
         return $letters;
     }
 
@@ -234,7 +235,7 @@ class Attempt extends Command {
             $letters[$letterPosition] = '('.$letter.')';
         }
         ksort($letters);
-        ServerLog::printR($letters);
+        //ServerLog::printR($letters);
         return $letters;
     }
 
