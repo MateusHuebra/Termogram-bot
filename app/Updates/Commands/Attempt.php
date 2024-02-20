@@ -55,16 +55,11 @@ class Attempt extends Command {
             ServerLog::log("game lost by {$game->user_id} at attempt {$attemptNumber}");
             $keyboard = $this->getShareButton($render, 'X');
             $render = $this->endGame($game, $render, $word);
+        } else {
+            $render = $this->renderKeyboard($render);
         }
 
-        $this->sendMessage($render, $keyboard);
-
-        // tests:
-        /*
-        $photo = new CURLFile(storage_path('app/test.png'), 'image/png');
-        $this->bot->setCurlOption(CURLOPT_TIMEOUT, 10);
-        $this->bot->sendPhoto($this->getUserId(), $photo);
-        */
+        $this->sendMessage($render, $keyboard, false, 'HTML');
     }
 
     private function getShareButton(string $render, $attemptNumber) {
@@ -147,7 +142,7 @@ class Attempt extends Command {
 
         $json = File::get(__DIR__.'/../../../resources/words.json');
         $words = json_decode($json);
-        
+
         if(!in_array($word, $words)) {
             return 'game.invalid_word';
         }
@@ -180,6 +175,32 @@ class Attempt extends Command {
         }
 
         return implode(' ', $letters);
+    }
+
+    private function renderKeyboard(string $render) {
+        $k = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+        //shown order = ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P', 'A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', 'Z', 'X', 'C', 'V', 'B', 'N', 'M'];
+
+        foreach ($k as $index => $key) {
+            $right = FontHandler::replace("[{$key}]");
+            $displaced = FontHandler::replace("{{$key}}");
+            $wrong = FontHandler::replace("({$key})");
+            if(str_contains($render, $right)) {
+                $returnedLetter = $right;
+            } else if(str_contains($render, $displaced)) {
+                $returnedLetter = $displaced;
+            } else if(str_contains($render, $wrong)) {
+                $returnedLetter = "<s>{$wrong}</s>";
+            } else {
+                $returnedLetter = $wrong;
+            }
+            $k[$index] = $returnedLetter;
+        }
+        $return = "\n\n\n{$k[16]} {$k[22]} {$k[4]} {$k[17]} {$k[19]} {$k[24]} {$k[20]} {$k[8]} {$k[14]} {$k[15]}\n";
+        $return.= "  {$k[0]} {$k[18]} {$k[3]} {$k[5]} {$k[6]} {$k[7]} {$k[9]} {$k[10]} {$k[11]}\n";
+        $return.= "    {$k[25]} {$k[23]} {$k[2]} {$k[21]} {$k[1]} {$k[13]} {$k[12]}";
+
+        return ($render.$return);
     }
 
     private function fillCorrects(array $attemptLetters, array $wordLetters) : array {
