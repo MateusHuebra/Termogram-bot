@@ -154,7 +154,7 @@
             "Seu feedback foi enviado com sucesso"
         ],
         "fail": [
-            "Houve algum erro ao tentar enviar seu feedback, tente novamente"
+            "Houve algum erro ao tentar enviar seu feedback, tente novamente (considere não utilizar caracteres especiais)"
         ],
         "no_message": [
             "Digite alguma mensagem após o comando para dar o seu feedback"

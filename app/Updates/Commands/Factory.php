@@ -71,7 +71,7 @@ class Factory {
             return false;
         }
 
-        preg_match(Client::REGEXP, $message->getText(), $matches);
+        preg_match(Client::REGEXP.'m', $message->getText(), $matches);
 
         if (empty($matches)) {
             ServerLog::log('no matches, command: attempt');
