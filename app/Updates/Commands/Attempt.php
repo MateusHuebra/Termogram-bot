@@ -191,7 +191,7 @@ class Attempt extends Command {
             } else if(str_contains($render, $displaced)) {
                 $returnedLetter = $displaced;
             } else if(str_contains($render, $wrong)) {
-                $returnedLetter = "<s>{$wrong}</s>";
+                $returnedLetter = "<u>{$wrong}</u>";
             } else {
                 $returnedLetter = $wrong;
             }
