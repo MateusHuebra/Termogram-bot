@@ -9,6 +9,7 @@ use App\Updates\CallbackQueries\Factory as CallbackQueriesFactory;
 class Factory {
 
     static function buildUpdate($update, $bot) {
+        ServerLog::$updateId = $update->getUpdateId();
         ServerLog::log('Factory > buildUpdate');
         $type = self::getUpdateType($update);
 
