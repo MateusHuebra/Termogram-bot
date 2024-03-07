@@ -22,6 +22,7 @@ class Kernel extends ConsoleKernel
         //$schedule->call(new ScheduleTest)->everyMinute();
         $schedule->call(new NotificateSubscribedUsers)->hourly();
         $schedule->call(new SendGamesPlayedToday)->daily();
+        $schedule->call(new DeleteOldLinesFromUpdatesTable)->daily();
         $schedule->call(new resetAndDistributeScore)->twiceMonthly(1, 16, '00:00');	
     }
 
