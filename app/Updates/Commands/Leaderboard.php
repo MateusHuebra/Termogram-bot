@@ -19,7 +19,7 @@ class Leaderboard extends Command {
  
         $membersList = $this->getMembersList();
         $users = User::leftJoin('games', 'users.id', '=', 'games.user_id')
-            ->select('users.id', 'users.score', DB::raw('max(games.word_date) as last_game_date'))
+            ->select('users.id', 'users.score', 'users.first_name', DB::raw('max(games.word_date) as last_game_date'))
             ->whereIn('users.id', $membersList)
             ->groupBy('users.id')
             ->orderBy('users.score', 'DESC')
