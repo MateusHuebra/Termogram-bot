@@ -114,6 +114,9 @@
         ],
         "line": [
             "\n{position}》[{name}](tg://user?id={id})  {score}"
+        ],
+        "wait": [
+            "Aguarde, o bot está processando a lista de membros do grupo..."
         ]
     },
     "error": {
