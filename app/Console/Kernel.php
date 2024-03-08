@@ -5,6 +5,7 @@ namespace App\Console;
 use App\Console\Scheduled\NotificateSubscribedUsers;
 use App\Console\Scheduled\resetAndDistributeScore;
 use App\Console\Scheduled\SendGamesPlayedToday;
+use App\Console\Scheduled\DeleteOldLinesFromUpdatesTable;
 use App\Console\Scheduled\reserAnd;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
