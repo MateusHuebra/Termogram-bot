@@ -112,11 +112,23 @@
         "title": [
             "🏆 ＬＥＡ🄳ＥＲＢＯＡＲＤ\nＤＯ ＧＲＵ🅟Ｏ ✍️"
         ],
-        "line": [
+        "line_with_mention": [
             "\n{position}》[{name}](tg://user?id={id})  {score}"
         ],
+        "line": [
+            "\n{position}》{name}  {score}"
+        ],
         "dontseeyou": [
-            "\n\nSeu nome não aparece na lista ou está desatualizado? clique aqui: /meincluir"
+            "\n\nSeu nome não aparece ou está desatualizado? /meincluir"
+        ],
+        "mention": [
+            "\nAlternar menção: /mencionar"
+        ],
+        "mention_on": [
+            "Você voltará a ser mencionado!"
+        ],
+        "mention_off": [
+            "Você não será mais mencionado!"
         ],
         "included": [
             "Incluído com sucesso! /leaderboard"

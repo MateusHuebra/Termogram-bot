@@ -26,6 +26,9 @@ class Factory {
         } else if($command=='meincluir') {
             return new IncludeMe($update, $bot);
 
+        } else if($command=='mencionar') {
+            return new Mention($update, $bot);
+
         } else if($command=='estatisticas') {
             return new Statistics($update, $bot);
 

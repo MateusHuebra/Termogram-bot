@@ -20,7 +20,7 @@ class Leaderboard extends Command {
  
         $membersList = $this->getMembersList();
         $users = User::leftJoin('games', 'users.id', '=', 'games.user_id')
-            ->select('users.id', 'users.score', 'users.first_name', DB::raw('max(games.word_date) as last_game_date'))
+            ->select('users.id', 'users.score', 'users.first_name', 'users.mention', DB::raw('max(games.word_date) as last_game_date'))
             ->whereIn('users.id', $membersList)
             ->groupBy('users.id')
             ->orderBy('users.score', 'DESC')
@@ -111,7 +111,13 @@ class Leaderboard extends Command {
                 $positionString = Notifications::parseHour($position).' ';
                 $positionString = str_replace(['01 ', '02 ', '03 '], ['🥇', '🥈', '🥉'], $positionString);
             }
-            $text.= TextString::get('leaderboard.line', [
+
+            if($user->mention) {
+                $path = 'leaderboard.line_with_mention';
+            } else {
+                $path = 'leaderboard.line';
+            }
+            $text.= TextString::get($path, [
                 'position' => $positionString,
                 'name' => self::parseMarkdownV2($user->first_name),
                 'id' => $user->id,
@@ -121,6 +127,7 @@ class Leaderboard extends Command {
             $position++;
         }
         $text.= TextString::get('leaderboard.dontseeyou');
+        $text.= TextString::get('leaderboard.mention');
         return $text;
     }
 
