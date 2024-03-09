@@ -48,6 +48,13 @@ abstract class Update {
         return $this->userId;
     }
 
+    protected function getFirstName() {
+        if(!isset($this->firstName)) {
+            $this->firstName = $this->update->getMessage()->getFrom()->getFirstName();
+        }
+        return $this->firstName;
+    }
+
     protected function getUserName() {
         if(!isset($this->userName)) {
             $this->userName = $this->update->getMessage()->getFrom()->getFirstName();

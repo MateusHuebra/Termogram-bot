@@ -2,6 +2,7 @@
 
 namespace App\Updates\Commands;
 use App\Models\Group;
+use App\Models\User;
 use App\Services\TextString;
 
 class IncludeMe extends Command {
@@ -18,6 +19,10 @@ class IncludeMe extends Command {
 
         $membersList = json_decode($group->members_list);
         if(!in_array($this->getUserId(), $membersList)) {
+            $user = User::find($this->getUserId());
+            $user->first_name = mb_substr($this->getFirstName(), 0, 16);
+            $user->save();
+
             array_push($membersList, $this->getUserId());
             $group->members_list = json_encode($membersList);
             $group->save();
