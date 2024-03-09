@@ -12,9 +12,9 @@ class Mention extends Command {
         $user->mention = !$user->mention;
         $user->save();
         if($user->mention) {
-            $string = TextString::get('leaderboard.mention_off');
-        } else {
             $string = TextString::get('leaderboard.mention_on');
+        } else {
+            $string = TextString::get('leaderboard.mention_off');
         }
         $this->sendMessage($string);
     }
