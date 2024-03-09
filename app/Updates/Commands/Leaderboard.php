@@ -119,6 +119,7 @@ class Leaderboard extends Command {
             $last = $user->score;
             $position++;
         }
+        $text.= TextString::get('leaderboard.dontseeyou');
         return $text;
     }
 

@@ -115,6 +115,12 @@
         "line": [
             "\n{position}》[{name}](tg://user?id={id})  {score}"
         ],
+        "dontseeyou": [
+            "\n\nSeu nome não aparece na lista? clique aqui: /meincluir"
+        ],
+        "included": [
+            "Incluído com sucesso! /leaderboard"
+        ],
         "wait": [
             "Aguarde, o bot está processando a lista de membros do grupo..."
         ]

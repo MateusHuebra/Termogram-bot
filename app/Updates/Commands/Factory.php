@@ -23,6 +23,9 @@ class Factory {
         } else if($command=='leaderboard') {
             return new Leaderboard($update, $bot);
 
+        } else if($command=='meincluir') {
+            return new IncludeMe($update, $bot);
+
         } else if($command=='estatisticas') {
             return new Statistics($update, $bot);
 
