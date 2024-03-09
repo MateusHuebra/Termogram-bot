@@ -9,6 +9,10 @@ class IncludeMe extends Command {
 
     public function run() {
         $this->dieIfUnallowedChatType(['group', 'supergroup']);
+
+        $user = User::find($this->getUserId());
+        $user->first_name = mb_substr($this->getFirstName(), 0, 16);
+        $user->save();
         
         $groupQuery = Group::where('id', $this->getChatId());
         $group = $groupQuery->first();
@@ -19,10 +23,6 @@ class IncludeMe extends Command {
 
         $membersList = json_decode($group->members_list);
         if(!in_array($this->getUserId(), $membersList)) {
-            $user = User::find($this->getUserId());
-            $user->first_name = mb_substr($this->getFirstName(), 0, 16);
-            $user->save();
-
             array_push($membersList, $this->getUserId());
             $group->members_list = json_encode($membersList);
             $group->save();

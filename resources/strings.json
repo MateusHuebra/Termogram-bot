@@ -116,7 +116,7 @@
             "\n{position}》[{name}](tg://user?id={id})  {score}"
         ],
         "dontseeyou": [
-            "\n\nSeu nome não aparece na lista? clique aqui: /meincluir"
+            "\n\nSeu nome não aparece na lista ou está desatualizado? clique aqui: /meincluir"
         ],
         "included": [
             "Incluído com sucesso! /leaderboard"

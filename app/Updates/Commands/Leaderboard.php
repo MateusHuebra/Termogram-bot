@@ -15,6 +15,7 @@ class Leaderboard extends Command {
     const ESCAPED_CHARACTERS = ['\_', '\*', '\[', '\]', '\(', '\)', '\~', '\`', '\>', '\#', '\+', '\-', '\=', '\|', '\{', '\}', '\.', '\!'];
 
     public function run() {
+        ServerLog::log('Leaderboard > run');
         $this->dieIfUnallowedChatType(['group', 'supergroup'], 'only_groups', false);
  
         $membersList = $this->getMembersList();
