@@ -6,6 +6,7 @@ use App\Services\ServerLog;
 use TelegramBot\Api\BotApi;
 use TelegramBot\Api\Types\Update as UpdateType;
 use App\Models\TelegramUpdate;
+use Exception;
 
 abstract class Update {
 
@@ -14,8 +15,11 @@ abstract class Update {
 
     public function __construct(UpdateType $update, BotApi $bot, bool $fakeUpdate = false)
     {
+        $this->updateId = $update->getUpdateId();
+        if($this->updateId === 'fake') {
+            $fakeUpdate = true;
+        }
         if($fakeUpdate === false) {
-            $this->updateId = $update->getUpdateId();
             if(TelegramUpdate::where('id', $this->updateId)->exists() === true) {
                 ServerLog::log("Update id {$this->updateId} already received. ending...");
                 die();
@@ -33,7 +37,11 @@ abstract class Update {
         if(!$forceReply && $this->isChatType('private')) {
             $this->bot->sendMessage($this->getUserId(), $text, $parseMode, false, null, $replyMarkup);
         } else {
-            $this->bot->sendMessage($this->getChatId(), $text, $parseMode, false, $this->getMessageId(), $replyMarkup);
+            try {
+                $this->bot->sendMessage($this->getChatId(), $text, $parseMode, false, $this->getMessageId(), $replyMarkup);
+            } catch(Exception $e) {
+                $this->bot->sendMessage($this->getChatId(), $text, $parseMode, false, null, $replyMarkup);
+            }
         }
     }
 
