@@ -140,9 +140,15 @@ class Attempt extends Command {
             return 'game.invalid_size';
         }
 
+        $attemptAlreadyExists = AttemptModel::byUser($this->getUserId())
+            ->where('word', $word)
+            ->exists();
+        if($attemptAlreadyExists) {
+            return 'game.repeated_word';
+        }
+
         $json = File::get(__DIR__.'/../../../resources/words.json');
         $words = json_decode($json);
-
         if(!in_array($word, $words)) {
             return 'game.invalid_word';
         }

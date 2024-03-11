@@ -24,6 +24,9 @@
         "invalid_characters": [
             "Palavra inválida!\nEssa palavra possui caracteres inválidos, não use caracteres especiais e/ou acentuação\n\nPor exemplo: use racao invés de ração"
         ],
+        "repeated_word": [
+            "Você já tentou essa palavra!"
+        ],
         "invalid_word": [
             "Palavra inválida!\nEssa palavra não consta no meu vocabulário robótico"
         ],
