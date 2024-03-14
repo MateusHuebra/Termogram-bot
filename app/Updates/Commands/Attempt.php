@@ -14,7 +14,7 @@ use TelegramBot\Api\Types\Inline\InlineKeyboardMarkup;
 
 class Attempt extends Command {
 
-    private $winStreak = 0;
+    private $winStreak = 1;
 
     public function run() {
         $this->dieIfUnallowedChatType(['private']);
@@ -71,7 +71,7 @@ class Attempt extends Command {
             ->whereNotNull('won_at')
             ->orderBy('word_date', 'desc');
         if($gamesQuery->count() == 0) {
-            ServerLog::log("\$winStreak = 0");
+            ServerLog::log("\$winStreak = 1");
             return;
         }
         $games = $gamesQuery->get();
