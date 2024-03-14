@@ -31,7 +31,7 @@
             "Palavra inválida!\nEssa palavra não consta no meu vocabulário robótico"
         ],
         "won": [
-            "\n\nVocê ganhou!\nPontos: {total_score} (+{score})"
+            "\n\nVocê ganhou!\nSequência: {streak}\nPontos: {total_score} (+{score})"
         ],
         "lost": [
             "\n\nVocê perdeu! A palavra era {word}"

@@ -14,6 +14,8 @@ use TelegramBot\Api\Types\Inline\InlineKeyboardMarkup;
 
 class Attempt extends Command {
 
+    private $winStreak = 0;
+
     public function run() {
         $this->dieIfUnallowedChatType(['private']);
         ServerLog::log('Attempt > run');
@@ -49,6 +51,7 @@ class Attempt extends Command {
 
         if($attempt == $word->value) {
             ServerLog::log("game won by {$game->user_id} at attempt {$attemptNumber}");
+            $this->calculateWinStreak();
             $keyboard = $this->getShareButton($render, $attemptNumber);
             $render = $this->endGame($game, $render, $word, $attemptNumber);
         } else if($attemptNumber>=6) {
@@ -62,10 +65,31 @@ class Attempt extends Command {
         $this->sendMessage($render, $keyboard, false, 'HTML');
     }
 
+    private function calculateWinStreak() {
+        ServerLog::log("calculateWinStreak()", false);
+        $games = Game::where('user_id', $this->getUserId())
+            ->whereNotNull('won_at')
+            ->orderBy('word_date', 'desc')
+            ->get();
+        $winStreak = 1;
+        $last_date = date('Y-m-d', strtotime('- 1 days'));
+
+        for ($i=0; $games[$i]->word_date == $last_date; $i++) {
+            $last_date = date('Y-m-d', strtotime($games[$i]->word_date.' - 1 days'));
+            $winStreak++;
+        }
+
+        ServerLog::log("\$winStreak = $winStreak");
+        $this->winStreak = $winStreak;
+    }
+
     private function getShareButton(string $render, $attemptNumber) {
-        $date = date('d/m/Y');
-        $share = "{$date} - {$attemptNumber} / 6\n\n";
-        $share.= FontHandler::hide($render);
+        $date = date('d/m/y');
+        $share = "{$date} - {$attemptNumber} / 6";
+        if($this->winStreak > 1){
+            $share.= ' 🔥 '.$this->winStreak;
+        }
+        $share.= "\n\n".FontHandler::hide($render);
         return new InlineKeyboardMarkup([
             [
                 [
@@ -95,6 +119,7 @@ class Attempt extends Command {
 
         if($wonAt) {
             $data = $this->addScore($wonAt);
+            $data['streak'] = $this->winStreak;
             $render.= TextString::get('game.won', $data);
         } else {
             $render.= TextString::get('game.lost', ['word' => $word->value]);
