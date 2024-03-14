@@ -67,10 +67,14 @@ class Attempt extends Command {
 
     private function calculateWinStreak() {
         ServerLog::log("calculateWinStreak()", false);
-        $games = Game::where('user_id', $this->getUserId())
+        $gamesQuery = Game::where('user_id', $this->getUserId())
             ->whereNotNull('won_at')
-            ->orderBy('word_date', 'desc')
-            ->get();
+            ->orderBy('word_date', 'desc');
+        if($gamesQuery->count() == 0) {
+            ServerLog::log("\$winStreak = 0");
+            return;
+        }
+        $games = $gamesQuery->get();
         $winStreak = 1;
         $last_date = date('Y-m-d', strtotime('- 1 days'));
 
