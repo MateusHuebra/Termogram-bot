@@ -78,7 +78,7 @@ class Attempt extends Command {
         $winStreak = 1;
         $last_date = date('Y-m-d', strtotime('- 1 days'));
 
-        for ($i=0; $games[$i]->word_date == $last_date; $i++) {
+        for ($i=0; isset($games[$i]) && $games[$i]->word_date == $last_date; $i++) {
             $last_date = date('Y-m-d', strtotime($games[$i]->word_date.' - 1 days'));
             $winStreak++;
         }
