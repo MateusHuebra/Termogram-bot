@@ -94,23 +94,25 @@ class Attempt extends Command {
             $share.= ' 🔥 '.$this->winStreak;
         }
         $share.= "\n\n".FontHandler::hide($render);
+        $shareTelegram = 'https://t.me/share/url?url='.rawurlencode('t.me/TermogramBot').'&text='.rawurlencode($share);
+        $shareOthers = rawurlencode('Joguei t.me/TermogramBot'.PHP_EOL.$share);
         return new InlineKeyboardMarkup([
             [
                 [
                     'text' => TextString::get('game.share_telegram'),
-                    'url' => 'https://t.me/share/url?url=t.me/TermogramBot&text='.$share
+                    'url' => $shareTelegram
                 ]
             ],
             [
                 [
                     'text' => TextString::get('game.share_twitter'),
-                    'url' => 'https://twitter.com/intent/tweet?text=Joguei t.me/TermogramBot'.PHP_EOL.$share
+                    'url' => 'https://twitter.com/intent/tweet?text='.$shareOthers
                 ]
             ],
             [
                 [
                     'text' => TextString::get('game.share_whatsapp'),
-                    'url' => 'https://api.whatsapp.com/send?text=Joguei t.me/TermogramBot'.PHP_EOL.$share
+                    'url' => 'https://api.whatsapp.com/send?text='.$shareOthers
                 ]
             ]
         ]);
