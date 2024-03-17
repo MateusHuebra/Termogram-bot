@@ -10,6 +10,9 @@ use Exception;
 
 abstract class Update {
 
+    const RESERVED_CHARACTERS = ['_', '*', '[', ']', '(', ')', '~', '`', '>', '#', '+', '-', '=', '|', '{', '}', '.', '!'];
+    const ESCAPED_CHARACTERS = ['\_', '\*', '\[', '\]', '\(', '\)', '\~', '\`', '\>', '\#', '\+', '\-', '\=', '\|', '\{', '\}', '\.', '\!'];
+
     protected $update;
     protected $bot;
 
@@ -33,6 +36,21 @@ abstract class Update {
         $this->bot = $bot;
     }
 
+    public function getUpdateId() {
+        return $this->updateId;
+    }
+
+    public function parseMarkdownV2($string) {
+        return str_replace(self::RESERVED_CHARACTERS, self::ESCAPED_CHARACTERS, $string);
+    }
+
+    public function getMessageId() {
+        if(!isset($this->messageId)) {
+            $this->messageId = $this->update->getMessage()->getMessageId();
+        }
+        return $this->messageId;
+    }
+
     protected function sendMessage(string $text, $replyMarkup = null, bool $forceReply = false, $parseMode = null) {
         if(!$forceReply && $this->isChatType('private')) {
             $this->bot->sendMessage($this->getUserId(), $text, $parseMode, false, null, $replyMarkup);
@@ -43,10 +61,6 @@ abstract class Update {
                 $this->bot->sendMessage($this->getChatId(), $text, $parseMode, false, null, $replyMarkup);
             }
         }
-    }
-
-    protected function getUpdateId() {
-        return $this->updateId;
     }
 
     protected function getUserId() {
@@ -89,13 +103,6 @@ abstract class Update {
             $this->chatId = $this->update->getMessage()->getChat()->getId();
         }
         return $this->chatId;
-    }
-
-    protected function getMessageId() {
-        if(!isset($this->messageId)) {
-            $this->messageId = $this->update->getMessage()->getMessageId();
-        }
-        return $this->messageId;
     }
 
     protected function getReplyToMessage() {

@@ -11,9 +11,6 @@ use Illuminate\Support\Facades\DB;
 
 class Leaderboard extends Command {
 
-    const RESERVED_CHARACTERS = ['_', '*', '[', ']', '(', ')', '~', '`', '>', '#', '+', '-', '=', '|', '{', '}', '.', '!'];
-    const ESCAPED_CHARACTERS = ['\_', '\*', '\[', '\]', '\(', '\)', '\~', '\`', '\>', '\#', '\+', '\-', '\=', '\|', '\{', '\}', '\.', '\!'];
-
     public function run() {
         ServerLog::log('Leaderboard > run');
         $this->dieIfUnallowedChatType(['group', 'supergroup'], 'only_groups', false);
@@ -119,7 +116,7 @@ class Leaderboard extends Command {
             }
             $text.= TextString::get($path, [
                 'position' => $positionString,
-                'name' => self::parseMarkdownV2($user->first_name),
+                'name' => $this->parseMarkdownV2($user->first_name),
                 'id' => $user->id,
                 'score' => $user->score
             ]);
@@ -136,10 +133,6 @@ class Leaderboard extends Command {
             return false;
         }
         return true;
-    }
-
-    static function parseMarkdownV2($string) {
-        return str_replace(self::RESERVED_CHARACTERS, self::ESCAPED_CHARACTERS, $string);
     }
 
 }

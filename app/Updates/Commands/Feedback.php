@@ -13,7 +13,7 @@ class Feedback extends Command {
         ServerLog::log('Feedback > started');
 
         if(strlen($this->update->getMessage()->getText()) > 10) {
-            $message = $this->getMessage();
+            $message = $this->parseMarkdownV2($this->getMessage());
             $message = $this->formatMessage($message);
             $this->tryToSendMessage($message);
         } else {
@@ -28,7 +28,7 @@ class Feedback extends Command {
     }
 
     private function formatMessage(string $message) {
-        return "[{$this->getUserName()}](tg://user?id={$this->getUserId()}): {$message}";
+        return "\#feedback: [{$this->getUserName()}](tg://user?id={$this->getUserId()}) \({$this->getUserId()}:{$this->getMessageId()}\):\n```\n{$message}```";
     }
 
     private function tryToSendMessage($message) {
