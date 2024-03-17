@@ -39,7 +39,7 @@ class DevMsg extends Command {
             $this->bot->sendMessage($replyUserId, $message, 'MarkdownV2', false, $replyMessageId);
             $msg = $this->bot->sendMessage($userId, TextString::get('feedback.success'));
             ServerLog::log('v success');
-            sleep(2);
+            sleep(3);
             $this->bot->deleteMessage($userId, $msg->getMessageId());
 
         } catch(Exception $e) {

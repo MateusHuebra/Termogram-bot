@@ -39,7 +39,7 @@ class Feedback extends Command {
             $this->bot->sendMessage($userId, $message, 'MarkdownV2', false, $replyMessageId);
             $msg = $this->bot->sendMessage($this->getUserId(), TextString::get('feedback.success'));
             ServerLog::log('v success');
-            sleep(2);
+            sleep(3);
             $this->bot->deleteMessage($this->getUserId(), $msg->getMessageId());
 
         } catch(Exception $e) {
