@@ -184,7 +184,7 @@
             "Digite alguma mensagem após o comando para dar o seu feedback"
         ],
         "ask_reply": [
-            "Marque esta mensagem para respondê\\-la diretamente"
+            "Marque esta mensagem para respondê\\-la"
         ]
     },
     "generate": {
