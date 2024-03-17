@@ -37,10 +37,10 @@ class Feedback extends Command {
         try {
             ServerLog::log('trying to message '.$userId, false);
             $this->bot->sendMessage($userId, $message, 'MarkdownV2', false, $replyMessageId);
-            $msgId = $this->bot->sendMessage($this->getUserId(), TextString::get('feedback.success'));
+            $msg = $this->bot->sendMessage($this->getUserId(), TextString::get('feedback.success'));
             ServerLog::log('v success');
             sleep(2);
-            $this->bot->deleteMessage($this->getUserId(), $msgId);
+            $this->bot->deleteMessage($this->getUserId(), $msg->getMessageId());
 
         } catch(Exception $e) {
             ServerLog::log('x failed: '.$e->getMessage());
