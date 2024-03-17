@@ -37,8 +37,10 @@ class DevMsg extends Command {
         try {
             ServerLog::log('trying to message '.$replyUserId, false);
             $this->bot->sendMessage($replyUserId, $message, 'MarkdownV2', false, $replyMessageId);
-            $this->bot->sendMessage($userId, TextString::get('feedback.success'));
+            $msgId = $this->bot->sendMessage($userId, TextString::get('feedback.success'));
             ServerLog::log('v success');
+            sleep(2);
+            $this->bot->deleteMessage($userId, $msgId);
 
         } catch(Exception $e) {
             ServerLog::log('x failed: '.$e->getMessage());
