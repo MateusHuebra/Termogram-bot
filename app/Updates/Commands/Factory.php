@@ -88,7 +88,7 @@ class Factory {
         if (empty($matches)) {
             if($message->getReplyToMessage() && str_contains($message->getReplyToMessage()->getText(), '#feedback')) {
                 return 'devmsg';
-            } else if($message->getReplyToMessage() && str_contains($message->getReplyToMessage()->getText(), '#MensagemDoDesenvolvedor')) {
+            } else if($message->getReplyToMessage() && str_contains($message->getReplyToMessage()->getText(), '#dev')) {
                 return 'usermsg';
             } else {
                 ServerLog::log('no matches, command: attempt');

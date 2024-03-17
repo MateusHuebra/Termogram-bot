@@ -28,7 +28,8 @@ class DevMsg extends Command {
     }
 
     private function formatMessage(string $message) {
-        return "\#MensagemDoDesenvolvedor {$this->getMessageId()}:\n```\n{$message}```\n".TextString::get('feedback.ask_reply');
+        $msg = "\#dev {$this->getMessageId()}:\n{$message}\n".TextString::get('feedback.ask_reply');
+        return str_ireplace("\n", "\n>", $msg);
     }
 
     private function tryToSendMessage($message, $replyUserId, $replyMessageId) {

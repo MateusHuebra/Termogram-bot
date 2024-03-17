@@ -12,7 +12,7 @@ class UserMsg extends Feedback {
         $this->dieIfUnallowedChatType(['private']);
         ServerLog::log('UserMsg > started');
 
-        preg_match("/^#MensagemDoDesenvolvedor (\d*):/m", $this->getReplyToMessageText(), $matches);
+        preg_match("/^#dev (\d*):/m", $this->getReplyToMessageText(), $matches);
         $replyMessageId = $matches[1];
         $message = $this->parseMarkdownV2($this->getMessage());
         $message = $this->formatMessage($message);

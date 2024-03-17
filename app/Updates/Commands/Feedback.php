@@ -28,7 +28,8 @@ class Feedback extends Command {
     }
 
     protected function formatMessage(string $message) {
-        return "\#feedback: [{$this->getUserName()}](tg://user?id={$this->getUserId()}) \({$this->getUserId()}:{$this->getMessageId()}\):\n```\n{$message}```";
+        $msg = "\#feedback: [{$this->getUserName()}](tg://user?id={$this->getUserId()}) \({$this->getUserId()}:{$this->getMessageId()}\):\n{$message}";
+        return str_ireplace("\n", "\n>", $msg);
     }
 
     protected function tryToSendMessage($message, $replyMessageId = null) {
