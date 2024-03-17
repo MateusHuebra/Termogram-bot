@@ -175,13 +175,16 @@
     },
     "feedback": {
         "success": [
-            "Seu feedback foi enviado com sucesso"
+            "Sua mensagem foi enviada com sucesso"
         ],
         "fail": [
-            "Houve algum erro ao tentar enviar seu feedback, tente novamente (considere não utilizar caracteres especiais)"
+            "Houve algum erro ao tentar enviar sua mensagem"
         ],
         "no_message": [
             "Digite alguma mensagem após o comando para dar o seu feedback"
+        ],
+        "ask_reply": [
+            "Marque esta mensagem para respondê\\-la diretamente"
         ]
     },
     "generate": {

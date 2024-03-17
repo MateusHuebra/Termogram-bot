@@ -31,11 +31,11 @@ class Feedback extends Command {
         return "\#feedback: [{$this->getUserName()}](tg://user?id={$this->getUserId()}) \({$this->getUserId()}:{$this->getMessageId()}\):\n```\n{$message}```";
     }
 
-    private function tryToSendMessage($message) {
+    private function tryToSendMessage($message, $replyMessageId = null) {
         $userId = env('TG_MYID');
         try {
             ServerLog::log('trying to message '.$userId, false);
-            $this->bot->sendMessage($userId, $message, 'MarkdownV2');
+            $this->bot->sendMessage($userId, $message, 'MarkdownV2', false, $replyMessageId);
             $this->bot->sendMessage($this->getUserId(), TextString::get('feedback.success'));
             ServerLog::log('v success');
 

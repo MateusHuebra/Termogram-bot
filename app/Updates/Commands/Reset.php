@@ -10,9 +10,7 @@ class Reset extends Command {
 
     public function run() {
         $this->dieIfUnallowedChatType(['private']);
-        if($this->getUserId() != env('TG_MYID')) {
-            return;
-        }
+        $this->dieIfNotAdmin();
 
         Attempt::byUser($this->getUserId())->delete();
         Game::byUser($this->getUserId())->delete();

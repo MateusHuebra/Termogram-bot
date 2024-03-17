@@ -112,6 +112,13 @@ abstract class Update {
         return $this->replyToMessage;
     }
 
+    protected function getReplyToMessageText() {
+        if(!isset($this->replyToMessageText)) {
+            $this->replyToMessageText = $this->update->getMessage()->getReplyToMessage()->getText();
+        }
+        return $this->replyToMessageText;
+    }
+
     protected function getReplyToMessageId() {
         if(!isset($this->replyToMessageId)) {
             if($this->getReplyToMessage()) {

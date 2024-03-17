@@ -59,6 +59,12 @@ class Factory {
         } else if($command=='feedback') {
             return new Feedback($update, $bot);
 
+        } else if($command=='devmsg') {
+            return new DevMsg($update, $bot);
+
+        } else if($command=='usermsg') {
+            return new UserMsg($update, $bot);
+
         } else if($command=='gerar') {
             return new Generate($update, $bot);
 
@@ -80,8 +86,14 @@ class Factory {
         preg_match(Client::REGEXP.'m', $message->getText(), $matches);
 
         if (empty($matches)) {
-            ServerLog::log('no matches, command: attempt');
-            return 'attempt';
+            if($message->getReplyToMessage() && str_contains($message->getReplyToMessage()->getText(), '#feedback')) {
+                return 'devmsg';
+            } else if($message->getReplyToMessage() && str_contains($message->getReplyToMessage()->getText(), '#MensagemDoDesenvolvedor')) {
+                return 'usermsg';
+            } else {
+                ServerLog::log('no matches, command: attempt');
+                return 'attempt';
+            }
         }
 
         ServerLog::log('command: '.$matches[1]);

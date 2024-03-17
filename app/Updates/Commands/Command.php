@@ -24,4 +24,11 @@ abstract class Command extends Update {
         die;
     }
 
+    protected function dieIfNotAdmin() {
+        if($this->getUserId() != env('TG_MYID')) {
+            ServerLog::log('end <----- Unallowed User Type');
+            die;
+        }
+    }
+
 }
