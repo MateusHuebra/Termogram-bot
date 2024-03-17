@@ -13,7 +13,7 @@ class DevMsg extends Command {
         $this->dieIfNotAdmin();
         ServerLog::log('DevMsg > started');
 
-        preg_match("/^#feedback:.*\((\d*):(\d*)\)/m", $this->getReplyToMessageText(), $matches);
+        preg_match("/^#feedback de .*(\d*)\.(\d*):/m", $this->getReplyToMessageText(), $matches);
         $replyUserId = $matches[1];
         $replyMessageId = $matches[2];
         $message = $this->parseMarkdownV2($this->getMessage());

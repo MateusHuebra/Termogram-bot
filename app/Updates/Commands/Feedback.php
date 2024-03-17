@@ -28,7 +28,7 @@ class Feedback extends Command {
     }
 
     protected function formatMessage(string $message) {
-        $msg = "\#feedback: [{$this->getUserName()}](tg://user?id={$this->getUserId()}) \({$this->getUserId()}:{$this->getMessageId()}\):\n{$message}";
+        $msg = "\#feedback de [{$this->getUserName()}](tg://user?id={$this->getUserId()}) {$this->getUserId()}\.{$this->getMessageId()}:\n{$message}";
         return str_ireplace("\n", "\n>", $msg);
     }
 
