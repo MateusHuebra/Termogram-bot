@@ -27,7 +27,7 @@ class Leaderboard extends Command {
         $this->bot->sendChatAction($this->getChatId(), 'typing');
         $board = $this->renderBoard($users, $type);
         
-        if ($yourPosition && strlen($board) > 512) {
+        if ($this->yourPosition && strlen($board) > 512) {
             $this->bot->sendMessage($this->getChatId(), $board, 'MarkdownV2');
             try {
                 $this->bot->sendMessage($this->getChatId(), TextString::get('leaderboard.yours', ['position' => $this->yourPosition]), 'MarkdownV2', false, $this->getMessageId());
