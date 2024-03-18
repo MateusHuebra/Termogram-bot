@@ -58,12 +58,15 @@ class Statistics extends Command {
         } else {
             $winRate = 0;
         }
+        $user = User::find($userId);
         $data = [
             'person' => $person,
             'total' => $total,
             'ended' => $ended,
             'win_rate' => $winRate,
-            'score' => User::find($userId)->score
+            'score' => $user->score,
+            'streak' => $user->current_streak,
+            'record' => $user->record_streak
         ];
 
         $text = TextString::get('statistics.text', $data);

@@ -14,7 +14,7 @@ use TelegramBot\Api\Types\Inline\InlineKeyboardMarkup;
 
 class Attempt extends Command {
 
-    private $winStreak = 1;
+    private $winStreak = 0;
 
     public function run() {
         $this->dieIfUnallowedChatType(['private']);
@@ -51,6 +51,7 @@ class Attempt extends Command {
 
         if($attempt == $word->value) {
             ServerLog::log("game won by {$game->user_id} at attempt {$attemptNumber}");
+            $this->winStreak++;
             $this->calculateWinStreak();
             $keyboard = $this->getShareButton($render, $attemptNumber);
             $render = $this->endGame($game, $render, $word, $attemptNumber);
@@ -75,7 +76,7 @@ class Attempt extends Command {
             return;
         }
         $games = $gamesQuery->get();
-        $winStreak = 1;
+        $winStreak = $this->winStreak;
         $last_date = date('Y-m-d', strtotime('- 1 days'));
 
         for ($i=0; isset($games[$i]) && $games[$i]->word_date == $last_date; $i++) {
@@ -123,22 +124,30 @@ class Attempt extends Command {
         $game->won_at = $wonAt;
         $game->save();
 
+        $data = $this->getScore($wonAt);
         if($wonAt) {
-            $data = $this->addScore($wonAt);
-            $data['streak'] = $this->winStreak;
             $render.= TextString::get('game.won', $data);
         } else {
-            $render.= TextString::get('game.lost', ['word' => $word->value]);
+            $data['word'] = $word->value;
+            $render.= TextString::get('game.lost', $data);
         }
 
         return $render;
     }
 
-    private function addScore(int $wonAt) : array {
-        $data['score'] = 7 - $wonAt;
+    private function getScore($wonAt) : array {
         $user = User::find($this->getUserId());
-        $user->score+= $data['score'];
+        if($wonAt) {
+            $data['score'] = 7 - $wonAt;
+            $user->score+= $data['score'];
+        }
+        if($user->record_streak < $this->winStreak) {
+            $user->record_streak = $this->winStreak;
+        }
+        $user->current_streak = $this->winStreak;
         $user->save();
+        $data['streak'] = $user->current_streak;
+        $data['record'] = $user->record_streak;
         $data['total_score'] = $user->score;
         return $data;
     }

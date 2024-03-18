@@ -31,10 +31,10 @@
             "Palavra inválida!\nEssa palavra não consta no meu vocabulário robótico"
         ],
         "won": [
-            "\n\nVocê ganhou!\nSequência: {streak}\nPontos: {total_score} (+{score})"
+            "\n\nVocê ganhou! 🎉\nSequência de vitórias: 🔥 {streak}\nMelhor sequência: {record}\nPontos: {total_score} (+{score})"
         ],
         "lost": [
-            "\n\nVocê perdeu! A palavra era {word}"
+            "\n\nVocê perdeu! A palavra era {word}\nSequência de vitórias: 🔥 {streak}\nMelhor sequência: {record}\nPontos: {total_score}"
         ],
         "share_telegram": [
             "Compartilhar no Telegram"
@@ -108,7 +108,7 @@
             "Estatísticas dessa pessoa"
         ],
         "text": [
-            "- {person}:\n\nJogos iniciados: {total}\nJogos finalizados: {ended}\nTaxa de vitória: {win_rate}%\nPontuação (beta): {score}\n\n- Distribuição de tentativas:\n"
+            "- {person}:\n\nJogos iniciados: {total}\nJogos finalizados: {ended}\nTaxa de vitória: {win_rate}%\nSequência de vitórias: 🔥 {streak}\nMelhor sequência: {record}\nPontuação: {score}\n\n- Distribuição de tentativas:\n"
         ]
     },
     "leaderboard": {
