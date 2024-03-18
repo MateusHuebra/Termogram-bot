@@ -124,6 +124,9 @@
         "line": [
             "\n{position}》{name}  {score}"
         ],
+        "yours": [
+            "Você está na posição {position}"
+        ],
         "dontseeyou": [
             "\n\nSeu nome não aparece ou está desatualizado? /meincluir"
         ],

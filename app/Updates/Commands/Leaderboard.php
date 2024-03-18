@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\DB;
 
 class Leaderboard extends Command {
 
+    private $yourPosition = null;
+
     public function run() {
         ServerLog::log('Leaderboard > run');
         if($this->getChatType() == 'private') {
@@ -25,10 +27,19 @@ class Leaderboard extends Command {
         $this->bot->sendChatAction($this->getChatId(), 'typing');
         $board = $this->renderBoard($users, $type);
         
-        try {
-            $this->bot->sendMessage($this->getChatId(), $board, 'MarkdownV2', false, $this->getMessageId());
-        } catch(Exception $e) {
-            $this->bot->sendMessage($this->getChatId(), $board, 'MarkdownV2', false);
+        if ($yourPosition && strlen($board) > 512) {
+            $this->bot->sendMessage($this->getChatId(), $board, 'MarkdownV2');
+            try {
+                $this->bot->sendMessage($this->getChatId(), TextString::get('leaderboard.yours', ['position' => $this->yourPosition]), 'MarkdownV2', false, $this->getMessageId());
+            } catch(Exception $e) {
+                //
+            }
+        } else {
+            try {
+                $this->bot->sendMessage($this->getChatId(), $board, 'MarkdownV2', false, $this->getMessageId());
+            } catch(Exception $e) {
+                $this->bot->sendMessage($this->getChatId(), $board, 'MarkdownV2');
+            }
         }
         
     }
@@ -106,17 +117,23 @@ class Leaderboard extends Command {
         $limitDay = date('Y-m-d', strtotime($today. ' - 14 days'));
 
         $position = 1;
-        $last = 0;
+        $lastPosition = 1;
+        $lastScore = 0;
         foreach ($users as $user) {
             if(!$this->hasUserPlayedRecently($user, $limitDay)) {
                 continue;
             }
 
-            if($user->score==$last) {
+            if($user->score==$lastScore) {
                 $positionString = ' \=  ';
             } else {
                 $positionString = Notifications::parseHour($position).' ';
                 $positionString = str_replace(['01 ', '02 ', '03 '], ['🥇', '🥈', '🥉'], $positionString);
+                $lastPosition = $position;
+            }
+            
+            if($user->id = $this->getUserId()) {
+                $this->yourPosition = $lastPosition;
             }
 
             if($user->mention && $type == 'group') {
@@ -130,7 +147,7 @@ class Leaderboard extends Command {
                 'id' => $user->id,
                 'score' => $user->score
             ]);
-            $last = $user->score;
+            $lastScore = $user->score;
             $position++;
         }
 
