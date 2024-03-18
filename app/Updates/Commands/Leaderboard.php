@@ -13,18 +13,17 @@ class Leaderboard extends Command {
 
     public function run() {
         ServerLog::log('Leaderboard > run');
-        $this->dieIfUnallowedChatType(['group', 'supergroup'], 'only_groups', false);
- 
-        $membersList = $this->getMembersList();
-        $users = User::leftJoin('games', 'users.id', '=', 'games.user_id')
-            ->select('users.id', 'users.score', 'users.first_name', 'users.mention', DB::raw('max(games.word_date) as last_game_date'))
-            ->whereIn('users.id', $membersList)
-            ->groupBy('users.id')
-            ->orderBy('users.score', 'DESC')
-            ->get();
-
+        if($this->getChatType() == 'private') {
+            $users = $this->getUsers();
+            $type = 'global';
+        } else if (in_array($this->getChatType(), ['group', 'supergroup'])) {
+            $membersList = $this->getMembersList();
+            $users = $this->getUsers($membersList);
+            $type = 'group';
+        }
+        
         $this->bot->sendChatAction($this->getChatId(), 'typing');
-        $board = $this->renderBoard($users);
+        $board = $this->renderBoard($users, $type);
         
         try {
             $this->bot->sendMessage($this->getChatId(), $board, 'MarkdownV2', false, $this->getMessageId());
@@ -32,6 +31,17 @@ class Leaderboard extends Command {
             $this->bot->sendMessage($this->getChatId(), $board, 'MarkdownV2', false);
         }
         
+    }
+
+    private function getUsers($membersList = null) {
+        $users = User::leftJoin('games', 'users.id', '=', 'games.user_id')
+            ->select('users.id', 'users.score', 'users.first_name', 'users.mention', DB::raw('max(games.word_date) as last_game_date'))
+            ->groupBy('users.id')
+            ->orderBy('users.score', 'DESC');
+        if(!is_null($membersList)) {
+            $users->whereIn('users.id', $membersList);
+        }
+        return $users->get();
     }
 
     private function getMembersList() {
@@ -89,9 +99,9 @@ class Leaderboard extends Command {
         return true;
     }
 
-    private function renderBoard($users) {
+    private function renderBoard($users, $type) {
         ServerLog::log('Leaderboard > renderBoard');
-        $text = TextString::get('leaderboard.title')."\n";
+        $text = TextString::get('leaderboard.'.$type)."\n";
         $today = date('Y-m-d');
         $limitDay = date('Y-m-d', strtotime($today. ' - 14 days'));
 
@@ -109,7 +119,7 @@ class Leaderboard extends Command {
                 $positionString = str_replace(['01 ', '02 ', '03 '], ['🥇', '🥈', '🥉'], $positionString);
             }
 
-            if($user->mention) {
+            if($user->mention && $type == 'group') {
                 $path = 'leaderboard.line_with_mention';
             } else {
                 $path = 'leaderboard.line';
@@ -123,8 +133,10 @@ class Leaderboard extends Command {
             $last = $user->score;
             $position++;
         }
-        $text.= TextString::get('leaderboard.dontseeyou');
-        $text.= TextString::get('leaderboard.mention');
+        if($type == 'group') {
+            $text.= TextString::get('leaderboard.dontseeyou');
+            $text.= TextString::get('leaderboard.mention');
+        }
         return $text;
     }
 
