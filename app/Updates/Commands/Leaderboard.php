@@ -133,6 +133,13 @@ class Leaderboard extends Command {
             $last = $user->score;
             $position++;
         }
+
+        $maxLen = 3072;
+        if (strlen($text) > $maxLen) {
+            $textCut = substr($text, 0, $maxLen);
+            $text = substr($textCut, 0, strrpos($textCut, PHP_EOL)).'[...]';
+        }
+
         if($type == 'group') {
             $text.= TextString::get('leaderboard.dontseeyou');
             $text.= TextString::get('leaderboard.mention');
