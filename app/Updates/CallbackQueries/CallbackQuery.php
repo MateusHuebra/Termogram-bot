@@ -18,6 +18,18 @@ abstract class CallbackQuery extends Update {
         }
     }
 
+    public function getMessageId() {
+        if(!isset($this->messageId)) {
+            if($this->getMessage()) {
+                $this->messageId = $this->update->getCallbackQuery()->getMessage()->getMessageId();
+            } else {
+                $this->messageId = null;
+            }
+
+        }
+        return $this->messageId;
+    }
+
     protected function getId() {
         if(!isset($this->id)) {
             $this->id = $this->update->getCallbackQuery()->getId();
@@ -37,18 +49,6 @@ abstract class CallbackQuery extends Update {
             $this->message = $this->update->getCallbackQuery()->getMessage();
         }
         return $this->message;
-    }
-
-    protected function getMessageId() {
-        if(!isset($this->messageId)) {
-            if($this->getMessage()) {
-                $this->messageId = $this->update->getCallbackQuery()->getMessage()->getMessageId();
-            } else {
-                $this->messageId = null;
-            }
-
-        }
-        return $this->messageId;
     }
 
     protected function getChatId() {
