@@ -137,7 +137,7 @@ class Leaderboard extends Command {
         $maxLen = 3072;
         if (strlen($text) > $maxLen) {
             $textCut = substr($text, 0, $maxLen);
-            $text = substr($textCut, 0, strrpos($textCut, PHP_EOL)).'[...]';
+            $text = substr($textCut, 0, strrpos($textCut, PHP_EOL)).'[\.\.\.]';
         }
 
         if($type == 'group') {
