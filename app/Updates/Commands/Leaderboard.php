@@ -132,7 +132,7 @@ class Leaderboard extends Command {
                 $lastPosition = $position;
             }
             
-            if($user->id = $this->getUserId()) {
+            if($user->id == $this->getUserId()) {
                 $this->yourPosition = $lastPosition;
             }
 
