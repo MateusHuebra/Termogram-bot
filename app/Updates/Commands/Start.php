@@ -58,11 +58,11 @@ class Start extends Command {
         if($word === null) {
             return 'error.no_todays_word';
         }
-        ServerLog::log('creating new game for '.$this->getUserId().' in '.$date.' from season '.$season->name);
+        ServerLog::log('saving first name for '.$this->getUserId().' as '.$this->getFirstName());
         $user = User::find($this->getUserId());
         $user->first_name = mb_substr($this->getFirstName(), 0, 16);
         $user->save();
-
+        ServerLog::log('creating new game for '.$this->getUserId().' in '.$date.' from season '.$season->name);
         $game = new Game();
         $game->user_id = $this->getUserId();
         $game->word_date = $word->date;

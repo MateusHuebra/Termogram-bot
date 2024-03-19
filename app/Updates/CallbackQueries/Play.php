@@ -15,6 +15,7 @@ class Play extends CallbackQuery {
         $start = new Start($this->update, $this->bot, true);
         $start->chatType = $this->getChatType();
         $start->userId = $this->getUserId();
+        $start->firstName = $this->getFirstName();
         $start->run();
     }
 
