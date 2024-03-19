@@ -19,7 +19,8 @@ class DevMsg extends Command {
             $replyMessageId = $matches[2];
             $message = $this->getMessageText();
         } else {
-            preg_match("/^\/devmsg (\d*) ([\w\W]*):/m", $this->getMessageText(), $matches);
+            preg_match("/^\/devmsg (\d*) ([\w\W]*)/m", $this->getMessageText(), $matches);
+            var_dump($matches);
             $replyUserId = $matches[1];
             $replyMessageId = null;
             $message = $matches[2];
