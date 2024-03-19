@@ -13,18 +13,23 @@ class DevMsg extends Command {
         $this->dieIfNotAdmin();
         ServerLog::log('DevMsg > started');
 
-        preg_match("/^#feedback de .* (\d*)\.(\d*):/m", $this->getReplyToMessageText(), $matches);
-        $replyUserId = $matches[1];
-        $replyMessageId = $matches[2];
-        $message = $this->parseMarkdownV2($this->getMessage());
+        if($this->getReplyToMessage()) {
+            preg_match("/^#feedback de .* (\d*)\.(\d*):/m", $this->getReplyToMessageText(), $matches);
+            $replyUserId = $matches[1];
+            $replyMessageId = $matches[2];
+            $message = $this->getMessageText();
+        } else {
+            preg_match("/^\/devmsg (\d*) ([\w\W]*):/m", $this->getMessageText(), $matches);
+            $replyUserId = $matches[1];
+            $replyMessageId = null;
+            $message = $matches[2];
+        }
+        
+        $message = $this->parseMarkdownV2($message);
         $message = $this->formatMessage($message);
         $this->tryToSendMessage($message, $replyUserId, $replyMessageId);
 
         ServerLog::log('DevMsg > finished');
-    }
-
-    private function getMessage() {
-        return $this->update->getMessage()->getText();
     }
 
     private function formatMessage(string $message) {

@@ -87,6 +87,13 @@ abstract class Update {
         return $this->userName;
     }
 
+    protected function getMessageText() {
+        if(!isset($this->messageText)) {
+            $this->messageText = $this->update->getMessage()->getText();
+        }
+        return $this->messageText;
+    }
+
     protected function getChatType() {
         if(!isset($this->chatType)) {
             $this->chatType = $this->update->getMessage()->getChat()->getType();

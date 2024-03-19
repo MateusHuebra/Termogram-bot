@@ -153,7 +153,7 @@ class Attempt extends Command {
     }
 
     private function getCurrentAttempt() {
-        return strtoupper($this->update->getMessage()->getText());
+        return strtoupper($this->getMessageText());
     }
 
     private function addNewAttempt(string $word) : int {
