@@ -46,7 +46,7 @@ abstract class CallbackQuery extends Update {
 
     protected function getFirstName() {
         if(!isset($this->firstName)) {
-            $this->firstName = $this->update->getCallbackQuery()->getFrom()->getLastName();
+            $this->firstName = $this->update->getCallbackQuery()->getFrom()->getFirstName();
         }
         return $this->firstName;
     }
