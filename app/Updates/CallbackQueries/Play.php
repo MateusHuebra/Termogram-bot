@@ -15,7 +15,7 @@ class Play extends CallbackQuery {
         try {
             $this->bot->answerCallbackQuery($this->getId(), TextString::get('settings.loading'));
         } catch(Exception $e) {
-            //
+            $this->bot->sendMessage($this->getUserId(), '/start');
         }
         $start = new Start($this->update, $this->bot, true);
         $start->chatType = $this->getChatType();
