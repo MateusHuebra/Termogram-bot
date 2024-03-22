@@ -44,6 +44,13 @@ class DevMsg extends Command {
             ServerLog::log('trying to message '.$replyUserId, false);
             $this->bot->sendMessage($replyUserId, $message, 'MarkdownV2', false, $replyMessageId);
             $msg = $this->bot->sendMessage($userId, TextString::get('feedback.success'));
+            $this->bot->call('setMessageReaction', [
+                'chat_id' => $this->getUserId(),
+                'message_id' => $this->getMessageId(),
+                'reaction' => json_encode([
+                    ['type' => 'emoji', 'emoji' => '👍']
+                ])
+            ]);
             ServerLog::log('v success');
             sleep(3);
             $this->bot->deleteMessage($userId, $msg->getMessageId());
@@ -51,6 +58,13 @@ class DevMsg extends Command {
         } catch(Exception $e) {
             ServerLog::log('x failed: '.$e->getMessage());
             $this->bot->sendMessage($userId, TextString::get('feedback.fail'));
+            $this->bot->call('setMessageReaction', [
+                'chat_id' => $this->getUserId(),
+                'message_id' => $this->getMessageId(),
+                'reaction' => json_encode([
+                    ['type' => 'emoji', 'emoji' => '👎']
+                ])
+            ]);
         }
     }
 
