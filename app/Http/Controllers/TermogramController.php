@@ -11,7 +11,7 @@ use App\Services\TextString;
 use App\Updates\Factory;
 use Exception;
 use Illuminate\Http\Request;
-use TelegramBot\Api\BotApi;
+use App\Services\CustomBotApi as BotApi;
 use TelegramBot\Api\Client;
 use TelegramBot\Api\Types\Update;
 

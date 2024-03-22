@@ -3,7 +3,7 @@
 namespace App\Updates\CallbackQueries;
 
 use App\Services\TextString;
-use TelegramBot\Api\BotApi;
+use App\Services\CustomBotApi as BotApi;
 use TelegramBot\Api\Types\Update as UpdateType;
 use App\Updates\Update;
 

@@ -38,13 +38,7 @@ class Feedback extends Command {
             ServerLog::log('trying to message '.$userId, false);
             $this->bot->sendMessage($userId, $message, 'MarkdownV2', false, $replyMessageId);
             $msg = $this->bot->sendMessage($this->getUserId(), TextString::get('feedback.success'));
-            $this->bot->call('setMessageReaction', [
-                'chat_id' => $this->getUserId(),
-                'message_id' => $this->getMessageId(),
-                'reaction' => json_encode([
-                    ['type' => 'emoji', 'emoji' => '👍']
-                ])
-            ]);
+            $this->bot->setMessageReaction($this->getUserId(), $this->getMessageId(), '👍');
             ServerLog::log('v success');
             sleep(3);
             $this->bot->deleteMessage($this->getUserId(), $msg->getMessageId());
@@ -52,13 +46,7 @@ class Feedback extends Command {
         } catch(Exception $e) {
             ServerLog::log('x failed: '.$e->getMessage());
             $this->bot->sendMessage($this->getUserId(), TextString::get('feedback.fail'));
-            $this->bot->call('setMessageReaction', [
-                'chat_id' => $this->getUserId(),
-                'message_id' => $this->getMessageId(),
-                'reaction' => json_encode([
-                    ['type' => 'emoji', 'emoji' => '👎']
-                ])
-            ]);
+            $this->bot->setMessageReaction($this->getUserId(), $this->getMessageId(), '👎');
         }
     }
 

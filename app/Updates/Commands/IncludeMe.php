@@ -29,13 +29,7 @@ class IncludeMe extends Command {
         }
         
         //$this->sendMessage(TextString::get('leaderboard.included'));
-        $this->bot->call('setMessageReaction', [
-            'chat_id' => $this->getChatId(),
-            'message_id' => $this->getMessageId(),
-            'reaction' => json_encode([
-                ['type' => 'emoji', 'emoji' => '👍']
-            ])
-        ]);
+        $this->bot->setMessageReaction($this->getChatId(), $this->getMessageId(), '👍');
     }
 
 }

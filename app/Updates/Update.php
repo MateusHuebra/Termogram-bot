@@ -3,7 +3,7 @@
 namespace App\Updates;
 
 use App\Services\ServerLog;
-use TelegramBot\Api\BotApi;
+use App\Services\CustomBotApi as BotApi;
 use TelegramBot\Api\Types\Update as UpdateType;
 use App\Models\TelegramUpdate;
 use Exception;
