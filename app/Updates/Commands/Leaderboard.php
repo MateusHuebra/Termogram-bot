@@ -63,8 +63,8 @@ class Leaderboard extends Command {
             ];
         }
         $buttons[0][] = [
-            'text' => $page+1,
-            'callback_data' => 'leaderboard:info'
+            'text' => ($page+1).' ⟳',
+            'callback_data' => 'leaderboard:'.$page
         ];
         if($keyboard!=='end') {
             $buttons[0][] = [
