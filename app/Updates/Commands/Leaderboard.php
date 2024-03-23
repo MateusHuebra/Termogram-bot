@@ -14,7 +14,7 @@ class Leaderboard extends Command {
 
     private $yourPosition = null;
 
-    public function run($page = null, $returnBoard = false) {
+    public function run($page = 0, $returnBoard = false) {
         ServerLog::log('Leaderboard > run');
         if($this->getChatType() == 'private') {
             $users = $this->getUsers();
@@ -25,7 +25,6 @@ class Leaderboard extends Command {
             $type = 'group';
         }
         
-        $this->bot->sendChatAction($this->getChatId(), 'typing');
         $boardData = $this->renderBoard($users, $type, $page);
         $keyboard = $this->getPaginationKeyboard($page, $boardData['keyboard']);
         if($returnBoard) {
