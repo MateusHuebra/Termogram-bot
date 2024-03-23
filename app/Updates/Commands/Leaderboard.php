@@ -8,12 +8,13 @@ use App\Services\ServerLog;
 use App\Services\TextString;
 use Exception;
 use Illuminate\Support\Facades\DB;
+use TelegramBot\Api\Types\Inline\InlineKeyboardMarkup;
 
 class Leaderboard extends Command {
 
     private $yourPosition = null;
 
-    public function run() {
+    public function run($page = null, $returnBoard = false) {
         ServerLog::log('Leaderboard > run');
         if($this->getChatType() == 'private') {
             $users = $this->getUsers();
@@ -25,10 +26,16 @@ class Leaderboard extends Command {
         }
         
         $this->bot->sendChatAction($this->getChatId(), 'typing');
-        $board = $this->renderBoard($users, $type);
+        $boardData = $this->renderBoard($users, $type, $page);
+        $keyboard = $this->getPaginationKeyboard($page, $boardData['keyboard']);
+        if($returnBoard) {
+            $boardData['keyboard'] = $keyboard;
+            return $boardData;
+        }
+        $board = $boardData['text'];
         
         if ($this->yourPosition && strlen($board) > 512) {
-            $this->bot->sendMessage($this->getChatId(), $board, 'MarkdownV2');
+            $this->bot->sendMessage($this->getChatId(), $board, 'MarkdownV2', false, null, $keyboard);
             try {
                 $this->bot->sendMessage($this->getChatId(), TextString::get('leaderboard.yours', ['position' => $this->yourPosition]), 'MarkdownV2', false, $this->getMessageId());
             } catch(Exception $e) {
@@ -36,18 +43,45 @@ class Leaderboard extends Command {
             }
         } else {
             try {
-                $this->bot->sendMessage($this->getChatId(), $board, 'MarkdownV2', false, $this->getMessageId());
+                $this->bot->sendMessage($this->getChatId(), $board, 'MarkdownV2', false, $this->getMessageId(), $keyboard);
             } catch(Exception $e) {
-                $this->bot->sendMessage($this->getChatId(), $board, 'MarkdownV2');
+                $this->bot->sendMessage($this->getChatId(), $board, 'MarkdownV2', false, null, $keyboard);
             }
         }
         
     }
 
+    public function getPaginationKeyboard($page, $keyboard) {
+        if(!$keyboard) {
+            return null;
+        }
+        $buttons = [];
+        if($page>0) {
+            $buttons[0][] = [
+                'text' => '<',
+                'callback_data' => 'leaderboard:'.($page-1)
+            ];
+        }
+        $buttons[0][] = [
+            'text' => $page+1,
+            'callback_data' => 'leaderboard:info'
+        ];
+        if($keyboard!=='end') {
+            $buttons[0][] = [
+                'text' => '>',
+                'callback_data' => 'leaderboard:'.($page+1)
+            ];
+        }
+        return new InlineKeyboardMarkup($buttons);
+    }
+
     private function getUsers($membersList = null) {
+        $today = date('Y-m-d');
+        $limitDay = date('Y-m-d', strtotime($today. ' - 14 days'));
         $users = User::leftJoin('games', 'users.id', '=', 'games.user_id')
             ->select('users.id', 'users.score', 'users.first_name', 'users.mention', DB::raw('max(games.word_date) as last_game_date'))
             ->groupBy('users.id')
+            ->having('last_game_date', '>', $limitDay)
             ->orderBy('users.score', 'DESC');
         if(!is_null($membersList)) {
             $users->whereIn('users.id', $membersList);
@@ -110,19 +144,17 @@ class Leaderboard extends Command {
         return true;
     }
 
-    private function renderBoard($users, $type) {
+    private function renderBoard($users, $type, $page = 0) {
         ServerLog::log('Leaderboard > renderBoard');
         $text = TextString::get('leaderboard.'.$type)."\n";
-        $today = date('Y-m-d');
-        $limitDay = date('Y-m-d', strtotime($today. ' - 14 days'));
 
-        $position = 1;
-        $lastPosition = 1;
+        $limit = 15;
+        $offset = $page*$limit;
+        $position = 1+($offset);
+        $lastPosition = 1+($offset);
         $lastScore = 0;
-        foreach ($users as $user) {
-            if(!$this->hasUserPlayedRecently($user, $limitDay)) {
-                continue;
-            }
+        for($i = $offset; $i < count($users) && $i <= $offset+$limit-1; $i++) {
+            $user = $users[$i];
 
             if($user->score==$lastScore) {
                 $positionString = ' \=  ';
@@ -151,17 +183,23 @@ class Leaderboard extends Command {
             $position++;
         }
 
-        $maxLen = 3072;
-        if (strlen($text) > $maxLen) {
-            $textCut = substr($text, 0, $maxLen);
-            $text = substr($textCut, 0, strrpos($textCut, PHP_EOL))."\n\n         e mais\.\.\.";
-        }
-
         if($type == 'group') {
             $text.= TextString::get('leaderboard.dontseeyou');
             $text.= TextString::get('leaderboard.mention');
         }
-        return $text;
+
+        if(count($users) <= $limit) {
+            $keyboard = false;
+        } else if($page*$limit+$limit >= count($users)) {
+            $keyboard = 'end';
+        } else {
+            $keyboard = true;
+        }
+        echo $keyboard;
+        return [
+            'text' => $text,
+            'keyboard' => $keyboard
+        ];
     }
 
     private function hasUserPlayedRecently($user, $limitDay) {

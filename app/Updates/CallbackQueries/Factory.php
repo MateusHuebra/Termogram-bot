@@ -16,6 +16,9 @@ class Factory {
         } else if($type=='play') {
             return new Play($update, $bot);
 
+        } else if($type=='leaderboard') {
+            return new Leaderboard($update, $bot);
+
         } else if($type=='open_notification') {
             return new OpenNotification($update, $bot);
 
