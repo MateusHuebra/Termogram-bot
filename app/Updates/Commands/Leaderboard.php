@@ -150,18 +150,22 @@ class Leaderboard extends Command {
 
         $limit = 15;
         $offset = $page*$limit;
-        $position = 1+($offset);
-        $lastPosition = 1+($offset);
+        $position = 1;
+        $keepFirstPositionForThePage = 1;
+        $lastPosition = 1;
         $lastScore = 0;
-        for($i = $offset; $i < count($users) && $i <= $offset+$limit-1; $i++) {
+        for($i = 0; $i < count($users); $i++) {
             $user = $users[$i];
 
             if($user->score==$lastScore) {
                 $positionString = ' \=  ';
             } else {
-                $positionString = Notifications::parseHour($position).' ';
-                $positionString = str_replace(['01 ', '02 ', '03 '], ['🥇', '🥈', '🥉'], $positionString);
+                $positionString = '*'.Notifications::parseHour($position).' ';
+                $positionString = str_replace(['*01 ', '*02 ', '*03 ', '*'], ['🥇', '🥈', '🥉', ''], $positionString);
                 $lastPosition = $position;
+                if($keepFirstPositionForThePage) {
+                    $keepFirstPositionForThePage = $positionString;
+                }
             }
             
             if($user->id == $this->getUserId()) {
@@ -173,12 +177,20 @@ class Leaderboard extends Command {
             } else {
                 $path = 'leaderboard.line';
             }
-            $text.= TextString::get($path, [
-                'position' => $positionString,
-                'name' => $this->parseMarkdownV2($user->first_name),
-                'id' => $user->id,
-                'score' => $user->score
-            ]);
+
+            if($i > $offset-1 && $i <= $offset+$limit-1) {
+                if($keepFirstPositionForThePage) {
+                    $positionString = $keepFirstPositionForThePage;
+                    $keepFirstPositionForThePage = false;
+                }
+                $text.= TextString::get($path, [
+                    'position' => $positionString,
+                    'name' => $this->parseMarkdownV2($user->first_name),
+                    'id' => $user->id,
+                    'score' => $user->score
+                ]);
+            }
+
             $lastScore = $user->score;
             $position++;
         }
@@ -195,7 +207,7 @@ class Leaderboard extends Command {
         } else {
             $keyboard = true;
         }
-        echo $keyboard;
+        
         return [
             'text' => $text,
             'keyboard' => $keyboard
