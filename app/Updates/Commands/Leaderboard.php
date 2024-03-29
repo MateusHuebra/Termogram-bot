@@ -29,10 +29,10 @@ class Leaderboard extends Command {
             return $boardData;
         }
         
-        if ($boardData['yourPosition'] && $boardData['keyboard']) {
+        if ($boardData['your_position'] && $boardData['keyboard']) {
             $this->bot->sendMessage($this->getChatId(), $boardData['text'], 'MarkdownV2', false, null, $keyboard);
             try {
-                $this->bot->sendMessage($this->getChatId(), TextString::get('leaderboard.yours', ['position' => $boardData['yourPosition']]), 'MarkdownV2', false, $this->getMessageId());
+                $this->bot->sendMessage($this->getChatId(), TextString::get('leaderboard.yours', ['position' => $boardData['your_position']]), 'MarkdownV2', false, $this->getMessageId());
             } catch(Exception $e) {
                 //
             }
