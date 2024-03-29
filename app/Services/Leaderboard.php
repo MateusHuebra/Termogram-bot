@@ -12,6 +12,9 @@ use TelegramBot\Api\Types\Inline\InlineKeyboardMarkup;
 
 class Leaderboard {
 
+    private $yourPosition = null;
+    private $positions = [];
+
     public function __construct($limit = 15) {
         $this->limit = $limit;
     }
@@ -40,6 +43,7 @@ class Leaderboard {
                 }
             }
             
+            $this->positions[$user->id] = $lastPosition;
             if($user->id == $userId) {
                 $this->yourPosition = $lastPosition;
             }
@@ -82,7 +86,9 @@ class Leaderboard {
         
         return [
             'text' => $text,
-            'keyboard' => $keyboard
+            'keyboard' => $keyboard,
+            'your_position' => $this->yourPosition,
+            'positions' => $this->positions
         ];
     }
 
