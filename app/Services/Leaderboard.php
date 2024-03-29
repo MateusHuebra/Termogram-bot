@@ -73,7 +73,11 @@ class Leaderboard {
         }
 
         if($this->final) {
-            $text.= TextString::get('leaderboard.final', ['date' => date('d/m/y')]);
+            $initialDay = date('d') > 16 ? 16 : 1 ;
+            $text.= TextString::get('leaderboard.final', [
+                'initial_day' => $initialDay,
+                'date' => date('d/m/y')
+            ]);
         } else if($type == 'group') {
             $text.= TextString::get('leaderboard.dontseeyou');
             $text.= TextString::get('leaderboard.mention');

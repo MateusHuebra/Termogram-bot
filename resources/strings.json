@@ -119,7 +119,7 @@
             "🏆 ＬＥＡ🄳ＥＲＢＯＡＲＤ\n    ＧＬＯ🅑ＡＬ ✍️"
         ],
         "final": [
-            "\n\nRanking final de {date}"
+            "\n\nRanking final de {initial_day}\\~{date}"
         ],
         "line_with_mention": [
             "\n{position}》[{name}](tg://user?id={id})  {score}"
