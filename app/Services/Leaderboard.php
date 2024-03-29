@@ -15,8 +15,9 @@ class Leaderboard {
     private $yourPosition = null;
     private $positions = [];
 
-    public function __construct($limit = 15) {
+    public function __construct($limit = 15, $final = false) {
         $this->limit = $limit;
+        $this->final = $final;
     }
 
     public function renderBoard($users, $type, $page = 0, $userId = 0) {
@@ -71,7 +72,9 @@ class Leaderboard {
             $position++;
         }
 
-        if($type == 'group') {
+        if($this->final) {
+            $text.= TextString::get('leaderboard.final', ['date' => date('d/m/y')]);
+        } else if($type == 'group') {
             $text.= TextString::get('leaderboard.dontseeyou');
             $text.= TextString::get('leaderboard.mention');
         }
