@@ -10,9 +10,6 @@ use Exception;
 
 abstract class Update {
 
-    const RESERVED_CHARACTERS = ['_', '*', '[', ']', '(', ')', '~', '`', '>', '#', '+', '-', '=', '|', '{', '}', '.', '!'];
-    const ESCAPED_CHARACTERS = ['\_', '\*', '\[', '\]', '\(', '\)', '\~', '\`', '\>', '\#', '\+', '\-', '\=', '\|', '\{', '\}', '\.', '\!'];
-
     protected $update;
     protected $bot;
 
@@ -38,10 +35,6 @@ abstract class Update {
 
     public function getUpdateId() {
         return $this->updateId;
-    }
-
-    public function parseMarkdownV2($string) {
-        return str_replace(self::RESERVED_CHARACTERS, self::ESCAPED_CHARACTERS, $string);
     }
 
     public function getMessageId() {

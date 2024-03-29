@@ -13,7 +13,7 @@ class Feedback extends Command {
         ServerLog::log('Feedback > started');
 
         if(strlen($this->update->getMessage()->getText()) > 10) {
-            $message = $this->parseMarkdownV2($this->getMessage());
+            $message = TextString::parseMarkdownV2($this->getMessage());
             $message = $this->formatMessage($message);
             $this->tryToSendMessage($message);
         } else {

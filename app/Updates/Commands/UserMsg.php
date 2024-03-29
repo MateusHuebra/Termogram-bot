@@ -14,7 +14,7 @@ class UserMsg extends Feedback {
 
         preg_match("/^#dev (\d*):/m", $this->getReplyToMessageText(), $matches);
         $replyMessageId = $matches[1];
-        $message = $this->parseMarkdownV2($this->getMessage());
+        $message = TextString::parseMarkdownV2($this->getMessage());
         $message = $this->formatMessage($message);
         $this->tryToSendMessage($message, $replyMessageId);
 

@@ -26,7 +26,7 @@ class DevMsg extends Command {
             $message = $matches[2];
         }
         
-        $message = $this->parseMarkdownV2($message);
+        $message = TextString::parseMarkdownV2($message);
         $message = $this->formatMessage($message);
         $this->tryToSendMessage($message, $replyUserId, $replyMessageId);
 

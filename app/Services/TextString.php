@@ -5,6 +5,9 @@ namespace App\Services;
 use Illuminate\Support\Facades\File;
 
 class TextString {
+    
+    const RESERVED_CHARACTERS = ['_', '*', '[', ']', '(', ')', '~', '`', '>', '#', '+', '-', '=', '|', '{', '}', '.', '!'];
+    const ESCAPED_CHARACTERS = ['\_', '\*', '\[', '\]', '\(', '\)', '\~', '\`', '\>', '\#', '\+', '\-', '\=', '\|', '\{', '\}', '\.', '\!'];
 
     static function get(string $path, array $variables = null) {
         $json = File::get(__DIR__.'/../../resources/strings.json');
@@ -29,6 +32,10 @@ class TextString {
 
         return $string;
 
+    }
+
+    static function parseMarkdownV2($string) {
+        return str_replace(self::RESERVED_CHARACTERS, self::ESCAPED_CHARACTERS, $string);
     }
 
 }
