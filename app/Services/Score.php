@@ -21,6 +21,9 @@ class Score {
         $games = Game::whereNotNull('won_at')->where('word_date', '>=', $date_offset)->get();
         foreach ($games as $game) {
             $user = User::find($game->user_id);
+            if($user->is_banned) {
+                continue;
+            }
             $user->score+= (7 - $game->won_at);
             $user->save();
         }

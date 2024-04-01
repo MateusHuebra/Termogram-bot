@@ -24,12 +24,11 @@ class Leaderboard {
         ServerLog::log('Leaderboard > renderBoard');
         $text = TextString::get('leaderboard.'.$type)."\n";
 
-        $this->limit = 15;
         $offset = $page*$this->limit;
         $position = 1;
         $keepFirstPositionForThePage = 1;
         $lastPosition = 1;
-        $lastScore = 0;
+        $lastScore = -1;
         for($i = 0; $i < count($users); $i++) {
             $user = $users[$i];
 
@@ -64,7 +63,7 @@ class Leaderboard {
                     'position' => $positionString,
                     'name' => TextString::parseMarkdownV2($user->first_name),
                     'id' => $user->id,
-                    'score' => $user->score
+                    'score' => $user->is_banned ? '_banido_' : $user->score
                 ]);
             }
 
@@ -127,7 +126,7 @@ class Leaderboard {
         $today = date('Y-m-d');
         $limitDay = date('Y-m-d', strtotime($today. ' - 14 days'));
         $users = User::leftJoin('games', 'users.id', '=', 'games.user_id')
-            ->select('users.id', 'users.score', 'users.first_name', 'users.mention', DB::raw('max(games.word_date) as last_game_date'))
+            ->select('users.id', 'users.score', 'users.first_name', 'users.mention', 'users.is_banned', DB::raw('max(games.word_date) as last_game_date'))
             ->groupBy('users.id')
             ->having('last_game_date', '>', $limitDay)
             ->orderBy('users.score', 'DESC');
@@ -180,6 +179,7 @@ class Leaderboard {
             $TgUser = $bot->getChatMember($chatId, $user->id);
             //get user again to avoid rewriting data with old data
             $user = User::find($user->id);
+            $user->username = $TgUser->getUser()->getUsername();
             $user->first_name = mb_substr($TgUser->getUser()->getFirstName(), 0, 16);
             $user->save();
         } catch(Exception $e) {

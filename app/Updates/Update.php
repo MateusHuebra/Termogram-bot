@@ -70,14 +70,11 @@ abstract class Update {
         return $this->firstName;
     }
 
-    protected function getUserName() {
-        if(!isset($this->userName)) {
-            $this->userName = $this->update->getMessage()->getFrom()->getFirstName();
-            if($lastName = $this->update->getMessage()->getFrom()->getLastName()) {
-                $this->userName.= ' '.$lastName;
-            }
+    protected function getUsername() {
+        if(!isset($this->username)) {
+            $this->username = $this->update->getMessage()->getFrom()->getUsername();
         }
-        return $this->userName;
+        return $this->username;
     }
 
     protected function getMessageText() {

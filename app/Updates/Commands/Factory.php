@@ -59,6 +59,9 @@ class Factory {
         } else if($command=='feedback') {
             return new Feedback($update, $bot);
 
+        } else if($command=='ban') {
+            return new Ban($update, $bot);
+
         } else if($command=='devmsg') {
             return new DevMsg($update, $bot);
 

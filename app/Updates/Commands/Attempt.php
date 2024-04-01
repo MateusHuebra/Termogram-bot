@@ -137,7 +137,10 @@ class Attempt extends Command {
 
     private function getScore($wonAt) : array {
         $user = User::find($this->getUserId());
-        if($wonAt) {
+        if($user->is_banned) {
+            $data['score'] = 'banido';
+            $user->score = 0;
+        } else if($wonAt) {
             $data['score'] = 7 - $wonAt;
             $user->score+= $data['score'];
         }

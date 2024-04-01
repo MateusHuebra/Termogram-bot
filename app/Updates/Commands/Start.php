@@ -45,6 +45,7 @@ class Start extends Command {
         $user = new User();
         $user->id = $this->getUserId();
         $user->subscription_hour = 0;
+        $user->username = $this->getUsername();
         $user->first_name = mb_substr($this->getFirstName(), 0, 16);
         $user->save();
         ServerLog::log('new user created');
@@ -58,10 +59,13 @@ class Start extends Command {
         if($word === null) {
             return 'error.no_todays_word';
         }
-        ServerLog::log('saving first name for '.$this->getUserId().' as '.$this->getFirstName());
+        
+        ServerLog::log('saving info for '.$this->getUserId().' as '.$this->getFirstName());
         $user = User::find($this->getUserId());
+        $user->username = $this->getUsername();
         $user->first_name = mb_substr($this->getFirstName(), 0, 16);
         $user->save();
+
         ServerLog::log('creating new game for '.$this->getUserId().' in '.$date.' from season '.$season->name);
         $game = new Game();
         $game->user_id = $this->getUserId();

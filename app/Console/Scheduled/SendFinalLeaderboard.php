@@ -16,7 +16,7 @@ class SendFinalLeaderboard {
     {
         ServerLog::log('SendFinalLeaderboard > run');
         $bot = new BotApi(env('TG_TOKEN'));
-        $LBservice = new LeaderboardService(100, true);
+        $LBservice = new LeaderboardService(30, true);
 
         $users = $LBservice->getUsers();
         $boardData = $LBservice->renderBoard($users, 'global');

@@ -24,7 +24,7 @@ class Feedback extends Command {
     }
 
     protected function getMessage() {
-        return str_ireplace('/feedback ', '', $this->update->getMessage()->getText());
+        return str_ireplace('/feedback ', '', $this->getMessageText());
     }
 
     protected function formatMessage(string $message) {
