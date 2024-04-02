@@ -143,7 +143,7 @@ class Leaderboard {
             ->groupBy('users.id')
             ->having('last_game_date', '>', $limitDay)
             ->orderBy('users.score', 'DESC')
-            ->orderBy('users.is_banned', 'DESC');
+            ->orderBy('users.is_banned', 'ASC');
         if(!is_null($membersList)) {
             $users->whereIn('users.id', $membersList);
         }
