@@ -84,41 +84,54 @@ class Leaderboard {
 
         if(count($users) <= $this->limit) {
             $keyboard = false;
-        } else if($page*$this->limit+$this->limit >= count($users)) {
-            $keyboard = 'end';
         } else {
             $keyboard = true;
         }
+        $totalPages = intdiv(count($users)-1, $this->limit)+1;
         
         return [
             'text' => $text,
             'keyboard' => $keyboard,
             'your_position' => $this->yourPosition,
-            'positions' => $this->positions
+            'positions' => $this->positions,
+            'total_pages' => $totalPages
         ];
     }
 
-    public function getPaginationKeyboard($page, $keyboard) {
+    public function getPaginationKeyboard($page, $keyboard, $totalPages) {
         if(!$keyboard) {
             return null;
         }
-        $buttons = [];
-        if($page>0) {
-            $buttons[0][] = [
-                'text' => '<',
-                'callback_data' => 'leaderboard:'.($page-1)
-            ];
-        }
-        $buttons[0][] = [
-            'text' => ($page+1).' ↻',
-            'callback_data' => 'leaderboard:'.$page
+        $previous = ($page>0) ? ($page-1) : 0;
+        $next = ($page < $totalPages-1) ? ($page+1) : $page;
+        $last = ($page < $totalPages-1) ? ($totalPages-1) : $page;
+        $buttons = [
+            [
+                [
+                    'text' => '◁',
+                    'callback_data' => 'leaderboard:'.$previous
+                ],
+                [
+                    'text' => ($page+1).' / '.$totalPages.' ↻',
+                    'callback_data' => 'leaderboard:'.$page
+                ],
+                [
+                    'text' => '▷',
+                    'callback_data' => 'leaderboard:'.$next
+                ]
+                
+            ],
+            [
+                [
+                    'text' => '|◁ ',
+                    'callback_data' => 'leaderboard:0'
+                ],
+                [
+                    'text' => ' ▷|',
+                    'callback_data' => 'leaderboard:'.$last
+                ]
+            ]
         ];
-        if($keyboard!=='end') {
-            $buttons[0][] = [
-                'text' => '>',
-                'callback_data' => 'leaderboard:'.($page+1)
-            ];
-        }
         return new InlineKeyboardMarkup($buttons);
     }
 
@@ -129,7 +142,8 @@ class Leaderboard {
             ->select('users.id', 'users.score', 'users.first_name', 'users.mention', 'users.is_banned', DB::raw('max(games.word_date) as last_game_date'))
             ->groupBy('users.id')
             ->having('last_game_date', '>', $limitDay)
-            ->orderBy('users.score', 'DESC');
+            ->orderBy('users.score', 'DESC')
+            ->orderBy('users.is_banned', 'DESC');
         if(!is_null($membersList)) {
             $users->whereIn('users.id', $membersList);
         }

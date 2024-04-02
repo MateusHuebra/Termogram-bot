@@ -23,7 +23,7 @@ class Leaderboard extends Command {
         }
         
         $boardData = $LBservice->renderBoard($users, $type, $page, $this->getUserId());
-        $keyboard = $LBservice->getPaginationKeyboard($page, $boardData['keyboard']);
+        $keyboard = $LBservice->getPaginationKeyboard($page, $boardData['keyboard'], $boardData['total_pages']);
         if($returnBoard) {
             $boardData['keyboard'] = $keyboard;
             return $boardData;
