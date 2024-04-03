@@ -26,6 +26,7 @@ class Play extends CallbackQuery {
         } catch(Exception $e) {
             $this->bot->sendMessage(env('TG_MYID'), 'Play by Notification error: '.$e->getMessage());
         }
+        ServerLog::log('Play by Notification > end');
     }
 
 }
