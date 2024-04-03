@@ -51,6 +51,13 @@ abstract class CallbackQuery extends Update {
         return $this->firstName;
     }
 
+    protected function getUsername() {
+        if(!isset($this->username)) {
+            $this->username = $this->update->getCallbackQuery()->getFrom()->getUsername();
+        }
+        return $this->username;
+    }
+
     protected function getMessage() {
         if(!isset($this->message)) {
             $this->message = $this->update->getCallbackQuery()->getMessage();

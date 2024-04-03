@@ -14,14 +14,15 @@ class Play extends CallbackQuery {
         ServerLog::log('Play by Notification > run');
         try {
             $this->bot->answerCallbackQuery($this->getId(), TextString::get('settings.loading'));
+            $start = new Start($this->update, $this->bot, true);
+            $start->chatType = $this->getChatType();
+            $start->userId = $this->getUserId();
+            $start->firstName = $this->getFirstName();
+            $start->username = $this->getUsername();
+            $start->run();
         } catch(Exception $e) {
             $this->bot->sendMessage($this->getUserId(), '/start');
         }
-        $start = new Start($this->update, $this->bot, true);
-        $start->chatType = $this->getChatType();
-        $start->userId = $this->getUserId();
-        $start->firstName = $this->getFirstName();
-        $start->run();
     }
 
 }
