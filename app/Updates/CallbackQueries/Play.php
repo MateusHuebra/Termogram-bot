@@ -21,6 +21,7 @@ class Play extends CallbackQuery {
             $start->username = $this->getUsername();
             $start->run();
         } catch(Exception $e) {
+            $this->bot->sendMessage(env('TG_MYID'), 'Play by Notification error: '.$e->getMessage());
             $this->bot->sendMessage($this->getUserId(), '/start');
         }
     }
