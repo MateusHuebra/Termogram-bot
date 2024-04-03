@@ -23,7 +23,7 @@ class Broadcast extends Command {
         ServerLog::log('Broadcast > started');
         $this->bot->sendMessage(env('TG_MYID'), TextString::get('broadcast.started'));
 
-        $users = User::all();
+        $users = User::where('status', 'actived')->get();
         $message = $this->getMessage();
 
         foreach ($users as $user) {
@@ -37,9 +37,7 @@ class Broadcast extends Command {
 
         ServerLog::log('Broadcast > ended: '.$result);
         $this->bot->sendMessage(env('TG_MYID'), $result);
-        foreach ($this->errors as $index=>$error) {
-            $this->bot->sendMessage(env('TG_MYID'), "$index\n\n$error");
-        }
+        $this->setUsersStatusForErrors();
     }
 
     private function getMessage() {
@@ -56,10 +54,29 @@ class Broadcast extends Command {
         } catch(Exception $e) {
             ServerLog::log('x failed: '.$e->getMessage());
             if(!array_key_exists($e->getMessage(), $this->errors)) {
-                $this->errors[$e->getMessage()] = '';
+                $this->errors[$e->getMessage()] = [];
             }
-            $this->errors[$e->getMessage()].= "{$userId}\n";
+            $this->errors[$e->getMessage()][] = $userId;
             $this->usersNotNotified++;
+        }
+    }
+
+    private function setUsersStatusForErrors() {
+        foreach ($this->errors as $error=>$usersId) {
+            $this->bot->sendMessage(env('TG_MYID'), "$error\n\n".implode("\n", $usersId));
+            $status = null;
+            if($error==='Forbidden: bot was blocked by the user') {
+                $status = 'blocked';
+            } else if($error==='Forbidden: user is deactivated') {
+                $status = 'deleted';
+            } else {
+                continue;
+            }
+            foreach ($usersId as $userId) {
+                $user = User::find($userId);
+                $user->status = $status;
+                $user->save();
+            }
         }
     }
 

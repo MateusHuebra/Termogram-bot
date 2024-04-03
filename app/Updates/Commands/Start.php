@@ -47,6 +47,7 @@ class Start extends Command {
         $user->subscription_hour = 0;
         $user->username = $this->getUsername();
         $user->first_name = mb_substr($this->getFirstName(), 0, 16);
+        $user->status = 'actived';
         $user->save();
         ServerLog::log('new user created');
     }
@@ -64,6 +65,7 @@ class Start extends Command {
         $user = User::find($this->getUserId());
         $user->username = $this->getUsername();
         $user->first_name = mb_substr($this->getFirstName(), 0, 16);
+        $user->status = 'actived';
         $user->save();
 
         ServerLog::log('creating new game for '.$this->getUserId().' in '.$date.' from season '.$season->name);
