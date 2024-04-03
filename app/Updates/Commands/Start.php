@@ -37,7 +37,7 @@ class Start extends Command {
 
         ServerLog::log('game not ended');
         $this->sendMessage(TextString::get('placeholder.game_status'));
-
+        return 'started';
     }
 
     private function addNewUser() {
