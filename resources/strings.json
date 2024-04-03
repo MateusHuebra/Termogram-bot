@@ -98,6 +98,9 @@
         ],
         "off": [
             "desligado"
+        ],
+        "send_start": [
+            "Toque em /jogar caso a partida não comece automaticamente"
         ]
     },
     "statistics": {

@@ -12,7 +12,7 @@ class Play extends CallbackQuery {
 
     public function run() {
         ServerLog::log('Play by Notification > run');
-        $message = $this->bot->sendMessage($this->getUserId(), '/start');
+        $message = $this->bot->sendMessage($this->getUserId(), TextString::get('notification.send_start'));
         try {
             $this->bot->answerCallbackQuery($this->getId(), TextString::get('settings.loading'));
             $start = new Start($this->update, $this->bot, true);
