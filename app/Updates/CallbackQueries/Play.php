@@ -20,9 +20,8 @@ class Play extends CallbackQuery {
             $start->userId = $this->getUserId();
             $start->firstName = $this->getFirstName();
             $start->username = $this->getUsername();
-            if($start->run() == 'started') {
-                $this->bot->deleteMessage($this->getUserId(), $message->getMessageId());
-            }
+            $start->run();
+            $this->bot->deleteMessage($this->getUserId(), $message->getMessageId());
         } catch(Exception $e) {
             $this->bot->sendMessage(env('TG_MYID'), 'Play by Notification error: '.$e->getMessage());
         }
