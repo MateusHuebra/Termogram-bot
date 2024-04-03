@@ -150,8 +150,9 @@ class Leaderboard {
         return $users->get();
     }
 
-    public function getMembersList($chatId, $bot) {
+    public function getMembersList($chat, $bot) {
         ServerLog::log('Leaderboard > getMembersList', false);
+        $chatId = $chat->getId();
         $groupQuery = Group::where('id', $chatId);
         $group = $groupQuery->first();
 
@@ -161,6 +162,9 @@ class Leaderboard {
 
             if($group->members_list_updated_at > $oneWeekAgo) {
                 ServerLog::log('- recent data', false);
+                $group->username = $chat->getUsername();
+                $group->title = mb_substr($chat->getTitle(), 0, 32);
+                $group->save();
                 return json_decode($group->members_list);
             }
 
@@ -180,6 +184,8 @@ class Leaderboard {
         }
         ServerLog::log('- requests ended', false);
 
+        $group->username = $chat->getUsername();
+        $group->title = mb_substr($chat->getTitle(), 0, 32);
         $group->members_list_updated_at = date('Y-m-d');
         $group->members_list = json_encode($membersList);
         $group->save();

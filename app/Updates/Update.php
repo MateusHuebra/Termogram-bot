@@ -95,9 +95,16 @@ abstract class Update {
         return $this->getChatType()==$type;
     }
 
+    protected function getChat() {
+        if(!isset($this->chat)) {
+            $this->chat = $this->update->getMessage()->getChat();
+        }
+        return $this->chat;
+    }
+
     protected function getChatId() {
         if(!isset($this->chatId)) {
-            $this->chatId = $this->update->getMessage()->getChat()->getId();
+            $this->chatId = $this->getChat()->getId();
         }
         return $this->chatId;
     }

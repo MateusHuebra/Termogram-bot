@@ -65,6 +65,13 @@ abstract class CallbackQuery extends Update {
         return $this->message;
     }
 
+    protected function getChat() {
+        if(!isset($this->chat)) {
+            $this->chat = $this->update->getCallbackQuery()->getMessage()->getChat();
+        }
+        return $this->chat;
+    }
+
     protected function getChatId() {
         if(!isset($this->chatId)) {
             if($this->getMessage()) {

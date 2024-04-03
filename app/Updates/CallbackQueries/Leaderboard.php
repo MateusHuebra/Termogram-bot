@@ -24,7 +24,7 @@ class Leaderboard extends CallbackQuery {
 
         $leaderboard = new LeaderboardCommand($this->update, $this->bot, true);
         $leaderboard->chatType = $this->getChatType();
-        $leaderboard->chatId = $this->getChatId();
+        $leaderboard->chat = $this->getChat();
         $leaderboard->userId = $this->getUserId();
         $data = $leaderboard->run($data, true);
 

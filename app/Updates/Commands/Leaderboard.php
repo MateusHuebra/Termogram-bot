@@ -17,7 +17,7 @@ class Leaderboard extends Command {
             $users = $LBservice->getUsers();
             $type = 'global';
         } else if (in_array($this->getChatType(), ['group', 'supergroup'])) {
-            $membersList = $LBservice->getMembersList($this->getChatId(), $this->bot);
+            $membersList = $LBservice->getMembersList($this->getChat(), $this->bot);
             $users = $LBservice->getUsers($membersList);
             $type = 'group';
         }
