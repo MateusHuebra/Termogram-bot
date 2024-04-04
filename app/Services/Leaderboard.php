@@ -63,6 +63,7 @@ class Leaderboard {
                 }
                 $text.= TextString::get($path, [
                     'position' => $positionString,
+                    'username' => $user->username,
                     'name' => TextString::parseMarkdownV2($user->first_name),
                     'id' => $user->id,
                     'score' => $user->is_banned ? '_banido_' : $user->score
