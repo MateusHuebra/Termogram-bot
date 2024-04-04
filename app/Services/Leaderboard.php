@@ -50,6 +50,8 @@ class Leaderboard {
 
             if($user->mention && $type == 'group') {
                 $path = 'leaderboard.line_with_mention';
+            } else if(!is_null($user->username) && $type == 'group'){
+                $path = 'leaderboard.line_with_link';
             } else {
                 $path = 'leaderboard.line';
             }
@@ -139,7 +141,7 @@ class Leaderboard {
         $today = date('Y-m-d');
         $limitDay = date('Y-m-d', strtotime($today. ' - 14 days'));
         $users = User::leftJoin('games', 'users.id', '=', 'games.user_id')
-            ->select('users.id', 'users.score', 'users.first_name', 'users.mention', 'users.is_banned', DB::raw('max(games.word_date) as last_game_date'))
+            ->select('users.id', 'users.score', 'users.username', 'users.first_name', 'users.mention', 'users.is_banned', DB::raw('max(games.word_date) as last_game_date'))
             ->groupBy('users.id')
             ->having('last_game_date', '>', $limitDay)
             ->orderBy('users.score', 'DESC')

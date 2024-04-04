@@ -127,6 +127,9 @@
         "line_with_mention": [
             "\n{position}》[{name}](tg://user?id={id})  {score}"
         ],
+        "line_with_link": [
+            "\n{position}》[{name}](t.me/{username})  {score}"
+        ],
         "line": [
             "\n{position}》{name}  {score}"
         ],
