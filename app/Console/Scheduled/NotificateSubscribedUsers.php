@@ -21,7 +21,9 @@ class NotificateSubscribedUsers {
         }
 
         $hour = date('H');
-        $users = User::whereSubscriptionHour($hour)->get('id');
+        $users = User::whereSubscriptionHour($hour)
+            ->where('status', 'actived')
+            ->get('id');
         foreach ($users as $user) {
             if(!Game::byUser($user->id)->exists()) {
                 self::tryToSendMessage($bot, $user->id);
@@ -35,9 +37,13 @@ class NotificateSubscribedUsers {
             $bot->sendMessage($userId, TextString::get('notification.new_word'), null, false, null, $keyboard);
         } catch (Exception $e) {
             $user = User::find($userId);
-            $user->subscription_hour = null;
+            if($e->getMessage()==='Forbidden: bot was blocked by the user') {
+                $user->status = 'blocked';
+            } else if($e->getMessage()==='Forbidden: user is deactivated') {
+                $user->status = 'deleted';
+            }
             $user->save();
-            $bot->sendMessage(env('TG_MYID'), "error on trying to notificate to {$userId}: {$e->getMessage()}\n\nturning off his notifications");
+            $bot->sendMessage(env('TG_MYID'), "error on trying to notificate to {$userId}: {$e->getMessage()}\n\nchanging their status to {$user->status}");
         }
     }
 
