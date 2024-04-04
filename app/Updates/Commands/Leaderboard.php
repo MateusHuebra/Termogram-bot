@@ -30,7 +30,7 @@ class Leaderboard extends Command {
         }
         
         if ($boardData['your_position'] && $boardData['keyboard']) {
-            $this->bot->sendMessage($this->getChatId(), $boardData['text'], 'MarkdownV2', false, null, $keyboard);
+            $this->bot->sendMessage($this->getChatId(), $boardData['text'], 'MarkdownV2', true, null, $keyboard);
             try {
                 $this->bot->sendMessage($this->getChatId(), TextString::get('leaderboard.yours', ['position' => $boardData['your_position']]), 'MarkdownV2', false, $this->getMessageId());
             } catch(Exception $e) {
@@ -38,7 +38,7 @@ class Leaderboard extends Command {
             }
         } else {
             try {
-                $this->bot->sendMessage($this->getChatId(), $boardData['text'], 'MarkdownV2', false, $this->getMessageId(), $keyboard);
+                $this->bot->sendMessage($this->getChatId(), $boardData['text'], 'MarkdownV2', true, $this->getMessageId(), $keyboard);
             } catch(Exception $e) {
                 $this->bot->sendMessage($this->getChatId(), $boardData['text'], 'MarkdownV2', false, null, $keyboard);
             }

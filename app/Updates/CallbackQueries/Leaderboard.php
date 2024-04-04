@@ -30,7 +30,7 @@ class Leaderboard extends CallbackQuery {
 
         if($this->getMessageId() && $this->getChatId()) {
             try{
-                $this->bot->editMessageText($this->getChatId(), $this->getMessageId(), $data['text'], 'MarkdownV2', false, $data['keyboard']);
+                $this->bot->editMessageText($this->getChatId(), $this->getMessageId(), $data['text'], 'MarkdownV2', true, $data['keyboard']);
             } catch(Exception $e) {
                 // do nothing
             }
