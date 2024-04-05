@@ -3,8 +3,9 @@
 namespace App\Updates;
 
 use App\Updates\Commands\Factory as CommandsFactory;
-use App\Services\ServerLog;
 use App\Updates\CallbackQueries\Factory as CallbackQueriesFactory;
+use App\Updates\ChatMembers\Factory as ChatMembersFactory;
+use App\Services\ServerLog;
 
 class Factory {
 
@@ -19,6 +20,9 @@ class Factory {
         } else if($type=='callback_query') {
             return CallbackQueriesFactory::buildCallbackQuery($update, $bot);
 
+        } else if($type=='chat_members') {
+            return ChatMembersFactory::buildChatMembers($update, $bot);
+
         } else {
             return false;
         }
@@ -30,6 +34,9 @@ class Factory {
         $callbackQuery = $update->getCallbackQuery();
 
         if (!is_null($message)) {
+            if($message->getNewChatMembers() || $message->getLeftChatMember()) {
+                return 'chat_members';
+            }
             return 'command';
         }
 

@@ -163,7 +163,7 @@ class Leaderboard {
             ServerLog::log('- group exists', false);
             $oneWeekAgo = date('Y-m-d', strtotime('- 7 days'));
 
-            if($group->members_list_updated_at > $oneWeekAgo) {
+            if(!is_null($group->members_list_updated_at) && $group->members_list_updated_at > $oneWeekAgo) {
                 ServerLog::log('- recent data', false);
                 $group->username = $chat->getUsername();
                 $group->title = mb_substr($chat->getTitle(), 0, 32);

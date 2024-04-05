@@ -102,6 +102,20 @@ abstract class Update {
         return $this->chat;
     }
 
+    protected function getChatTitle() {
+        if(!isset($this->chatTitle)) {
+            $this->chatTitle = $this->update->getMessage()->getChat()->getTitle();
+        }
+        return $this->chatTitle;
+    }
+
+    protected function getChatUsername() {
+        if(!isset($this->chatUsername)) {
+            $this->chatUsername = $this->update->getMessage()->getChat()->getUsername();
+        }
+        return $this->chatUsername;
+    }
+
     protected function getChatId() {
         if(!isset($this->chatId)) {
             $this->chatId = $this->getChat()->getId();
