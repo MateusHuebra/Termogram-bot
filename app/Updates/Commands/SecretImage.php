@@ -25,7 +25,7 @@ class SecretImage extends Command {
         imagecopy($card2, $card, 0, 0, 0, 0, 190, 140);
         imagefttext($card, 20, 0, 10, 130, $cor_fundo, storage_path('Cat Comic.ttf'), date('d/m/Y'));
         imagefttext($card, 20, 0, 10, 25, $cor_fundo, storage_path('Cat Comic.ttf'), '1');
-        imagefttext($card2, 25, 0, 10, 130, $cor_fundo, storage_path('Cat Comic.ttf'), 'DELA');
+        imagefttext($card2, 25, 0, 10, 130, $cor_fundo, storage_path('Cat Comic.ttf'), $this->getFirstName());
         imagefttext($card2, 20, 0, 10, 25, $cor_fundo, storage_path('Cat Comic.ttf'), '2');
 
         // Define a cor de fundo (branco)
@@ -96,7 +96,6 @@ class SecretImage extends Command {
         $this->bot->sendPhoto($this->getChatId(), $photo, 'imagem secreta', null, $keyboard);
 
         // Remove o arquivo temporário
-        unlink($nome_photo);
         unlink($nome_arquivo);
     }
 
