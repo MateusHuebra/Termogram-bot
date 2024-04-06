@@ -40,7 +40,7 @@ class SecretImage extends Command {
 
         imagecopy($imagem, $card, 10, 10, 0, 0, 190, 140);
         imagecopy($imagem, $card2, 210, 10, 0, 0, 190, 140);
-        imagecopy($imagem, $card2, 410, 10, 0, 0, 190, 140);
+        imagecopy($imagem, $card3, 410, 10, 0, 0, 190, 140);
         imagefilledrectangle($imagem, 610, 10, 800, 150, $cor_cartao);
         imagefilledrectangle($imagem, 810, 10, 1000, 150, $cor_cartao);
 
