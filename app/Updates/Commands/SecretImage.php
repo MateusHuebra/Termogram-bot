@@ -24,6 +24,7 @@ class SecretImage extends Command {
         $card2 = imagecreate(190, 140);
         $card3 = imagecreate(190, 140);
         imagecopy($card2, $card, 0, 0, 0, 0, 190, 140);
+        imagecopy($card3, $card, 0, 0, 0, 0, 190, 140);
         imagefttext($card, 20, 0, 10, 130, $cor_fundo, storage_path('Cat Comic.ttf'), date('d/m/y'));
         imagefttext($card, 20, 0, 10, 25, $cor_fundo, storage_path('Cat Comic.ttf'), '1');
         imagefttext($card2, 25, 0, 10, 130, $cor_fundo, storage_path('Cat Comic.ttf'), $this->getFirstName());
