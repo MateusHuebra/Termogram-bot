@@ -51,12 +51,6 @@ class NotificateSubscribedUsers {
         $buttons = [
             [
                 [
-                    'text' => TextString::get('settings.play'),
-                    'callback_data' => 'play:'
-                ]
-            ],
-            [
-                [
                     'text' => TextString::get('settings.notifications_settings'),
                     'callback_data' => 'open_notification:'
                 ]

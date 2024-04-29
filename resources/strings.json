@@ -4,9 +4,7 @@
             "Boas vindas ao Termogram!!\nEnvie /jogar para começar um novo jogo ou /ajuda para tirar dúvidas"
         ],
         "game_started": [
-            "Jogo iniciado, qual o seu primeiro chute?",
-            "Vambora, qual o seu primeiro chute?",
-            "Bora lá, qual o seu primerio chute?"
+            "ATUALIZAÇÃO: Você não precisa mais usar um comando para iniciar a partida, basta enviar sua primeira tentativa logo"
         ]
     },
     "game": {

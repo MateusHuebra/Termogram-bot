@@ -71,9 +71,6 @@ class Factory {
         } else if($command=='gerar') {
             return new Generate($update, $bot);
 
-        } else if($command=='imagemsecreta') {
-            return new SecretImage($update, $bot);
-
         } else {
             return false;
         }

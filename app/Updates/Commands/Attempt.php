@@ -22,9 +22,13 @@ class Attempt extends Command {
         $game = Game::byUser($this->getUserId())->first();
 
         if($game === null) {
-            ServerLog::log('game does\'n exist');
-            $this->sendMessage(TextString::get('game.no_game'));
-            return;
+            $start = new Start($this->update, $this->bot, true);
+            $start->chatType = $this->getChatType();
+            $start->userId = $this->getUserId();
+            $start->firstName = $this->getFirstName();
+            $start->username = $this->getUsername();
+            $start->run(false);
+            $game = Game::byUser($this->getUserId())->first();
         }
 
         if($game->ended) {

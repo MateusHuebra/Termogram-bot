@@ -11,7 +11,7 @@ use App\Services\TextString;
 
 class Start extends Command {
 
-    public function run() {
+    public function run(bool $sendMessage = true) {
         $this->dieIfUnallowedChatType(['private'], 'start_in_private');
         ServerLog::log('Start > run');
 
@@ -25,7 +25,9 @@ class Start extends Command {
         if(Game::byUser($this->getUserId())->exists() === false) {
             ServerLog::log('game does\'n exist');
             $resultString = $this->startNewGame($this->getUserId());
-            $this->sendMessage(TextString::get($resultString));
+            if($sendMessage) {
+                $this->sendMessage(TextString::get($resultString));
+            }
             return;
         }
 
@@ -44,7 +46,7 @@ class Start extends Command {
         ServerLog::log('creating new user: '.$this->getUserId());
         $user = new User();
         $user->id = $this->getUserId();
-        $user->subscription_hour = 0;
+        $user->subscription_hour = rand(1,20);
         $user->username = $this->getUsername();
         $user->first_name = mb_substr($this->getFirstName(), 0, 16);
         $user->status = 'actived';
@@ -52,7 +54,7 @@ class Start extends Command {
         ServerLog::log('new user created');
     }
 
-    private function startNewGame() : string {
+    public function startNewGame() : string {
         $date = date('Y-m-d');
         $season = Season::current()->first();
         $word = Word::today()->first();
