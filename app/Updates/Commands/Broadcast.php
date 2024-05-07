@@ -20,14 +20,17 @@ class Broadcast extends Command {
             return;
         }
 
+        if(!$this->update->getMessage()->getReplyToMessage()) {
+            return;
+        }
+
         ServerLog::log('Broadcast > started');
         $this->bot->sendMessage(env('TG_MYID'), TextString::get('broadcast.started'));
 
         $users = User::where('status', 'actived')->get();
-        $message = $this->getMessage();
 
         foreach ($users as $user) {
-            $this->tryToSendMessage($user->id, $message);
+            $this->tryToSendMessage($user->id, $this->update->getMessage()->getReplyToMessage());
         }
 
         $result = TextString::get('broadcast.done', [
@@ -47,7 +50,8 @@ class Broadcast extends Command {
     private function tryToSendMessage($userId, $message) {
         try {
             ServerLog::log('trying to message '.$userId, false);
-            $this->bot->sendMessage($userId, $message);
+            //$this->bot->sendMessage($userId, $message);
+            $this->bot->copyMessage($userId, $message->getChat()->getId(), $message->getMessageId(), $message->getCaption()??null);
             $this->usersNotified++;
             ServerLog::log('v success');
 
