@@ -17,4 +17,16 @@ class CustomBotApi extends BotApi {
         ]);
     }
 
+    public function sendMessage($chatId, $text, $parseMode = null, $disablePreview = false, $replyToMessageId = null, $replyMarkup = null, $disableNotification = false) {
+        try {
+            return parent::sendMessage($chatId, $text, $parseMode, $disablePreview, $replyToMessageId, $replyMarkup, $disableNotification);
+        } catch (\Exception $e) {
+            try {
+                return parent::sendMessage($chatId, $text, $parseMode, $disablePreview, $replyToMessageId, $replyMarkup, $disableNotification);
+            } catch (\Exception $e) {
+                return parent::sendMessage($chatId, $text, $parseMode, $disablePreview, $replyToMessageId, $replyMarkup, $disableNotification);
+            }
+        }
+    }
+
 }
