@@ -17,14 +17,14 @@ class CustomBotApi extends BotApi {
         ]);
     }
 
-    public function sendMessage($chatId, $text, $parseMode = null, $disablePreview = false, $replyToMessageId = null, $replyMarkup = null, $disableNotification = false) {
+    public function sendMessage($chatId, $text, $parseMode = null, $disablePreview = false, $replyToMessageId = null, $replyMarkup = null, $disableNotification = false, $messageThreadId = null, $protectContent = null, $allowSendingWithoutReply = null) {
         try {
-            return parent::sendMessage($chatId, $text, $parseMode, $disablePreview, $replyToMessageId, $replyMarkup, $disableNotification);
+            return parent::sendMessage($chatId, $text, $parseMode, $disablePreview, $replyToMessageId, $replyMarkup, $disableNotification, $messageThreadId, $protectContent, $allowSendingWithoutReply);
         } catch (\Exception $e) {
             try {
-                return parent::sendMessage($chatId, $text, $parseMode, $disablePreview, $replyToMessageId, $replyMarkup, $disableNotification);
+                return parent::sendMessage($chatId, $text, $parseMode, $disablePreview, $replyToMessageId, $replyMarkup, $disableNotification, $messageThreadId, $protectContent, $allowSendingWithoutReply);
             } catch (\Exception $e) {
-                return parent::sendMessage($chatId, $text, $parseMode, $disablePreview, $replyToMessageId, $replyMarkup, $disableNotification);
+                return parent::sendMessage($chatId, $text, $parseMode, $disablePreview, $replyToMessageId, $replyMarkup, $disableNotification, $messageThreadId, $protectContent, $allowSendingWithoutReply);
             }
         }
     }
