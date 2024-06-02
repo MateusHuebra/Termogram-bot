@@ -33,7 +33,7 @@ class SendFinalLeaderboard {
 
         $groups = Group::all();
         foreach($groups as $group) {
-            $LBservice = new LeaderboardService(100, true);
+            $LBservice = new LeaderboardService(30, true);
             try {
                 $membersList = $LBservice->getMembersList($group->id, $bot);
                 $users = $LBservice->getUsers($membersList);
@@ -41,6 +41,7 @@ class SendFinalLeaderboard {
                 $bot->sendMessage($group->id, $boardData['text'], 'MarkdownV2');
             } catch(Exception $e) {
                 ServerLog::log($e->getMessage());
+                $bot->sendMessage(env('TG_MYID'), $e->getMessage());
             }
         }
         
