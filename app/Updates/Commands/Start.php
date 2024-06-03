@@ -68,6 +68,7 @@ class Start extends Command {
         $user->username = $this->getUsername();
         $user->first_name = mb_substr($this->getFirstName(), 0, 16);
         $user->status = 'actived';
+        $user->last_time_notified = date('Y-m-d');
         $user->save();
 
         ServerLog::log('creating new game for '.$this->getUserId().' in '.$date.' from season '.$season->name);

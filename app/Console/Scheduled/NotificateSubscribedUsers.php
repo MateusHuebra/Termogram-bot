@@ -21,9 +21,16 @@ class NotificateSubscribedUsers {
         }
 
         $hour = date('H');
-        $users = User::whereSubscriptionHour($hour)
-            ->where('status', 'actived')
-            ->get('id', 'last_time_notified');
+        $day = date('Y-m-d');
+        
+        $users = User::where('status', 'actived')
+            ->where('subscription_hour', '<=', $hour)
+            ->where(function($query) use ($day) {
+                $query->where('last_time_notified', '!=', $day)
+                    ->orWhereNull('last_time_notified');
+        })
+        ->get(['id']);
+        
         foreach ($users as $user) {
             if(!Game::byUser($user->id)->exists()) {
                 self::tryToSendMessage($bot, $user);
