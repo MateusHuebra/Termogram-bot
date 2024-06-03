@@ -23,28 +23,28 @@ class NotificateSubscribedUsers {
         $hour = date('H');
         $users = User::whereSubscriptionHour($hour)
             ->where('status', 'actived')
-            ->get('id');
+            ->get('id', 'last_time_notified');
         foreach ($users as $user) {
             if(!Game::byUser($user->id)->exists()) {
-                self::tryToSendMessage($bot, $user->id);
+                self::tryToSendMessage($bot, $user);
             }
         }
     }
 
-    static function tryToSendMessage(BotApi $bot, $userId) {
+    static function tryToSendMessage(BotApi $bot, User $user) {
         try {
             $keyboard = self::getNotificationKeyboard();
-            $bot->sendMessage($userId, TextString::get('notification.new_word'), null, false, null, $keyboard);
+            $bot->sendMessage($user->id, TextString::get('notification.new_word'), null, false, null, $keyboard);
+            $user->last_time_notified = date('Y-m-d');
         } catch (Exception $e) {
-            $user = User::find($userId);
             if($e->getMessage()==='Forbidden: bot was blocked by the user') {
                 $user->status = 'blocked';
             } else if($e->getMessage()==='Forbidden: user is deactivated') {
                 $user->status = 'deleted';
             }
-            $user->save();
-            $bot->sendMessage(env('TG_MYID'), "error on trying to notificate to {$userId}: {$e->getMessage()}\n\nchanging their status to {$user->status}");
+            $bot->sendMessage(env('TG_MYID'), "error on trying to notificate to {$user->id}: {$e->getMessage()}\n\nchanging their status to {$user->status}");
         }
+        $user->save();
     }
 
     static function getNotificationKeyboard() {
