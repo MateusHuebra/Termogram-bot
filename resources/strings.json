@@ -97,6 +97,9 @@
         "off": [
             "desligado"
         ],
+        "on": [
+            "ligado"
+        ],
         "send_start": [
             "Toque em /jogar caso a partida não comece automaticamente"
         ]
@@ -220,6 +223,20 @@
         ],
         "saved": [
             "Palavra salva com sucesso!\n{word} - {date}"
+        ]
+    },
+    "alt_text": {
+        "correct": [
+            "correta"
+        ],
+        "displaced": [
+            "mal posicionada"
+        ],
+        "wrong": [
+            "errada"
+        ],
+        "desc": [
+            "Descrição textual: {value}"
         ]
     }
 }

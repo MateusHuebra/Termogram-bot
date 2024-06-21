@@ -48,7 +48,7 @@ class Attempt extends Command {
         $word = Word::today()->first();
 
         $attempts = AttemptModel::byUser($this->getUserId())->get();
-        $render = $this->getGameRender($attempt, $word->value, $attempts);
+        $render = $this->getGameRender($attempt, $word->value, $attempts, User::find($this->getUserId())->alt_text);
         $render = FontHandler::replace($render);
         $attemptNumber = $this->addNewAttempt($attempt);
         $keyboard = null;
@@ -203,16 +203,16 @@ class Attempt extends Command {
         return false;
     }
 
-    private function getGameRender(string $currentAttempt, string $word, $attempts) : string {
+    private function getGameRender(string $currentAttempt, string $word, $attempts, bool $altText) : string {
         $lines = [];
         foreach ($attempts as $attempt) {
             $lines[] = $this->getLineRender($attempt->word, $word);
         }
-        $lines[] = $this->getLineRender($currentAttempt, $word);
+        $lines[] = $this->getLineRender($currentAttempt, $word, $altText);
         return implode(PHP_EOL, $lines);
     }
 
-    private function getLineRender(string $attempt, string $word) : string {
+    private function getLineRender(string $attempt, string $word, bool $altText) : string {
         ServerLog::log("- - getLineRender - {$attempt} > {$word}");
         $letters = [];
         $attemptLetters = str_split($attempt);
@@ -227,7 +227,21 @@ class Attempt extends Command {
             $letters = $this->fillDisplacedsAndWrongs($attemptLetters, $wordLetters, $letters);
         }
 
-        return implode(' ', $letters);
+        $result = implode(' ', $letters);
+        if($altText) {
+            foreach ($letters as $letter) {
+                if(in_array($letter, FontHandler::WRONG)) {
+                    $alt = TextString::get('alt_text.wrong');
+                } else if(in_array($letter, FontHandler::DISPLACED)) {
+                    $alt = TextString::get('alt_text.displaced');
+                } else {
+                    $alt = TextString::get('alt_text.correct');
+                }
+                $result.= PHP_EOL.$letter.' '.$alt;
+            }
+        }
+
+        return $result;
     }
 
     private function renderKeyboard(string $render) {

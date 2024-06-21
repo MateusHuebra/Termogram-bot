@@ -71,6 +71,9 @@ class Factory {
         } else if($command=='gerar') {
             return new Generate($update, $bot);
 
+        } else if($command=='descrever') {
+            return new AltText($update, $bot);
+
         } else {
             return false;
         }
