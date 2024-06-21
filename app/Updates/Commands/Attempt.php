@@ -212,7 +212,7 @@ class Attempt extends Command {
         return implode(PHP_EOL, $lines);
     }
 
-    private function getLineRender(string $attempt, string $word, bool $altText) : string {
+    private function getLineRender(string $attempt, string $word, bool $altText = false) : string {
         ServerLog::log("- - getLineRender - {$attempt} > {$word}");
         $letters = [];
         $attemptLetters = str_split($attempt);
