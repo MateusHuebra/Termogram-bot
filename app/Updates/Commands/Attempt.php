@@ -230,9 +230,9 @@ class Attempt extends Command {
         $result = implode(' ', $letters);
         if($altText) {
             foreach ($letters as $letter) {
-                if(in_array($letter, FontHandler::WRONG)) {
+                if(str_contains($letter, '(')) {
                     $alt = TextString::get('alt_text.wrong');
-                } else if(in_array($letter, FontHandler::DISPLACED)) {
+                } else if(str_contains($letter, '{')) {
                     $alt = TextString::get('alt_text.displaced');
                 } else {
                     $alt = TextString::get('alt_text.correct');
