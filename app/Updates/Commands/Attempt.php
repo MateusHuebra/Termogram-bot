@@ -227,8 +227,8 @@ class Attempt extends Command {
             $letters = $this->fillDisplacedsAndWrongs($attemptLetters, $wordLetters, $letters);
         }
 
-        $result = implode(' ', $letters);
         if($altText) {
+            $result = implode(' ', $attemptLetters);
             $altTextString = '';
             $corrects = 0;
             foreach ($letters as $key => $letter) {
@@ -245,6 +245,8 @@ class Attempt extends Command {
             if($corrects!=5) {
                 $result.= $altTextString;
             }
+        } else {
+            $result = implode(' ', $letters);
         }
 
         return $result;
