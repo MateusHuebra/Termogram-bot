@@ -229,15 +229,21 @@ class Attempt extends Command {
 
         $result = implode(' ', $letters);
         if($altText) {
-            foreach ($letters as $letter) {
+            $altTextString = '';
+            $corrects = 0;
+            foreach ($letters as $key => $letter) {
                 if(str_contains($letter, '(')) {
                     $alt = TextString::get('alt_text.wrong');
                 } else if(str_contains($letter, '{')) {
                     $alt = TextString::get('alt_text.displaced');
                 } else {
                     $alt = TextString::get('alt_text.correct');
+                    $corrects++;
                 }
-                $result.= PHP_EOL.$letter.' '.$alt;
+                $altTextString.= PHP_EOL.$attemptLetters[$key].' '.$alt;
+            }
+            if($corrects!=5) {
+                $result.= $altTextString;
             }
         }
 
