@@ -46,9 +46,10 @@ class Attempt extends Command {
         }
 
         $word = Word::today()->first();
+        $isAltText = User::find($this->getUserId())->alt_text;
 
         $attempts = AttemptModel::byUser($this->getUserId())->get();
-        $render = $this->getGameRender($attempt, $word->value, $attempts, User::find($this->getUserId())->alt_text);
+        $render = $this->getGameRender($attempt, $word->value, $attempts, $isAltText);
         $render = FontHandler::replace($render);
         $attemptNumber = $this->addNewAttempt($attempt);
         $keyboard = null;
@@ -57,17 +58,25 @@ class Attempt extends Command {
             ServerLog::log("game won by {$game->user_id} at attempt {$attemptNumber}");
             $this->winStreak++;
             $this->calculateWinStreak();
-            $keyboard = $this->getShareButton($render, $attemptNumber);
+            $shareableRender = $isAltText ? $this->getShareableRender($attempt, $word->value, $attempts) : $render;
+            $keyboard = $this->getShareButton($shareableRender, $attemptNumber);
             $render = $this->endGame($game, $render, $word, $attemptNumber);
         } else if($attemptNumber>=6) {
             ServerLog::log("game lost by {$game->user_id} at attempt {$attemptNumber}");
-            $keyboard = $this->getShareButton($render, 'X');
+            $shareableRender = $isAltText ? $this->getShareableRender($attempt, $word->value, $attempts) : $render;
+            $keyboard = $this->getShareButton($shareableRender, 'X');
             $render = $this->endGame($game, $render, $word);
-        } else {
+        } else if (!$isAltText){
             $render = $this->renderKeyboard($render);
         }
 
         $this->sendMessage($render, $keyboard, false, 'HTML');
+    }
+
+    private function getShareableRender(string $currentAttempt, string $word, $attempts) {
+        $render = $this->getGameRender($currentAttempt, $word, $attempts, false);
+        $render = FontHandler::replace($render);
+        return $render;
     }
 
     private function calculateWinStreak() {
@@ -203,16 +212,18 @@ class Attempt extends Command {
         return false;
     }
 
-    private function getGameRender(string $currentAttempt, string $word, $attempts, bool $altText) : string {
+    private function getGameRender(string $currentAttempt, string $word, $attempts, bool $isAltText) : string {
         $lines = [];
-        foreach ($attempts as $attempt) {
-            $lines[] = $this->getLineRender($attempt->word, $word);
+        if(!$isAltText) {
+            foreach ($attempts as $attempt) {
+                $lines[] = $this->getLineRender($attempt->word, $word);
+            }
         }
-        $lines[] = $this->getLineRender($currentAttempt, $word, $altText);
+        $lines[] = $this->getLineRender($currentAttempt, $word, $isAltText);
         return implode(PHP_EOL, $lines);
     }
 
-    private function getLineRender(string $attempt, string $word, bool $altText = false) : string {
+    private function getLineRender(string $attempt, string $word, bool $isAltText = false) : string {
         ServerLog::log("- - getLineRender - {$attempt} > {$word}");
         $letters = [];
         $attemptLetters = str_split($attempt);
@@ -227,7 +238,7 @@ class Attempt extends Command {
             $letters = $this->fillDisplacedsAndWrongs($attemptLetters, $wordLetters, $letters);
         }
 
-        if($altText) {
+        if($isAltText) {
             $result = implode(' ', $attemptLetters);
             $altTextString = '';
             $corrects = 0;
