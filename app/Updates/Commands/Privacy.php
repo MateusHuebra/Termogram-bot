@@ -11,7 +11,7 @@ class Privacy extends Command {
             $text = "/privacy is only available on the bot's DM";
         }
         
-        $this->sendMessage($text, 'HTML');
+        $this->sendMessage($text, null, false, 'HTML');
     }
 
 }

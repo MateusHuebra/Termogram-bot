@@ -77,7 +77,6 @@ class Factory {
         } else if($command=='privacy') {
             return new Privacy($update, $bot);
 
-
         } else {
             return false;
         }
