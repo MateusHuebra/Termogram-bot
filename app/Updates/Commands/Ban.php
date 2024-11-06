@@ -13,15 +13,7 @@ class Ban extends Command {
         $this->dieIfNotAdmin();
         ServerLog::log('Ban > started');
 
-        $user = null;
-        $userId = $this->getMessage();
-        if(str_contains($userId, '@')) {
-            $username = substr($userId, 1);
-            $user = User::where('username', $username)->first();
-        } else {
-            $user = User::find($userId);
-        }
-        
+        $user = self::getUserFromMessage($this->getUserIdFromMessage());
         $successMessage = TextString::get('ban.success', [
             'id' => $user->id,
             'score' => $user->score
@@ -35,8 +27,17 @@ class Ban extends Command {
         ServerLog::log('Ban > end');
     }
 
-    private function getMessage() {
+    private function getUserIdFromMessage() {
         return str_ireplace('/ban ', '', $this->getMessageText());
+    }
+
+    static public function getUserFromMessage($userId) {
+        if(str_contains($userId, '@')) {
+            $username = substr($userId, 1);
+            return User::where('username', $username)->first();
+        } else {
+            return User::find($userId);
+        }
     }
 
 }

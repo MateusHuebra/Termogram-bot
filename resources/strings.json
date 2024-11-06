@@ -207,8 +207,17 @@
         "success": [
             "Você baniu o [usuário](tg://user?id={id}) com sucesso\\!\n\nEle tinha {score} pontos"
         ],
+        "success_block": [
+            "Você bloqueou o [usuário](tg://user?id={id}) com sucesso\\!\n\nEle tinha {score} pontos"
+        ],
         "banned": [
             "🚫 Você foi banido da Leaderboard 🚫\n\nVocê ainda pode jogar os desafios diários normalmente, mas, como foi pego trapaceando, não acumulará mais pontos\n\nAfinal de contas, não tem graça competir contra um \"robô\"\n\nSe você acha que isso foi um engano, envie um /feedback e estarei analisando o seu caso com mais cuidado"
+        ],
+        "blocked": [
+            "🚫 Você foi bloqueado do Termogram 🚫\n\nVocê não poderá mais jogar devida a má conduta (como espalhar a resposta do dia)\n\nSe você acha que isso foi um engano, envie um /feedback e estarei analisando o seu caso com mais cuidado"
+        ],
+        "error": [
+            "Você está bloqueado do Termogram"
         ]
     },
     "generate": {

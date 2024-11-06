@@ -22,6 +22,11 @@ class Attempt extends Command {
         $game = Game::byUser($this->getUserId())->first();
 
         if($game === null) {
+            $user = User::find($this->getUserId());
+            if($user->is_blocked) {
+                return;
+            }
+
             $start = new Start($this->update, $this->bot, true);
             $start->chatType = $this->getChatType();
             $start->userId = $this->getUserId();

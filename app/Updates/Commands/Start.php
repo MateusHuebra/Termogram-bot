@@ -71,6 +71,10 @@ class Start extends Command {
         $user->last_time_notified = date('Y-m-d');
         $user->save();
 
+        if($user->is_blocked) {
+            return 'ban.error';
+        }
+
         ServerLog::log('creating new game for '.$this->getUserId().' in '.$date.' from season '.$season->name);
         $game = new Game();
         $game->user_id = $this->getUserId();
