@@ -66,7 +66,9 @@ class Start extends Command {
         ServerLog::log('saving info for '.$this->getUserId().' as '.$this->getFirstName());
         $user = User::find($this->getUserId());
         $user->username = $this->getUsername();
-        $user->first_name = mb_substr($this->getFirstName(), 0, 16);
+        if(!$user->is_banned) {
+            $user->first_name = mb_substr($this->getFirstName(), 0, 16);
+        }
         $user->status = 'actived';
         $user->last_time_notified = date('Y-m-d');
         $user->save();

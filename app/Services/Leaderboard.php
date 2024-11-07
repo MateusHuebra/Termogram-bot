@@ -144,7 +144,8 @@ class Leaderboard {
         $users = User::leftJoin('games', 'users.id', '=', 'games.user_id')
             ->select('users.id', 'users.score', 'users.username', 'users.first_name', 'users.mention', 'users.is_banned', DB::raw('max(games.word_date) as last_game_date'))
             ->groupBy('users.id')
-            ->having('last_game_date', '>', $limitDay)
+            ->havingRaw('(last_game_date > ? OR users.is_banned = ?)', [$limitDay, true])
+            //->having('last_game_date', '>', $limitDay)
             ->orderBy('users.score', 'DESC')
             ->orderBy('users.is_banned', 'ASC');
         if(!is_null($membersList)) {
