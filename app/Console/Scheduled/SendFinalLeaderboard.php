@@ -31,6 +31,15 @@ class SendFinalLeaderboard {
             }
         }
 
+        try {
+            $this->doGroups($bot);
+        } catch (\Throwable $th) {
+            $bot->sendMessage(env('TG_MYID'), 'Leaderboard DoGroups: '.$e->getMessage());
+        }
+        
+    }
+
+    private function doGroups($bot) {
         $groups = Group::all();
         foreach($groups as $group) {
             $LBservice = new LeaderboardService(30, true);
@@ -44,7 +53,6 @@ class SendFinalLeaderboard {
                 $bot->sendMessage(env('TG_MYID'), $e->getMessage());
             }
         }
-        
     }
 
 }
