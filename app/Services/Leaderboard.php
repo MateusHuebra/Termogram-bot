@@ -206,7 +206,7 @@ class Leaderboard {
             $user->username = $TgUser->getUser()->getUsername();
             $user->first_name = mb_substr($TgUser->getUser()->getFirstName(), 0, 16);
             $user->save();
-        } catch(Exception $e) {
+        } catch(\Throwable $th) {
             //Bad Request: user not found || chat not found
             return false;
         }
