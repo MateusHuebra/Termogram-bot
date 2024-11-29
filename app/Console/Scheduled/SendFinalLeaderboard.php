@@ -34,7 +34,7 @@ class SendFinalLeaderboard {
         try {
             $this->doGroups($bot);
         } catch (\Throwable $th) {
-            $bot->sendMessage(env('TG_MYID'), 'Leaderboard DoGroups: '.$e->getMessage());
+            $bot->sendMessage(env('TG_MYID'), 'Leaderboard DoGroups: '.$e->getMessage().' '.$e->getLine());
         }
         
     }
