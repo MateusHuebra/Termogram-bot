@@ -10,7 +10,8 @@ use App\Services\TextString;
 use App\Services\ServerLog;
 use Exception;
 
-class SendFinalLeaderboard {
+class SendFinalLeaderboard
+{
 
     public function __invoke()
     {
@@ -20,13 +21,13 @@ class SendFinalLeaderboard {
 
         $users = $LBservice->getUsers();
         $boardData = $LBservice->renderBoard($users, 'global');
-        foreach($users as $user) {
+        foreach ($users as $user) {
             try {
                 $bot->sendMessage($user->id, $boardData['text'], 'MarkdownV2');
                 //if(count($boardData['positions']) > 15) {
-                    $bot->sendMessage($user->id, TextString::get('leaderboard.yours', ['position' => $boardData['positions'][$user->id]]), 'MarkdownV2');
+                $bot->sendMessage($user->id, TextString::get('leaderboard.yours', ['position' => $boardData['positions'][$user->id]]), 'MarkdownV2');
                 //}
-            } catch(Exception $e) {
+            } catch (Exception $e) {
                 ServerLog::log($e->getMessage());
             }
         }
@@ -34,25 +35,24 @@ class SendFinalLeaderboard {
         try {
             $this->doGroups($bot);
         } catch (\Throwable $th) {
-            $bot->sendMessage(env('TG_MYID'), 'Leaderboard DoGroups: '.$e->getMessage().' '.$e->getFile().' '.$e->getLine());
+            $bot->sendMessage(env('TG_MYID'), 'Leaderboard DoGroups: ' . $e->getMessage() . ' ' . $e->getFile() . ' ' . $e->getLine() . ' ' . $e->getTraceAsString());
         }
-        
     }
 
-    private function doGroups($bot) {
+    private function doGroups($bot)
+    {
         $groups = Group::all();
-        foreach($groups as $group) {
+        foreach ($groups as $group) {
             $LBservice = new LeaderboardService(30, true);
             try {
                 $membersList = $LBservice->getMembersList($group->id, $bot);
                 $users = $LBservice->getUsers($membersList);
                 $boardData = $LBservice->renderBoard($users, 'group');
                 $bot->sendMessage($group->id, $boardData['text'], 'MarkdownV2');
-            } catch(Exception $e) {
+            } catch (Exception $e) {
                 ServerLog::log($e->getMessage());
                 $bot->sendMessage(env('TG_MYID'), $e->getMessage());
             }
         }
     }
-
 }
