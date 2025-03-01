@@ -4,7 +4,6 @@ namespace App\Updates\Commands;
 
 use App\Services\TextString;
 use App\Services\ServerLog;
-use App\Models\User;
 
 class Block extends Command {
 

@@ -207,6 +207,9 @@
         "success": [
             "Você baniu o [usuário](tg://user?id={id}) com sucesso\\!\n\nEle tinha {score} pontos"
         ],
+        "success_unban": [
+            "Você desbaniu o [usuário](tg://user?id={id}) com sucesso\\!"
+        ],
         "success_block": [
             "Você bloqueou o [usuário](tg://user?id={id}) com sucesso\\!\n\nEle tinha {score} pontos"
         ],

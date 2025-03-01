@@ -62,6 +62,9 @@ class Factory {
         } else if($command=='ban') {
             return new Ban($update, $bot);
 
+        } else if($command=='unban') {
+            return new Unban($update, $bot);
+
         } else if($command=='block') {
             return new Block($update, $bot);
 
