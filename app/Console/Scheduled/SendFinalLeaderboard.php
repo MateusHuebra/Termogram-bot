@@ -34,7 +34,7 @@ class SendFinalLeaderboard
 
         try {
             $this->doGroups($bot);
-        } catch (\Throwable $th) {
+        } catch (\Throwable $e) {
             $bot->sendMessage(env('TG_MYID'), 'Leaderboard DoGroups: ' . $e->getMessage() . ' ' . $e->getFile() . ' ' . $e->getLine() . ' ' . $e->getTraceAsString());
         }
     }
@@ -49,9 +49,9 @@ class SendFinalLeaderboard
                 $users = $LBservice->getUsers($membersList);
                 $boardData = $LBservice->renderBoard($users, 'group');
                 $bot->sendMessage($group->id, $boardData['text'], 'MarkdownV2');
-            } catch (Exception $e) {
+            } catch (\Throwable $e) {
                 ServerLog::log($e->getMessage());
-                $bot->sendMessage(env('TG_MYID'), $e->getMessage());
+                $bot->sendMessage(env('TG_MYID'), 'Leaderboard DoGroups ForEach: ' . $e->getMessage() . ' ' . $e->getFile() . ' ' . $e->getLine());
             }
         }
     }
