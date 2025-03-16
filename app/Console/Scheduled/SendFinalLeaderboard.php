@@ -45,7 +45,7 @@ class SendFinalLeaderboard
         foreach ($groups as $group) {
             $LBservice = new LeaderboardService(30, true);
             try {
-                $membersList = $LBservice->getMembersList($group->id, $bot);
+                $membersList = $LBservice->getMembersList($group, $bot);
                 $users = $LBservice->getUsers($membersList);
                 $boardData = $LBservice->renderBoard($users, 'group');
                 $bot->sendMessage($group->id, $boardData['text'], 'MarkdownV2');
