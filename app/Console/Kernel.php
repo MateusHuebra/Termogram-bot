@@ -21,6 +21,10 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
+        $schedule->command('db:dump')
+            ->dailyAt('04:00')
+            ->sendOutputTo(storage_path('logs/db_dump.log'));
+            
         //$schedule->call(new ScheduleTest)->everyMinute();
         $schedule->call(new resetAndDistributeScore)->twiceMonthly(1, 16, '00:00');
         $schedule->call(new NotificateSubscribedUsers)->hourly();
